@@ -1,0 +1,52 @@
+﻿@model ContactUs
+@{
+    Layout = "_Layout";
+}
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <div class="controls text-center" style="margin-top: 20px;">
+        @*@Html.Display(Model.email)
+
+        @Html.Display(Model.pageInstagramUrl)*@
+
+
+        @*@Html.Display(Model.pageTelegramUrl)*@
+        @*@Html.Display(Model.pageTwitterUrl)*@
+        @*@Html.Display(Model.phone)*@
+        <div style="text-align:center">
+
+            <div>
+                <label>تلگرام : </label>
+                <a href="https://telegram.me/@Model.pageTelegramUrl" class="btn btn-primary"><i class="fa fa-telegram"></i>dakeh_net_official</a>
+            </div>
+            
+            <div>
+                <label>واتساپ :</label>
+                <a href="https://wa.me/+989903338789" class="btn btn-primary"><i class="fa fa-whatsapp"></i>dakeh_net_official</a>
+            </div>
+
+            <div>
+            <label>تلفن : </label>
+            <a class="btn btn-primary" href="tel:@Model.phone"><i class="fa fa-mobile"></i>09903338789</a>
+        </div>
+        <div>
+            <label>اینستاگرام : </label>
+            <a class="btn btn-primary" href="https://instagram.com/@Model.pageInstagramUrl"><i class="fa fa-instagram"></i>dakeh.net_official</a>
+        </div>
+        <div>
+            <label>ایمیل : </label>       
+            <a class="btn btn-primary" href="mailto: @Model.email"><i class="fa fa-envelope"></i>Info@dakeh.net</a>
+        </div>
+            @if (Model.pageTwitterUrl != null)
+			{
+
+        <div>
+            <label>توییتر : </label>
+            <a class="btn btn-primary" href="https://twitter.com/intent/@Model.pageTwitterUrl"><i class="fa fa-twitter"></i>@Model.pageTwitterUrl</a>
+
+        </div>
+			}
+        </div>
+    </div>
+
+

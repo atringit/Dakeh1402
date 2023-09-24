@@ -1,0 +1,102 @@
+﻿@model PagedList.Core.IPagedList<Dake.Models.Factor>
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">فاکتورها</h3>
+            </div>
+            <!-- /.box-header -->
+			<div class="box-body  table-responsive">
+				<form asp-action="Print" asp-controller="Factor" method="post">
+					<div class="box-body">
+
+						<div class="col-md-1 form-group">
+							<button type="submit" class="btn btn-default"><i class="fa fa-file-excel-o"></i>خروجی اکسل</button>
+						</div>
+					
+					</div>
+				</form>
+				<table id="example2" class="table table-bordered table-hover">
+					<thead>
+						<tr>
+							<th>کد</th>
+							<th>شماره همراه</th>
+
+							<th>آگهی</th>
+							<th>قیمت کل</th>
+							<th>تاریخ</th>
+							<th>نوع</th>
+							<th>امکانات</th>
+						</tr>
+					</thead>
+					<tbody>
+						@foreach (var item in Model)
+						{
+							<tr>
+								<td>@item.id</td>
+								<td>@item.user.cellphone</td>
+								@*@if (item.advertismentId != null)
+						{
+							<td>@item.advertisment.title</td>
+						}
+						else
+						{
+							<td></td>
+						}*@
+								@if (item.noticeId != null)
+								{
+									<td>@item.notice.title</td>
+								}
+								else
+								{
+									<td>@item.banner.title</td>
+								}
+								<td>@item.totalPrice</td>
+								<td>@item.createDatePersian</td>
+								@if (item.bannerId == null)
+								{
+									<td>عادی</td>
+								}
+								else
+								{
+									<td>بنری</td>
+								}
+								<td><a href="/Notice/Details/@item.noticeId" class="btn btn-default">مشاهده اگهی</a></td>
+							</tr>
+						}
+
+
+					</tbody>
+					<tfoot>
+
+					</tfoot>
+				</table>
+			</div>
+            <!-- /.box-body -->
+            <div class="row">
+                <div class="col-sm-5">
+                </div>
+                <div class="col-sm-7">
+                    <div class="dataTables_paginate paging_simple_numbers" id="example1_paginate">
+                        <ul class="pagination">
+                            @*@for (int i = 1; i <= Model.PageCount; i++)
+                                {
+                                    <li class="paginate_button  @((i==Model.CurrentPage?"active":""))">
+                                        <a href="/Admin/Users?pageId=@i" aria-controls="example1" data-dt-idx="1" tabindex="0">@i</a>
+                                    </li>
+                                }*@
+                            <li>
+                                <pager list="@Model" asp-controller="Factor" asp-action="Index" />
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- /.col -->
+</div>
+
+
+

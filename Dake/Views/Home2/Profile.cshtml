@@ -1,0 +1,573 @@
+﻿@model Dake.ViewModel.AddNotice
+
+@{ Layout = "_Layout"; }
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<form id="AddNoticeForm" method="post" action="AddNotice" enctype="multipart/form-data">
+    <section class="form">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="form__wrapper">
+                        <div class="form__box">
+                            <div class="form__box__title">
+                                <h3>مشخصات کلی</h3>
+                            </div>
+                            <div class="form-group">
+                                <input placeholder="عنوان آگهی" type="text" class="title form-control" asp-for="title" />
+                                <span asp-validation-for="title" class="text-danger"></span>
+
+                                <div class="form__box__info">
+                                    <ul>
+                                        <li>انتخاب عنوان مناسب باعث بهتر دیده شدن آگهی شما میشود.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="form-group">
+
+                                <input placeholder="لینک" class="title form-control" asp-for="link" />
+                                <span asp-validation-for="link" class="text-danger"></span>
+                            </div>
+                            <span asp-validation-for="description" class="text-danger"></span>
+
+
+                            <div class="form-group">
+                                <textarea rows="1" cols="50" class="form-control title" placeholder="توضیحات آگهی" asp-for="description"></textarea>
+                                <span asp-validation-for="description" class="text-danger"></span>
+                                <div class="form__box__info">
+                                    <ul>
+                                        <li>نوشتن توضیحات کامل و مناسب باعث بهتر دیده شدن آگهی شما میشود.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form__wrapper">
+                        <div class="form__box">
+                            <div class="form__box__title">
+                                <h3>قیمت</h3>
+                            </div>
+                            <div class="form-group mb-5">
+                                <input placeholder="قیمت پایه" class="title form-control" asp-for="price" type="text" onkeyup="numberWithCommas(this)" />
+                                <span asp-validation-for="price" class="text-danger"></span>
+                                <div class="form__box__info">
+                                    <ul>
+                                        <li>قیمت به تومان میباشد.</li>
+                                        <li>قیمت گذاری صحیح باعث فروش سریع تر محصول شما میشود.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <input placeholder="قیمت نهایی" class="title form-control" asp-for="lastPrice" type="text" onkeyup="numberWithCommas(this)" />
+                                <span asp-validation-for="lastPrice" class="text-danger"></span>
+                                <div class="form__box__info">
+                                    <ul>
+                                        <li>قیمت به تومان میباشد.</li>
+                                        <li>قیمت نهایی باید کوچکتر و یا مساوی قیمت پایه باشد.</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form__wrapper">
+                        <div class="form__box">
+                            <div class="form__box__title">
+                                <h3>دسته بندی و محدوده</h3>
+                            </div>
+                            <div class="form-group" onclick="openselectlist()">
+
+
+
+                                <input class="title form-control" type="text" id="categoryId" name="categoryId" hidden />
+
+
+                                <div onclick="sayHelioo()" style="height:60px;">
+                                    <select id="slccategory" class="title form-control selectpicker">
+                                        <option value="">انتخاب دسته بندی</option>
+
+                                    </select>
+                                </div>
+
+
+                                <p style="margin-right:15px" id="currentcat"></p>
+                                <p style="margin-right:15px" class="text text-danger" id="errorcat"></p>
+
+                                <span asp-validation-for="categoryId" class="text-danger"></span>
+                                <div class="form__box__info">
+                                    <ul style="margin-right:13px">
+                                        <li>انتخاب اشتباه دسته بندی باعث رد شدن آگهی شما می شود.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <select class="title form-control selectpicker" data-size="5" asp-for="cityId" required>
+                                    <option value="">استان آگهی را انتخاب کنید</option>
+                                    @foreach (var item in (IEnumerable<City>)ViewData["Cities"])
+                                    {
+                        <option value="@item.id">@item.name</option>}
+                                </select>
+                                <span asp-validation-for="cityId" class="text-danger"></span>
+
+                            </div>
+                            <div class="form-group">
+                                <div id="proContent">
+                                    <select class="title form-control selectpicker" data-size="5" asp-for="provinceId" required>
+                                        <option value="">شهرستان آگهی را انتخاب کنید</option>
+
+                                    </select>
+                                    <span asp-validation-for="provinceId" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div id="areaContent">
+                                    <select class="title form-control selectpicker" data-size="5" asp-for="areaId" required>
+                                        <option value="">محدوده آگهی را انتخاب کنید</option>
+
+                                    </select>
+                                    <span asp-validation-for="areaId" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form__wrapper">
+                        <div class="form__box">
+                            <div class="form__box__title">
+                                <h3>تصاویر و فیلم</h3>
+                            </div>
+                            <div class="form-group">
+                                <div class="form__box__info">
+                                    <ul>
+                                        <li> حداکثرتعداد فیلم 1 عدد میباشد.</li>
+                                        <li>تعداد تصاویر باید کمتر از 10 عدد باشد.</li>
+                                        <li>حجم فیلم کم تر از 20 مگابایت و زمان آن باید زیر یک دقیقه باشد.</li>
+                                    </ul>
+                                </div>
+                                <div class="form__box__upload">
+                                    <div class="form__box__upload__image">
+                                        <input id="fileChooser" onchange="ValidateFileUpload()" type="file" name="image[]">
+                                        <img src="">
+                                        <i class="dk-delete"></i>
+                                        <span>انتخاب محتوا</span>
+
+                                    </div>
+                                    <div class="form__box__upload__add">
+                                        <i class="dk-plus"></i>
+                                    </div>
+                                </div>
+                                <div id="SelectedFileName">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form__wrapper">
+                        <div class="form__box">
+                            <div class="form__box__title">
+                                <h3>کدتخفیف</h3>
+                            </div>
+                            <div class="form-group">
+                                <input maxlength="6" placeholder="کدتخفیف" class="title form-control" id="DiscountCode" name="discountcode" />
+                                <p class="text text-danger">@TempData["DiscountErrorMessage"]</p>
+
+                                <span id="DiscountCodeMessage" class="text-danger"></span>
+                                <div class="form__box__info">
+                                    <ul>
+                                        <li>در صورت تمایل کد تخفیف وارد کنید </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <p>کدهای تخفیف مناسب شما :</p>
+
+                                @foreach (var item in (IEnumerable<DiscountCode>)ViewData["Discounts"])
+                                {
+                    <small>@item.code</small>}
+                            </div>
+
+                            <div class="form__btn">
+                                <button class="btn btn-primary" onclick="DisCountCodeCheckValidity()" type="button" style="width:80px">برسی</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade " id="modalcategory">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header " style="text-align:center">
+                                <div id="divbtnreturn" style="width:30px">
+                                </div>
+                                <h6 class="modal-title" style="margin:auto;vertical-align:middle;">دسته بندی</h6>
+
+                            </div>
+
+
+                            <div class="modal-body" id="categorybody">
+
+                                @foreach (var item in (IEnumerable<Category>)ViewData["Categorie"])
+                                {
+                    <div class="form-group" onclick="MobileGetChilds(@item.id);">
+
+                        <div style="width : 100% ;height:30px ;background-color:whitesmoke;border-bottom:1px solid">
+                            <p style="text-align:center;height:inherit;cursor:pointer">@item.name</p>
+                        </div>
+                    </div>}
+                            </div>
+
+
+                        </div>
+                        <!-- /.modal-content -->
+                    </div>
+                    <!-- /.modal-dialog -->
+                </div>
+
+            </div>
+            <div class="form__btn">
+
+                <button type="button" onclick="sendform();">پرداخت و ایجاد آگهی</button>
+
+            </div>
+
+            @*<button onclick="openselectlist()" type="button"> tesy</button>*@
+
+        </div>
+    </section>
+</form>
+
+
+
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">در حال آپلود فایل انتخابی</h5>
+            </div>
+            <div class="modal-body">
+                <div class="progress">
+                    <div id="progress" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+                        <div id="label" class="control-label">0%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section scripts
+        {
+    <script>
+        window.onload = Load;
+
+        function Load() {
+
+            $("#slccategory").onclick(function () {
+                alert("Hi");
+            })
+        }
+        function ValidateFileUpload() {
+            var fuData = document.getElementById('fileChooser');
+            var FileUploadPath = fuData.value;
+
+            //To check if user upload any file
+            if (FileUploadPath == '') {
+                alert("Please upload an image");
+
+            } else {
+                var Extension = FileUploadPath.substring(
+                    FileUploadPath.lastIndexOf('.') + 1).toLowerCase();
+
+                //The file uploaded is an image
+
+                if (Extension == "gif" || Extension == "png" || Extension == "webp"
+                    || Extension == "jpeg" || Extension == "jpg" || Extension == "mp4") {
+
+                    // To Display
+                    if (fuData.files && fuData.files[0]) {
+                        
+                            console.log("this.files[0].size");
+                            console.log(this.files[0].size);
+                            if (this.files[0].size > 99999999) {
+                                alert("حجم فایل بیش از حد مجاز است لطفا فایلی با حجم زیر 98 مگابایت انتخاب کنید!");
+                                this.value = "";
+                            } else {
+                                var nameFiles = ""
+
+                                var value = e.target.files[0].name;
+                                nameFiles += "<h4> فایل " + value + " انتخاب شده است</h4>";
+
+                                SelectedFileName.innerHTML = nameFiles;
+                            }
+
+                        reader.readAsDataURL(fuData.files[0]);
+                    }
+
+                }
+
+                //The file upload is NOT an image
+                else {
+                    var nameFiles = ""
+                    document.getElementById('fileChooser').value= nameFiles;
+                    alert("Photo only allows file types of GIF, PNG, JPG, JPEG and BMP. ");
+                }
+            }
+        }
+        
+
+
+
+        function sendform() {
+
+            if ($("#categoryId").val() == 0 || $("#categoryId").val() == '') {
+                $("#errorcat").text("لطفا دسته بندی را مشخص نمایید.");
+                setTimeout(function () {
+                    $("#errorcat").text("");
+                }, 5000);
+            }
+            else {
+
+                $("input[name='image[]']").each(function (e) {
+                    $(this).attr('name', 'image');
+                });
+                $("#AddNoticeForm").submit();
+                startUpdatingProgressIndicator();
+            }
+        }
+        function MobileGetChilds(id) {
+            $.ajax({
+                type: "GET",
+                url: "../Home2/MobileGetChildsCategories?Id=" + id + "",
+                dataType: "json",
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    if (response.success) {
+
+                        if (response.isfinal == false) {
+                            $('#categorybody').html('');
+                            $.each(response.list, function () {
+
+
+                                $("#divbtnreturn").html("<button class='btn btn-sm' type='button' onclick='GetBack(" + response.parentid + ");' style='float:right'><i style='font-size: 24px' class='fa'>&#xf112;</i></button>");
+
+                                if (this.havenext == false) {
+                                    $('#categorybody').append("<div class='form-group' onclick='MobileSetCatId(" + this.id + ",\"" + this.name + "\" );'><div  style='width : 100% ;height:30px ;background-color:#83c030;border-bottom:1px solid'><p style='text-align:center;height:inherit;cursor:pointer'>" + this.name + "</p></div></div>");
+
+                                }
+                                else {
+                                    $('#categorybody').append("<div class='form-group' onclick='MobileGetChilds(" + this.id + ");'><div  style='width : 100% ;height:30px ;background-color:whitesmoke;border-bottom:1px solid'><p style='text-align:center;height:inherit;cursor:pointer'>" + this.name + "</p></div></div>");
+                                }
+                            });
+                        }
+                    }
+                    else {
+
+                    }
+                },
+                error: function (response) {
+                    alert("Error");
+                }
+            });
+
+        }
+
+        function numberWithCommas(x) {
+            var tmp = x.value;
+            while (tmp.indexOf(',') != -1)
+                tmp = tmp.replace(',', '');
+            var parts = tmp.toString().split(".");
+            parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            x.value = parts.join(".");
+        }
+        $(document).ready(function () {
+
+
+            $(".bak-color-profile").parent().css("background-color", "#FFFFFF");
+
+
+        });
+        $("#cityId").change(function () {
+            if ($("#cityId").val() != "") {
+                $("#proContent").html('');
+                $("#areaContent").html('');
+                $.ajax({
+                    type: "GET",
+                    url: "/Home2/GetProvince?id=" + $("#cityId").val(),
+
+                    success: function (response) {
+
+                        $("#proContent").html(response);
+                        $('#provinceId').selectpicker('refresh');
+
+                    }
+                });
+            }
+        });
+        $(document).on('change', '#provinceId', function () {
+
+            if ($("#provinceId").val() != "") {
+                $("#areaContent").html('');
+                $.ajax({
+                    type: "GET",
+                    url: "/Home2/GetArea?id=" + $("#provinceId").val(),
+
+                    success: function (response) {
+
+                        $("#areaContent").html(response);
+                        $('#areaId').selectpicker('refresh');
+                    }
+                });
+            }
+        });
+        function openselectlist() {
+            $("#categoryId").selectpicker('destroy');
+            $('#categoryId').attr('size', 6);
+
+        }
+
+
+        function GetBack(id) {
+
+
+
+            $.ajax({
+                type: "GET",
+                url: "../Home2/GetBackCategories?Id=" + id + "",
+                dataType: "json",
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    if (response.success) {
+                        $('#categoryId').find('option').remove();
+
+
+                        if (response.isfinal == false) {
+                            $("#divbtnreturn").html("<button class='btn btn-sm' type='button' onclick='GetBack(" + response.parentid + ");' style='float:right'><i style='font-size: 24px' class='fa'>&#xf112;</i></button>");
+
+                        }
+                        if (response.isfinal == true) {
+
+                            $("#divbtnreturn").html('');
+                        }
+                        $('#categorybody').html('');
+                        $.each(response.list, function () {
+                            //$('#categoryId').append($("<option/>").val(this.id).text(this.name));
+                            if (this.havenext == false) {
+                                $('#categorybody').append("<div class='form-group' onclick='MobileSetCatId(" + this.id + ",\"" + this.name + "\" );'><div  style='width : 100% ;height:30px ;background-color:#83c030;border-bottom:1px solid'><p style='text-align:center;height:inherit;cursor:pointer'>" + this.name + "</p></div></div>");
+                            }
+                            else {
+                                $('#categorybody').append("<div class='form-group' onclick='MobileGetChilds(" + this.id + ");'><div  style='width : 100% ;height:30px ;background-color:whitesmoke;border-bottom:1px solid'><p style='text-align:center;height:inherit;cursor:pointer'>" + this.name + "</p></div></div>");
+                            }
+                        });
+                        //      $("#categoryId").selectpicker('destroy');
+                        //$('#categoryId').attr('size', 6);
+                    }
+                    else {
+                    }
+                },
+                error: function (response) {
+                    alert("Error");
+                }
+            });
+
+
+        }
+        function detectMob() {
+            const toMatch = [
+                /Android/i,
+                /webOS/i,
+                /iPhone/i,
+                /iPad/i,
+                /iPod/i,
+                /BlackBerry/i,
+                /Windows Phone/i
+            ];
+
+            return toMatch.some((toMatchItem) => {
+                return navigator.userAgent.match(toMatchItem);
+            });
+        }
+
+        function MobileSetCatId(id, name) {
+            $("#categoryId").val(id);
+            $("#currentcat").text("دسته انتخابی : " + name + " ")
+            $("#modalcategory").modal('toggle')
+
+
+        }
+
+
+
+        function DisCountCodeCheckValidity() {
+            $.ajax({
+                type: "GET",
+                url: "/DiscountCode/Validity?code=" + $("#DiscountCode").val() + "&" + "categoryId=" + $("#categoryId").val(),
+                success: function (response) {
+
+                    if (response.success == false && response.alreadyused == true) {
+                        $("#DiscountCodeMessage").attr('class', 'text-danger');
+                        $("#DiscountCodeMessage").text('کد وارد شده قبلا توسط شما استفاده شده ');
+                    }
+                    else if (response.success == false) {
+                        $("#DiscountCodeMessage").attr('class', 'text-danger');
+                        $("#DiscountCodeMessage").text('کد وارد شده معتبر نیست');
+                    }
+                    else {
+                        $("#DiscountCodeMessage").attr('class', 'text-success');
+                        $("#DiscountCodeMessage").text('کد وارد شده به ارزش ' + response.price + ' ریال است و مبلغ فاکتور برابر است با ' + response.total + '');
+
+                    }
+                }
+            });
+        }
+
+
+
+        function sayHelioo() {
+            $('#slccategory').val('');
+            $("#modalcategory").modal('show');
+        }
+
+        function startUpdatingProgressIndicator() {
+            $('#exampleModal').modal('show');
+            $("#progress").show();
+
+            intervalId = setInterval(
+                function () {
+                    // We use the POST requests here to avoid caching problems (we could use the GET requests and disable the cache instead)
+                    $.post(
+                        "/Home2/Progressing",
+                        function (progress) {
+                            //$("#bar").css({ width: progress + "%" });
+
+                            if (progress >= 100) {
+                                $("#progress").css({ width: 0 + "%" });
+                                $("#label").html(0 + "%");
+                            }
+                            else {
+                                $("#progress").css({ width: progress + "%" });
+                                $("#label").html(progress + "%");
+
+                            }
+                        }
+                    );
+                },
+                10
+            );
+        }
+        function stopUpdatingProgressIndicator() {
+            clearInterval(intervalId);
+        }
+
+    </script>
+}

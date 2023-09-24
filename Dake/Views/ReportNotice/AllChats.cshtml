@@ -1,0 +1,65 @@
+﻿@model PagedList.Core.IPagedList<Dake.Models.ViewModels.CustomMessage>
+
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">مذاکرات آگهی ها</h3>
+            </div>
+
+            <!-- /.box-header -->
+            <div class="box-body table-responsive">
+                <table id="example2" class="table table-bordered table-hover ">
+                    <thead>
+                        <tr>
+                            <th>کد</th>
+                            <th>متن</th>
+                            <th>تاریخ </th>
+                            <th>گیرنده </th>
+                            <th>فرستنده</th>
+                            <th>آگهی</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.id</td>
+                                <td>@item.text</td>
+                                <td>@item.date</td>
+                                <td>@item.userReceiverPhone</td>
+                                <td>@item.userSenderPhone</td>
+                                <td>@item.Title</td>
+                            </tr>
+                        }
+
+
+                    </tbody>
+                    <tfoot>
+
+                    </tfoot>
+                </table>
+            </div>
+            <!-- /.box-body -->
+            <div class="row">
+                <div class="col-sm-5">
+                </div>
+                <div class="col-sm-7">
+                    <div class="dataTables_paginate paging_simple_numbers" id="example1_paginate">
+                        <ul class="pagination">
+                            <li>
+                                <pager list="@Model" asp-controller="ReportNotice" asp-action="AllChats" />
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- /.col -->
+</div>

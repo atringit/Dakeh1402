@@ -1,0 +1,83 @@
+@font-face {
+  font-family: yekan;
+  font-style: normal;
+  font-weight: bold;
+  src: url("../fonts/yekan/eot/iranyekanwebbold(fanum).eot");
+  src: url("../fonts/yekan/eot/iranyekanwebbold(fanum).eot?#iefix") format("embedded-opentype"), url("../fonts/yekan/woff2/iranyekanwebbold(fanum).woff2") format("woff2"), url("../fonts/yekan/woff/iranyekanwebbold(fanum).woff") format("woff"), url("../fonts/yekan/ttf/iranyekanwebbold(fanum).ttf") format("truetype");
+}
+@font-face {
+  font-family: yekan;
+  font-style: normal;
+  font-weight: 300;
+  src: url("../fonts/yekan/eot/iranyekanweblight(fanum).eot");
+  src: url("../fonts/yekan/eot/iranyekanweblight(fanum).eot?#iefix") format("embedded-opentype"), url("../fonts/yekan/woff2/iranyekanweblight(fanum).woff2") format("woff2"), url("../fonts/yekan/woff/iranyekanweblight(fanum).woff") format("woff"), url("../fonts/yekan/ttf/iranyekanweblight(fanum).ttf") format("truetype");
+}
+@font-face {
+  font-family: yekan;
+  font-style: normal;
+  font-weight: normal;
+  src: url("../fonts/yekan/eot/iranyekanwebregular(fanum).eot");
+  src: url("../fonts/yekan/eot/iranyekanwebregular(fanum).eot?#iefix") format("embedded-opentype"), url("../fonts/yekan/woff2/iranyekanwebregular(fanum).woff2") format("woff2"), url("../fonts/yekan/woff/iranyekanwebregular(fanum).woff") format("woff"), url("../fonts/yekan/ttf/iranyekanwebregular(fanum).ttf") format("truetype");
+}
+
+
+@font-face {
+    font-family: 'dakeh';
+    src: url('../fonts/dakeh/dakeh.eot?x6ozoq');
+    src: url('../fonts/dakeh/dakeh.eot?x6ozoq#iefix') format('embedded-opentype'), url('../fonts/dakeh/dakeh.ttf?x6ozoq') format('truetype'), url('../fonts/dakeh/dakeh.woff?x6ozoq') format('woff'), url('../fonts/dakeh/dakeh.svg?x6ozoq#dakeh') format('svg');
+    font-weight: normal;
+    font-style: normal;
+    font-display: block;
+}
+
+[class^="dk-"], [class*=" dk-"]
+{
+  font-family: 'dakeh' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.dk-play:before {
+    content: "\e900";
+}
+
+.dk-arrow-up:before {
+    content: "\e901";
+}
+
+.dk-arrow-down:before {
+    content: "\e902";
+}
+
+.dk-gallery:before {
+    content: "\e903";
+}
+
+.dk-plus:before {
+    content: "\e904";
+}
+
+.dk-heart:before {
+    content: "\e905";
+}
+
+.dk-chart:before {
+    content: "\e906";
+}
+
+.dk-gps:before {
+    content: "\e907";
+}
+
+.dk-logout:before {
+    content: "\e908";
+}
+
+.dk-delete:before {
+    content: "\e909";
+}

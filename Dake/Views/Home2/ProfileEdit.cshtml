@@ -1,0 +1,429 @@
+﻿@model Dake.ViewModel.AddNotice
+
+@{
+    Layout = "_Layout";
+}
+<form id="AddNoticeForm" method="post" action="EditNotice" enctype="multipart/form-data">
+    <input hidden asp-for="id" />
+    <section class="form">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="form__wrapper">
+                        <div class="form__box">
+                            <div class="form__box__title">
+                                <h3>مشخصات کلی</h3>
+                            </div>
+                            <div class="form-group">
+                                <input placeholder="عنوان آگهی" type="text" class="title form-control" asp-for="title" />
+                                <span asp-validation-for="title" class="text-danger"></span>
+
+                                <div class="form__box__info">
+                                    <ul>
+                                        <li>انتخاب عنوان مناسب باعث بهتر دیده شدن آگهی شما میشود.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="form-group">
+
+                                <input placeholder="لینک" class="title form-control" asp-for="link" />
+                                <span asp-validation-for="link" class="text-danger"></span>
+                            </div>
+                            <span asp-validation-for="description" class="text-danger"></span>
+
+
+                            <div class="form-group">
+                                <textarea rows="1" cols="50" class="form-control title" placeholder="توضیحات آگهی" asp-for="description"></textarea>
+                                <span asp-validation-for="description" class="text-danger"></span>
+                                <div class="form__box__info">
+                                    <ul>
+                                        <li>نوشتن توضیحات کامل و مناسب باعث بهتر دیده شدن آگهی شما میشود.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form__wrapper">
+                        <div class="form__box">
+                            <div class="form__box__title">
+                                <h3>قیمت</h3>
+                            </div>
+                            <div class="form-group mb-5">
+                                <input placeholder="قیمت پایه" class="title form-control" value="@String.Format("{0:0,0}", Model.price)" id="price" name="price" type="text" onkeyup="numberWithCommas(this)" />
+
+                                <span asp-validation-for="price" class="text-danger"></span>
+                                <div class="form__box__info">
+                                    <ul>
+                                        <li>قیمت به تومان میباشد.</li>
+                                        <li>قیمت گذاری صحیح باعث فروش سریع تر محصول شما میشود.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <input placeholder="قیمت نهایی" class="title form-control" id="lastPrice" name="lastPrice" value="@String.Format("{0:0,0}", Model.lastPrice)" asp-for="lastPrice" type="text" onkeyup="numberWithCommas(this)" />
+                                <span asp-validation-for="lastPrice" class="text-danger"></span>
+                                <div class="form__box__info">
+                                    <ul>
+                                        <li>قیمت به تومان میباشد.</li>
+                                        <li>قیمت نهایی باید کوچکتر و یا مساوی قیمت پایه باشد.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form__wrapper">
+                        <div class="form__box">
+                            <div class="form__box__title">
+                                <h3>دسته بندی و محدوده</h3>
+                            </div>
+                            <div class="form-group">
+                                <select class="title form-control selectpicker" asp-for="categoryId" required>
+                                    <option value="">دسته بندی آگهی را انتخاب کنید</option>
+                                    @foreach (var item in (IEnumerable<Category>)ViewData["Categorie"])
+                                    {
+                                        if (item.id == Model.categoryId)
+                                        {
+                                            <option selected value="@item.id">@item.name</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@item.id">@item.name</option>
+                                        }
+                                    }
+                                </select>
+                                <span asp-validation-for="categoryId" class="text-danger"></span>
+                                <div class="form__box__info">
+                                    <ul>
+                                        <li>انتخاب اشتباه دسته بندی باعث رد شدن آگهی شما می شود.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <select class="title form-control selectpicker" asp-for="cityId" required>
+                                    <option value="">استان آگهی را انتخاب کنید</option>
+                                    @foreach (var item in (IEnumerable<City>)ViewData["Cities"])
+                                    {
+                                        if (item.id == Model.cityId)
+                                        {
+                                            <option selected value="@item.id">@item.name</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@item.id">@item.name</option>
+                                        }
+                                    }
+                                </select>
+                                <span asp-validation-for="cityId" class="text-danger"></span>
+
+                            </div>
+                            <div class="form-group">
+                                <div id="proContent">
+                                    <select class="title form-control selectpicker" asp-for="provinceId" required>
+                                        <option value="">شهرستان آگهی را انتخاب کنید</option>
+                                        @foreach (var item in (IEnumerable<Province>)ViewData["Provinces"])
+                                        {
+                                            if (item.id == Model.provinceId)
+                                            {
+                                                <option selected value="@item.id">@item.name</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@item.id">@item.name</option>
+                                            }
+                                        }
+
+                                    </select>
+                                    <span asp-validation-for="provinceId" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div id="areaContent">
+                                    <select class="title form-control selectpicker" asp-for="areaId" required>
+                                        <option value="">محدوده آگهی را انتخاب کنید</option>
+                                        @foreach (var item in (IEnumerable<Area>)ViewData["Areas"])
+                                        {
+                                            if (item.id == Model.areaId)
+                                            {
+                                                <option selected value="@item.id">@item.name</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@item.id">@item.name</option>
+                                            }
+                                        }
+                                    </select>
+                                    <span asp-validation-for="areaId" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form__wrapper">
+                        <div class="form__box">
+                            <div class="form__box__title">
+                                <h3>تصاویر و فیلم</h3>
+                            </div>
+                            <div class="form-group">
+                                <div class="form__box__info">
+                                    <ul>
+                                        <li> حداکثرتعداد فیلم 1 عدد میباشد.</li>
+                                        <li>تعداد تصاویر باید کمتر از 10 عدد باشد.</li>
+                                        <li>حجم فیلم کم تر از 20 مگابایت و زمان آن باید زیر یک دقیقه باشد.</li>
+                                    </ul>
+                                </div>
+                                @if (String.IsNullOrWhiteSpace(Model.movieUrl) == false)
+                                {
+                                    <a href="@Model.movieUrl" target="_blank" class="btn btn-success">
+                                        دانلود ویدئو
+                                    </a>
+                                    <br />
+                                }
+                                
+                                    <div class="form__box__upload">
+
+                                        @if (String.IsNullOrWhiteSpace(Model.imageUrl) == false)
+                                        {
+
+
+                                            <div class="form__box__upload__image" id="img_@Model.imageUrl.Substring(8, 8)">
+                                                <input  type="file" name="image[]">
+                                                <img src="@Model.imageUrl">
+                                                <span>انتخاب محتوا</span>
+                                            <i class="dk-delete" style="display:block" onclick="DeleteImage('@Model.imageUrl')"></i>
+                                            </div>
+
+
+
+                                        }
+                                        @foreach (var item in Model.NoticeImages)
+                                        {
+                                            <div class="form__box__upload__image" id="img_@item.image.Substring(8,8)">
+                                                <input type="file" name="image">
+                                                <img src="@item.image">
+                                                <span>انتخاب محتوا</span>
+                                            <i class="dk-delete" style="display:block" data-img="@item.image" onclick="DeleteImage2('@item.image')"></i>
+
+                                            </div>
+                                        }
+                                        <div class="form__box__upload__add">
+                                            <i class="dk-plus"></i>
+                                        </div>
+                                    </div>
+
+
+                                @*<div class="row">
+            <div class="col-md-6">
+                <label>تصویر اصلی</label>
+                <img src="@Model.imageUrl" class="img-thumbnail editimg" />
+                <input type="file" name="image" id="image" class="file-input-custom" accept="image/*" />
+            </div>
+            <div class="col-md-6">
+                <label>فیلم</label>
+                @if (String.IsNullOrWhiteSpace(Model.movieUrl) == false)
+                {
+                    <a href="@Model.movieUrl" target="_blank" class="btn btn-success">
+                        دانلود ویدئو
+                    </a>
+                    <br />
+                }
+                <input type="file" name="movie" id="movie" class="file-input-custom" data-show-caption="true" data-show-upload="true" accept="video/mp4" />
+
+            </div>
+            @{ var count = 1;}
+            @foreach (var item in Model.NoticeImages)
+            {
+                <div class="col-md-6">
+
+                    <img src="@item.image" class="img-thumbnail editimg" />
+
+                    <input type="file" name="image_@count" id="image_@count" class="file-input-custom" data-show-caption="true" data-show-upload="true" accept="image/*" />
+                </div>
+                count++;
+            }
+            @for (int i = count; i < 10; i++)
+            {
+                <div class="col-md-6">
+
+                    <input type="file" name="image_@count" id="image_@count" class="file-input-custom" data-show-caption="true" data-show-upload="true" accept="image/*" />
+                </div>
+            }
+
+        </div>*@
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form__btn">
+                <button type="submit" onclick="sendform()">ویرایش آگهی</button>
+            </div>
+        </div>
+    </section>
+</form>
+    @section scripts
+        {
+        <script>
+        function sendform() {
+
+            if ($("#categoryId").val() == 0 || $("#categoryId").val() == '') {
+                $("#errorcat").text("لطفا دسته بندی را مشخص نمایید.");
+                setTimeout(function () {
+                    $("#errorcat").text("");
+                }, 5000);
+            }
+            else {
+
+                $("input[name='image[]']").each(function (e) {
+                    $(this).attr('name', 'image');
+                });
+                $("#AddNoticeForm").submit();
+                startUpdatingProgressIndicator();
+            }
+        }
+            //$(document).ready(function () {
+            //    $('.file-caption-name').remove();
+            //    $('.btn-file > span').remove();
+            //    $('.fileinput-cancel').remove();
+            //    $('.fileinput-upload-button').remove();
+            //    $('.kv-fileinput-caption').remove();
+            //    $('.file-input-custom').addClass("mg-rgt");
+            //    $('.fileinput-remove').remove();
+
+            //});
+
+        function DeleteImage(p) {
+            $.ajax({
+                type: "GET",
+                url: `/Notice2/DeleteNoticeImage?id=${@Model.id}&imageName=${p}`,
+                success: function (response) {
+                    console.log("hhhhh");
+                }
+            });
+        }
+
+        function DeleteImage2(p) {
+            $.ajax({
+                type: "GET",
+                url: `/Notice2/DeleteNoticeImage?id=${@Model.id}&imageName=${p}`,
+                success: function (response) {
+                    console.log("hhhhh");
+                }
+            });
+        }
+            function numberWithCommas(x) {
+                var tmp = x.value;
+                while (tmp.indexOf(',') != -1)
+                    tmp = tmp.replace(',', '');
+                var parts = tmp.toString().split(".");
+                parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                x.value = parts.join(".");
+            }
+            //$(document).ready(function () {
+            //    $(".bak-color-profile").parent().css("background-color", "#FFFFFF");
+            //});
+            $("#cityId").change(function () {
+                if ($("#cityId").val() != "") {
+                    $("#proContent").html('');
+                    $("#areaContent").html('');
+                    $.ajax({
+                        type: "GET",
+                        url: "/Home2/GetProvince?id=" + $("#cityId").val(),
+
+                        success: function (response) {
+
+                            $("#proContent").html(response);
+                        }
+                    });
+                }
+            });
+            $(document).on('change', '#provinceId', function () {
+                if ($("#provinceId").val() != "") {
+                    $("#areaContent").html('');
+                    $.ajax({
+                        type: "GET",
+                        url: "/Home2/GetArea?id=" + $("#provinceId").val(),
+
+                        success: function (response) {
+
+                            $("#areaContent").html(response);
+                        }
+                    });
+                }
+            });
+                    //function RegisterNotice() {
+
+                    //    //var fd = new FormData();
+                    //    //fd.append('title', $("#title").val());
+                    //    //fd.append('link', $("#link").val());
+                    //    //fd.append('description', $("#description").val());
+                    //    //fd.append('totallDescription', $("#totallDescription").val());
+                    //    //fd.append('cityId', $("#cityId").val());
+                    //    //fd.append('provinceId', $("#provinceId").val());
+                    //    //fd.append('areaId', $("#areaId").val());
+                    //    //fd.append('categoryId', $("#categoryId").val());
+
+                    //    if ($('#price').length != 0) {
+                    //        while (price.value.indexOf(',') != -1) {
+                    //            price.value = price.value.replace(',', '');
+                    //        }
+                    //    }
+                    //    if ($('#lastPrice').length != 0) {
+                    //        while (lastPrice.value.indexOf(',') != -1) {
+                    //            lastPrice.value = lastPrice.value.replace(',', '');
+                    //        }
+                    //    }
+                    //    //fd.append('price', price.value);
+                    //    //fd.append('lastPrice', lastPrice.value);
+                    //    //fd.append('image', $('#image')[0].files[0]);
+                    //    //fd.append('image1', $('#image1')[0].files[0]);
+                    //    //fd.append('image2', $('#image2')[0].files[0]);
+                    //    //fd.append('image3', $('#image3')[0].files[0]);
+                    //    //fd.append('image4', $('#image4')[0].files[0]);
+                    //    //fd.append('image5', $('#image5')[0].files[0]);
+                    //    //fd.append('image6', $('#image6')[0].files[0]);
+                    //    //fd.append('image7', $('#image7')[0].files[0]);
+                    //    //fd.append('image8', $('#image8')[0].files[0]);
+                    //    //fd.append('image9', $('#image9')[0].files[0]);
+                    //    //fd.append('movie', $('#movie')[0].files[0]);
+                    //    var fd = JSON.stringify({
+                    //        'title': $("#title").val(),
+                    //        'link': $("#link").val(),
+                    //        'description': $("#description").val(),
+                    //        'totallDescription': $("#totallDescription").val(),
+                    //        'cityId': parseInt($("#cityId").val()),
+                    //        'provinceId': parseInt($("#provinceId").val()),
+                    //        'areaId': parseInt($("#areaId").val()),
+                    //        'categoryId': parseInt($("#categoryId").val()),
+                    //        'price': parseFloat(price.value),
+                    //        'lastPrice': parseFloat(lastPrice.value),
+                    //        'movie': $('#movie')[0].files[0],
+
+
+
+                    //    });
+
+                    //    $('#AddNoticeForm').removeData("validator");
+                    //    $('#AddNoticeForm').removeData('unobtrusiveValidation');
+                    //    $.validator.unobtrusive.parse('#AddNoticeForm');
+                    //    if ($('#AddNoticeForm').valid()) {
+                    //        $.ajax({
+                    //            type: "POST",
+                    //            url: "/Home2/AddNotice",
+                    //            data: fd,
+                    //            contentType: false,
+                    //            processData: false,
+                    //            success: function (response) {
+                    //                if (response == "Success")
+                    //                    window.location.href = "/Tests/Index";
+                    //            }
+                    //        });
+                    //    }
+                    //}
+        </script>
+    }

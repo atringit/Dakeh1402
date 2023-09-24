@@ -1,0 +1,18 @@
+﻿
+@model Dake.Models.ViewModels.BannerGetData
+
+<div class="photos" id="main-div">
+    <div class="row">
+        @foreach (var banner in Model.banners)
+        {
+        <div class="col-md-4">
+            <figure class="photos__item photos__item--big">
+                <a href="@banner.Link" title="@banner.title">
+                    <img src="@banner.BannerImage.First().FileLocation" title="@banner.BannerImage.First().Name" alt="@banner.BannerImage.First().Name">
+                </a>
+                <figcaption>@banner.title</figcaption>
+            </figure>
+        </div>
+        }
+    </div>
+</div>

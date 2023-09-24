@@ -1,0 +1,288 @@
+﻿@model Dake.Models.Notice
+
+<section class="content">
+	<div class="row">
+		<!-- left column -->
+		<div class="col-md-12">
+			<!-- general form elements -->
+			<div class="box box-primary">
+				<div class="box-header with-border">
+					<h3 class="box-title">جزییات آگهی</h3>
+				</div>
+				<div class="row">
+
+					<div class="box-body">
+						<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label class="control-label">تاریخ ایجاد</label>
+
+								<input class="form-control" disabled value="@Dake.Utility.PersianCalendarDate.PersianCalendarResult(Model.createDate)" />
+
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label class="control-label">شهرکاربر</label>
+								<input class="form-control" disabled value="@Model.city.name" />
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label asp-for="title" class="control-label"></label>
+								<input disabled asp-for="title" class="form-control" />
+								<span asp-validation-for="title" class="text-danger"></span>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label class="control-label">کد</label>
+								<input disabled value="@Model.code" class="form-control" />
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label class="control-label">لینک</label>
+								<input disabled value="@Model.link" class="form-control" />
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label class="control-label">کاربر</label>
+								<input disabled value="@Model.user.cellphone" class="form-control" />
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label class="control-label">دسته بندی</label>
+								<input disabled value="@Model.category.name" class="form-control" />
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label class="control-label">قیمت</label>
+								<input disabled value="@String.Format("{0:0,0}", @Model.price)" class="form-control" />
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label class="control-label">قیمت آخر</label>
+								<input disabled value="@String.Format("{0:0,0}", @Model.lastPrice)" class="form-control" />
+							</div>
+						</div>
+
+						<div class="col-md-6">
+							<div class="form-group">
+								<label class="control-label">تعداد بازدید</label>
+								<input disabled value="@Model.countView" class="form-control" />
+							</div>
+						</div>
+						<div class="col-md-12">
+							<div class="form-group">
+								<label asp-for="description" class="control-label"></label>
+								<textarea disabled asp-for="description" class="form-control"></textarea>
+								<span asp-validation-for="description" class="text-danger"></span>
+							</div>
+						</div>
+
+						<div class="col-md-6">
+							<div class="form-group">
+								<label class="control-label">تصویر اصلی</label>
+
+								<img class="thumbnail" style="width:300px;height:300px" src="@Html.DisplayFor(model => model.image)" />
+							</div>
+						</div>
+						@foreach (var item in ViewBag.allImage)
+						{
+							<div class="col-md-6">
+								<div class="form-group">
+									<label class="control-label">تصویر دیگر</label>
+									<img class="thumbnail" style="width:300px;height:300px" src="@item.image" />
+								</div>
+							</div>
+						}
+
+						<div class="col-md-6">
+							<div class="form-group">
+								<label class="control-label">فیلم</label>
+								<video width="400" controls>
+									<source src="@Html.DisplayFor(model => model.movie)" type="video/mp4">
+								</video>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label class="control-label">وضعیت آگهی</label>
+								@if (Model.adminConfirmStatus == EnumStatus.Accept)
+								{
+									<p  style="background-color:green;color:aliceblue;width:200px;border-radius:8px;text-align:center">تایید شده</p>
+								}
+								@if (Model.adminConfirmStatus == EnumStatus.Pending)
+								{
+									<p class="text text-warning">در انتظار تایید </p>
+								}
+								@if (Model.adminConfirmStatus == EnumStatus.NotAccept)
+								{
+									<p class="text text-danger">تایید نشده</p>
+								}
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<a onclick="Active(@Model.id)" class="btn btn-default">رد/تایید کردن</a>
+								<a asp-action="Charts" asp-route-id="@Model.id" class="btn btn-default">چارت</a>
+								<a asp-action="Index" class="btn btn-danger">بازگشت</a>
+							</div>
+						</div>
+					</div>
+				</div>
+
+
+			</div>
+		</div>
+	</div>
+	<div class="modal fade" id="modal-default">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title">آگهی</h4>
+				</div>
+				<form id="NoticeConfirm">
+					<input type="hidden" id="id" name="id" value="" />
+					<div class="modal-body">
+						<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+						<input id="titleNotice" class="form-control" name="titleNotice" disabled />
+						<div class="form-group">
+							<label>وضعیت</label>
+							<select class="form-control" id="adminConfirmStatus" name="adminConfirmStatus">
+								@foreach (var item in Enum.GetValues(typeof(Dake.Models.EnumStatus)))
+								{
+									if (item.Equals(Dake.Models.EnumStatus.Pending))
+									{
+										<option selected value="1"> در انتظار تایید </option>
+									}
+									if (item.Equals(Dake.Models.EnumStatus.Accept))
+									{
+										<option selected value="2"> تایید شده </option>
+									}
+									if (item.Equals(Dake.Models.EnumStatus.NotAccept))
+									{
+										<option selected value="3"> تایید نشده </option>
+									}
+								}
+							</select>
+							<i class="form-group__bar"></i>
+						</div>
+						<div class="form-group" id="ConfirmDescriptiondivsms">
+							<label>دلیل رد متن پیام کوتاه</label>
+							<select class="form-control" id="adminConfirmsms" name="adminConfirmsms">
+								<option selected value="1">دسته بندی آگهی شما اشتباه است. </option>
+								<option selected value="2">فیلم آگهی شما دارای جهت نامناسب یا کیفیت پایین یا محتوای ضد اخلاقی است. </option>
+								<option selected value="3">متن نوشته شده را مجدد بررسی و جمله بندی ها و کلمات را اصلاح کنید. </option>
+								<option selected value="4">تصاویر آگهی شما مناسب نیست(مراجعه به قوانین و مقررات سایت). </option>
+								<option selected value="5">لینک درج شده دارای محتوای خلاف قوانین فضای مجازی کشور است. </option>
+
+							</select>
+							<i class="form-group__bar"></i>
+						</div>
+						<div class="form-group" id="ConfirmDescriptiondiv">
+							<label class="control-label">دلیل رد</label>
+							<textarea class="form-control" type="text" data-val="true" data-val-maxlength="دلیل رد نمی تواند بیشتر از 1000 کاراکتر باشد ." data-val-maxlength-max="1000" id="notConfirmDescription" name="notConfirmDescription" value=""></textarea>
+							<span class="text-danger field-validation-valid" data-valmsg-for="notConfirmDescription" data-valmsg-replace="true"></span>
+						</div>
+
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default pull-left" data-dismiss="modal">خروج</button>
+						<button type="submit" class="btn btn-primary">ذخیره</button>
+					</div>
+				</form>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+</section>
+
+
+@section Scripts
+    {
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+
+}
+<script>
+	window.onload = Load; 
+
+	function Load() {
+		$(function () {
+			$('#NoticeConfirm #ConfirmDescriptiondiv').hide();
+			$('#adminConfirmStatus').change(function () {
+				if ($('#adminConfirmStatus').val() == '3') {
+					$('#NoticeConfirm #ConfirmDescriptiondiv').show();
+					$('#NoticeConfirm #ConfirmDescriptiondivsms').show();
+				} else {
+					$('#NoticeConfirm #ConfirmDescriptiondiv').hide();
+					$('#NoticeConfirm #ConfirmDescriptiondivsms').hide();
+				}
+			});
+		});
+		$("#NoticeConfirm").submit(function (event) {
+
+			event.preventDefault();
+			var form = $(this).serialize();
+			$.ajax({
+				url: "/Notice/InActive",
+				method: "POST",
+				data: form,
+				success: function (data) {
+					$('#modal-default').modal('hide');
+					alert("عمیات انجام شد");
+					location.reload();
+				}
+
+			})
+
+
+		});
+	}
+
+
+	function Active(id) {
+
+		$.ajax({
+			url: "/Notice/GetNotice?id=" + id,
+			method: "Get",
+			dataType: "json",
+			success: function (data) {
+				if (data.id != 0) {
+					$("#titleNotice").val(data.title);
+					$("#notConfirmDescription").val(data.notConfirmDescription);
+					$("#adminConfirmStatus").val(data.adminConfirmStatus);
+					$("#id").val(data.id);
+					$(function () {
+						$('#NoticeConfirm #ConfirmDescriptiondiv').hide();
+						if ($('#adminConfirmStatus').val() == '3') {
+							$('#NoticeConfirm #ConfirmDescriptiondiv').show();
+						} else {
+							$('#NoticeConfirm #ConfirmDescriptiondiv').hide();
+						}
+					});
+					$('#modal-default').modal('show');
+				}
+				else {
+					alert("ID is incorrect");
+				}
+			},
+			error: function () {
+				alert("Ajax call failed");
+			}
+		})
+	}
+
+</script>
+

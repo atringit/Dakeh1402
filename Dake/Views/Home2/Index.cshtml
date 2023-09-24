@@ -1,0 +1,213 @@
+﻿@{
+    Layout = "_Layout";
+}
+<section class="home" >
+    <div class="container">
+        <div class="site-name">
+            <h1>راحت ترین سامانه‌ی خرید و فروش کالا</h1>
+            <p>تاکنون بیش از @ViewBag.NoticeCount آگهی در سامانه‌ی <span>دکه</span> ثبت شده است.</p>
+        </div>
+        <div class="filter">
+            <div class="row">
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <select class="form-control selectpicker" onchange="GetByCity()" title="نمایش بر اساس استان @ViewBag.CityName" id="cityId" name="cityId">
+                            <option value="0">همه استان ها</option>
+                            @foreach (var item in (IEnumerable<City>)ViewData["city"])
+                            {
+                                <option value="@item.id">@item.name</option>
+                            }
+                        </select>     
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="filter">
+			<div class="row">
+				<div class="col-md-4">
+					<div class="form-group">
+						<input type="text" class="form-control" id="title2" name="title2" placeholder="برای جستجوی کالا اینجا بنویسید">
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div class="form-group">
+						<select class="form-control selectpicker" title="دسته بندی را انتخاب کنید" id="categoryId2" name="categoryId2" onchange="getsubcats()">
+							<option value="">دسته بندی آگهی را انتخاب کنید</option>
+							@foreach (var item in (IEnumerable<Category>)ViewData["category2"])
+							{
+								<option value="@item.id">@item.name</option>
+							}
+						</select>
+
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div class="form-group" id="subcatcontent">
+						<select class="form-control selectpicker" title="دسته بندی را انتخاب کنید" id="categoryId3" name="categoryId3">
+							<option value="">انتخاب زیردسته</option>
+						</select>
+					</div>
+				</div>
+				<div class="col-md-2">
+					<button class="btn btn-full" onclick="Search()">پیدا کردن</button>
+				</div>
+			</div>
+        </div>
+        <div class="cats">
+            <div class="swiper-container">
+                <div class="swiper-wrapper">
+                    @foreach (var item in (IEnumerable<Category>)ViewData["category2"])
+                    {
+                        <div class="swiper-slide">
+                            <a style="cursor:pointer" id="div-@item.id" onclick="SearchByCat(@item.id)" class="index-link">@item.name</a>
+                        </div>
+                    }
+
+                </div>
+            </div>
+        </div>
+
+        <div id="all-notice">
+        </div>
+    </div>
+</section>
+
+
+@section scripts
+    {
+        <script>
+
+            function Search() {
+                $("#all-notice").html("");
+                $.ajax({
+                    url: "/Home2/GetData",
+                    method: "POST",
+					data: { page: 1, catId: $("#categoryId2").val(), title: $("#title2").val(), cityId: $("#cityId").val(), subCatId: $("#categoryId3").val()  },
+                    success: function (data) {
+						$("#all-notice").append(data);
+                    },
+                    error: function () {
+
+                    }
+                })
+            }
+        </script>
+		<script>
+			$(document).ready(function () {
+
+				//FillComboBox('../Home2/GetCityes', 'CityId');
+
+				$.ajax({
+					url: "/Home2/GetData",
+					method: "POST",
+					data: { page: 1, catId: null },
+					success: function (data) {
+						$("#all-notice").append(data);
+					},
+					error: function () {
+
+					}
+				})
+			});
+			//var pageNo = 2;
+			//var isPaged = true;
+			//var isCalled = false;
+			
+			//$(window).scroll(function () {
+
+			//	//if ($(window).scrollTop() <
+			//	//	$(document).height() - $(window).height()) {
+			//		if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+
+			//	if (isPaged && !isCalled) {
+			//		isCalled = true;
+
+			//		$.ajax({
+			//			url: "/Home2/GetData",
+			//			method: "POST",
+			//			data: { page: pageNo, catId: $("#categoryId2").val(), title: $("#title2").val() },
+			//			success: function (data) {
+			//				$("#all-notice").append(data);
+			//				pageNo++;
+			//				isCalled = false;
+			//				if ($.trim(data) == "") {
+			//					isPaged = false;
+			//				}
+			//			},
+			//			error: function () {
+
+			//			}
+			//		})
+			//	}
+			//}
+			//		});
+
+			function SearchByCat(catId) {
+				$.ajax({
+					url: "/Home2/GetSubCat",
+					method: "Get",
+					data: { catId: catId },
+					success: function (data) {
+
+						if (data != "") {
+							$("#allSubCat").html("");
+							$("#allSubCat").html(data);
+						}
+						else {
+							$("#div-" + catId).addClass('LiActive');
+						}
+
+					},
+					error: function () {
+					}
+				})
+				$.ajax({
+					url: "/Home2/GetData",
+					method: "POST",
+					data: { page: 1, catId: catId },
+					success: function (data) {
+
+						$("#all-notice").html("");
+						$("#all-notice").append(data);
+					},
+					error: function () {
+					}
+				})
+			}
+			function GetByCity() {
+				Search();
+			}
+
+
+			function getsubcats() {
+				$("#categoryId3").selectpicker('destroy');
+				$('#categoryId3').find('option:not(:first)').remove();
+
+				$.ajax({
+					type: "GET",
+					url: "../Home2/GetSubCategorys?Id=" + $('#categoryId2').val() + "",
+					dataType: "json",
+					contentType: false,
+					processData: false,
+					success: function (response) {
+						if (response.success) {
+							$.each(response.list, function () {
+								$('#categoryId3').append($("<option/>").val(this.id).text(this.name));
+							});
+							$('#categoryId3').attr('size', 6);
+
+							$('#categoryId3').selectpicker('refresh');
+						}
+						else {
+						}
+					},
+					error: function (response) {
+						alert("Error");
+					}
+				});
+
+			}
+
+		</script>
+}

@@ -1,0 +1,118 @@
+﻿@model Dake.ViewModel.AddNotice
+
+@{ Layout = "_Layout"; }
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <section class="form">
+        <div class="container">
+            <div class="row">
+               <div class="col-lg-6">
+        <div class="panel-heading clearfix">
+            <h3 class="panel-title"> فرم ثبت بنر</h3>
+        </div>
+        <div class="panel-body">
+        <form  method="post" action="AddBanner" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="Name">نام</label>
+                <input type="text" class="form-control" id="title" name="title" placeholder="نام">
+            </div>
+            <div class="form-group">
+                <label for="Link">لینک</label>
+                <input type="text" class="form-control" id="Link" name="Link"  placeholder="لینک">
+            </div>
+
+            <div class="form-group">
+                <label for="image">عکس</label>
+                <input type="file" multiple id="image" name="image" placeholder="عکس">
+            </div>
+
+            @*<button type="submit" class="btn btn-primary">ثبت</button>*@
+            <button onclick="Reset()" class="btn btn-primary">پاک سازی اطلاعات</button>
+        </form>
+        </div>
+    </div>
+
+            </div>
+            <div class="form__btn">
+
+                <button type="button" onclick="Register();">پرداخت و ایجاد بنر</button>
+
+            </div>
+
+            @*<button onclick="openselectlist()" type="button"> tesy</button>*@
+
+        </div>
+    </section>
+
+<button id="showLoading" style="display:none; position:absolute; top:50%; left:40%" class="btn btn-primary" disabled>
+    <span class="spinner-border spinner-border-sm"></span>
+    Loading..
+</button>
+
+
+
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">در حال آپلود فایل انتخابی</h5>
+            </div>
+            <div class="modal-body">
+                <div class="progress">
+                    <div id="progress" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+                        <div id="label" class="control-label">0%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section scripts
+        {
+   <script>
+
+       function Reset() {
+            id = 0;
+            $('#title').val('');
+            $('#Link').val('');
+            $('#image').val('');
+            $("#showLoading").hide();
+        }
+
+        var id=0;
+        function Register() {
+
+            $("#showLoading").show();
+
+            var formdata = new FormData();
+
+            formdata.append("Id", id);
+            formdata.append("title", $('#title').val());
+            formdata.append("Link", $('#Link').val());
+
+            var image = $("#image")[0];
+
+            for (var i in image.files) {
+                formdata.append("files", image.files[i]);
+            }
+
+            $.ajax({
+                url: "/Banner/AddBanner",
+                type: "Post",
+                data: formdata,
+                enctype: 'multipart/form-data',
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                    Reset();
+                    setTimeout(() => {
+                        location.reload();
+                    }, 2000)
+                }
+            });
+        }
+   </script>
+}

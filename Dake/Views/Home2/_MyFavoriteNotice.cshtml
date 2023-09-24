@@ -1,0 +1,13 @@
+﻿@model List<Dake.Models.UserFavorite>
+<div class="photos">
+    <div class="row" data-space="20">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-3 col-sm-6 col-6">
+                <figure class="photos__item">
+                    <a href="/Notice2/Index?id=@item.notice.id" title="@item.notice.title"><img src="@item.notice.image" alt="@item.notice.title" title="@item.notice.title"></a>
+                </figure>
+            </div>
+        }
+        </div>
+</div>

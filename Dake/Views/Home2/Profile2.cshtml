@@ -1,0 +1,130 @@
+﻿@{
+    Layout = "_Layout";
+}
+<section class="myads">
+    <div class="container">
+        <div class="myads__tabs tabs">
+            <ul>
+
+                <li data-tab="tab_1" class="active tablinks" onclick="openCity(event, 'MyNotice')" id="mynoticetab">آگهی های من</li>
+                <li data-tab="tab_2" class="tablinks" onclick="openCity(event, 'MyFavorite')">لیست علاقه مندی ها</li>
+            </ul>
+            <p class="text text-success">@TempData["PursheResult"]</p>
+            <p class="text text-success">@TempData["ErrorPursheResult"]</p>
+
+
+            
+            <div class="tab-content active" data-tabtarget="tab_1" id="MyNotice">
+
+            </div>
+            <div class="tab-content" data-tabtarget="tab_2" id="MyFavorite">
+
+            </div>
+        </div>
+
+    </div>
+</section>
+
+
+
+
+
+@section scripts
+    {
+    <script>
+        function openCity(evt, cityName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(cityName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+    </script>
+    <script>
+        $(document).ready(function () {
+            $.ajax({
+                url: "/Home2/GetMyNotice",
+                method: "POST",
+                data: { page: 1},
+                success: function (data) {
+                    $("#MyNotice").append(data);
+
+
+                },
+                error: function () {
+
+                }
+            })
+            $("#MyNotice").css('display', 'block');
+            $("#mynoticetab").addClass('active');
+            $.ajax({
+                url: "/Home2/GetMyFavorite",
+                method: "POST",
+                data: { page: 1 },
+                success: function (data) {
+                    $("#MyFavorite").append(data);
+
+
+                },
+                error: function () {
+
+                }
+            })
+           
+        });
+        var pageNo = 2;
+        var pageNo2 = 2;
+        var isPaged = true;
+        var isPaged2 = true;
+        $(window).scroll(function () {
+            
+            if ($(window).scrollTop() ==
+                $(document).height() - $(window).height()) {
+                if (isPaged || isPaged2) {
+                    if ($("#MyFavorite:visible").length == 0) {
+                        $.ajax({
+                            url: "/Home2/GetMyNotice",
+                            method: "POST",
+                            data: { page: pageNo },
+                            success: function (data) {
+                                $("#MyNotice").append(data);
+                                pageNo++;
+                                if ($.trim(data) == "") {
+                                    isPaged = false;
+                                }
+                            },
+                            error: function () {
+
+                            }
+                        })
+                    }
+                    else {
+                        $.ajax({
+                            url: "/Home2/GetMyFavorite",
+                            method: "POST",
+                            data: { page: pageNo2 },
+                            success: function (data) {
+                                $("#MyFavorite").append(data);
+                                pageNo2++;
+                                if ($.trim(data) == "") {
+                                    isPaged2 = false;
+                                }
+                            },
+                            error: function () {
+
+                            }
+                        })
+                    }
+                }
+            }
+        });
+
+        
+    </script>
+}

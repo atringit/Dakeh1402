@@ -1,0 +1,450 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - سامانه دکه</title>
+    <link href="~/Home2/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="shortcut icon" href="~/assets/img/dakeh-wh512.jpg" type="image/x-icon">
+
+
+    <link href="~/assets/css/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="~/assets/css/mobilenav.css">
+
+    <link href="~/assets/css/magnify.css" rel="stylesheet" />
+
+    @*<link href="~/Magnifie/mag2/magnifier.css" rel="stylesheet" />*@
+
+</head>
+
+<body>
+    <header class="main-header">
+        <div class="container">
+            <div class="main-header__wrapper">
+                <div class="main-header__mobile-menu-toggle">
+                    <a href="#"></a>
+                </div>
+                <div class="main-header__logo">
+                    <a href="#" title=""><img src="~/assets/img/dakeh-wh512.jpg" title="دکه" alt="دکه">سامانه
+                        <span>دکه</span></a>
+                </div>
+                <nav class="main-header__nav">
+                    <ul>
+                        <li><a href="/Home2/Index" title="خانه">خانه</a></li>
+
+                        <li><a href="/Home2/AboutUs" title="درباره ما">درباره ما</a></li>
+                        <li><a href="/Home2/Rule" title="قوانین و مقررات">قوانین و مقررات</a></li>
+                        <li><a href="/Home2/Stir" title="نحوه فعالیت">نحوه فعالیت</a></li>
+                        <li><a href="/Home2/Contact" title="تماس با ما">تماس با ما</a></li>
+                        <li><a href="/Applications/dakeh.apk" title="اپلیکیشن دکه">اپلیکیشن دکه</a></li>
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                نرم افزار های کاربری
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a style="margin-right:5px" href="/Applications/Freevideocompressor-[dakeh.net].zip"
+                                        title="نرم افزارکمپرسورفیلم">نرم افزارکمپرسورفیلم</a></li>
+                                <li><a style="margin-right:5px" href="/Applications/app1.apk"
+                                        title="نرم افزارکمپرسورفیلم(نسخه اندروید)">نرم افزاراندرویدکمپرسورفیلم</a></li>
+                                <li><a style="margin-right:5px"
+                                        href="/Applications/VideoCompressorFastCompressVideoPhoto_v1.2.02_DakehNET.apk"
+                                        title="نرم افزاراندرویدکمپرسورفیلم">نرم افزاراندرویدکمپرسورفیلم</a></li>
+                            </ul>
+                        </li>
+
+                    </ul>
+                </nav>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <div class="main-header__btns">
+                        <a href="" data-toggle="modal" data-target="#myModal3">پروفایل</a>
+                    </div>
+                }
+                <div class="main-header__btns">
+                    @if (!User.Identity.IsAuthenticated)
+                    {
+                        <button class="btn btn-default" id="myBtn" title="ورود / ایجاد آگهی" data-toggle="modal"
+                            data-target="#myModal">ورود / ایجاد آگهی</button>
+                    }
+                    else
+
+                    {
+                        @*<a class="createNoticeLink " href='/Home2/Profile'>ایجاد آگهی</a>*@
+                        <div class="createNoticeLink dropdown" href='/Home2/Profile'>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                ایجاد آگهی
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a style="margin-right:5px" href='/Home2/Profile' title="عادی">عادی</a></li>
+                                <li><a style="margin-right:5px" href="/Banner/CreateBanner" title="بنری">بنری</a></li>
+                            </ul>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </header>
+    <div id="myModal3" class="modal">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div data-dismiss="modal"></div>
+                <div class="modal-body">
+                    <div class="profile-modal">
+                        <div class="profile-modal__title">
+                            <h3>پروفایل</h3>
+                            @*<span>اصفهان</span>*@
+                        </div>
+                        <div class="profile-modal__list">
+                            <ul>
+                                <li><i class="dk-chart"></i><a href="~/Home2/Profile2" title="">آگهی های شما</a></li>
+                                <li><i class="dk-heart"></i><a href="~/Home2/Profile2" title="">لیست علاقه مندی ها</a>
+                                </li>
+                                <li>
+                                    <i class="dk-gps"></i>
+                                    <div class="profile-modal__list__item">
+                                        <div class="profile-modal__list__item__inner" id="proOfUser"></div>
+                                        <button class="btn btn-color" onclick="RegisterProOfUser()">تایید
+                                            شهرستان</button>
+                                    </div>
+                                </li>
+                                <li><i class="dk-logout"></i><a href="~/Home2/Logout" title="">خروج از حساب</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+    </div>
+    <div id="myModal2" class="modal">
+
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+
+                <div class="modal-body">
+                    <div class="login-modal">
+                        <h3>ورود دو مرحله‌ای</h3>
+                        <p id="errorText" style="color:red !important"></p>
+
+                        <p>برای ورود به سامانه ی دکه لطفا شماره‌ی خود را صحت سنجی کنید.</p>
+
+                        <img src="~/assets/img/sms.png" />
+                        <p>کد تایید ارسال شده به شماره‌ی <b id="cell-span"></b> را وارد کنید</p>
+                        <div class="form-group">
+                            <input hidden id="cellPhone" />
+
+                            <input type="tel" id="code" class="form-control" name=""
+                                placeholder="کد تایید خود را اینجا وارد کنید">
+                        </div>
+                        <a class="login-modal__btn" href="#" onclick="Login()">بررسی کد تایید</a>
+                        <span id="time">02:00</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="myModal" class="modal">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+
+                <div class="modal-body">
+                    <div class="login-modal">
+                        <h3>ورود دو مرحله‌ای</h3>
+                        <p>برای ورود به سامانه ی دکه لطفا شماره‌ی خود را در کادر زیر وارد کنید.</p>
+                        <img src="~/assets/img/sms.png">
+                        <div class="form-group">
+                            <input type="tel" class="form-control" placeholder="شماره تلفن خود را اینجا وارد کنید">
+                        </div>
+                        <a class="login-modal__btn" href="#" onclick="Register()">ارسال کد تایید</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+    <div class="mobile-menu">
+        <div class="mobile-menu__close-menu"></div>
+        <nav class="mobile-nav">
+            <ul>
+                <li style="display: flex;background-color: #fff;box-shadow: 0px 0px 0px 0px #fff;"><img src="~/assets/img/dakeh-wh512.jpg" style="width: 40%;" alt=""><h2 style="font-size: 25px;margin-top: 35px;">سامانه<span style="color: #83c030;"> دکه</span></h2></li>
+                <li><a href="#">خانه</a></li>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <li><a href="#">پروفایل</a></li>
+                }
+                <li><a href="#">درباره ما</a></li>
+                <li><a href="#">قوانین و مقررات</a></li>
+                <li><a href="#">نحوه فعالیت</a></li>
+                <li><a href="#">تماس با ما</a></li>
+                <li><a href="#">اپلیکیشن دکه</a></li>
+                <li><a href="#">نرم افزارکمپرسورفیلم</a></li>
+                <li><a href="#">نرم افزاراندرویدکمپرسورفیلم</a></li>
+                @* @if (!User.Identity.IsAuthenticated)
+                {
+                    <li style="background-color: #fff;" ><a id="Login_Notice" href="#">ورود / ایجاد آگهی</a></li>
+                } *@
+                @* else
+                {
+                    <li><a href="#">ایجاد آگهی</a></li>
+                    <li><a href="#">عادی</a></li>
+                    <li><a href="#">بنری</a></li>
+                } *@
+            </ul>
+        </nav>
+    </div>
+
+    <div class="container body-content">
+        @RenderBody()
+
+
+    </div>
+
+    <style>
+        footer {
+            /*position: absolute;*/
+            height: 100px;
+            /*bottom: 0;*/
+            width: 100%;
+            padding: 20px;
+        }
+    </style>
+
+    @* <footer style="position:fixed; bottom:0; right:0">
+    <a target="_blank" href="https://trustseal.enamad.ir/?id=154839&amp;Code=KiOESL253vfa2IKEoxCY"><img
+    src="https://Trustseal.eNamad.ir/logo.aspx?id=154839&amp;Code=KiOESL253vfa2IKEoxCY" alt="" style="cursor:pointer"
+    id="KiOESL253vfa2IKEoxCY"></a>
+    <p>&copy; 2019 - Dakeh</p>
+    </footer>*@
+
+    <script src="~/AdminContent/bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="~/assets/js/popper.min.js"></script>
+    <script src="~/assets/js/bootstrap.min.js"></script>
+    <script src="~/assets/js/bootstrap-select.min.js"></script>
+
+    <script src="~/js/jquery.validate.min.js"></script>
+    <script src="~/js/jquery.validate.unobtrusive.min.js"></script>
+
+    <script src="~/js/fileinput.min.js"></script>
+    <script src="~/js/uploader_bootstrap.js"></script>
+    <script src="~/assets/js/sweetalert2.min.js"></script>
+
+    <script src="~/Scripts/Common.js"></script>
+    <script src="~/assets/js/swiper.min.js"></script>
+
+    <script src="~/assets/js/jquery.countdown.min.js"></script>
+    <script src="~/assets/js/jquery.magnify.js"></script>
+    <script src="~/assets/js/scripts.js"></script>
+
+    <script>
+
+        $(document).ready(function () {
+            if ('@User.Identity.IsAuthenticated' == 'True') {
+
+                $.ajax({
+                    url: '/Home2/GetInfoOfProfile',
+                    type: 'Get',
+
+                    success: function (response) {
+                        if (response) {
+                            $("#myModal3 #proOfUser").html(response.proContent);
+                            $('#provinceId2').selectpicker('refresh')
+                            //$('#categoryId').selectpicker('refresh');  
+
+                            if (response.isBlocked) {
+                                //$(".createNoticeLink").prop( "disabled", true );
+                                //$(".createNoticeLink").attr('disabled','disabled');
+                                $(".createNoticeLink").hide();
+
+                            }
+                        }
+
+                    }
+
+                });
+            }
+
+            $.ajax({
+                url: '/Home2/GetInfoOfFooter',
+                type: 'Get',
+
+                success: function (response) {
+                    if (response) {
+
+                        {
+
+                            //$("#col_1_footer").html(rowElement);
+                            //  $("#col_2_footer").html(response.description);
+
+                            var contacts =
+                                `<a href="${response.contacts.email}">${response.contacts.email}</a><br>` +
+                                `<a href="${response.contacts.phone}">${response.contacts.phone}</a><br>` +
+                                `<a href="https://www.instagram.com/${response.contacts.pageInstagramUrl}">${response.contacts.pageInstagramUrl}</a>` +
+                                `<a href="https://telegram.me/${response.contacts.pageTelegramUrl}">${response.contacts.pageTelegramUrl}</a>` +
+                                `<a href="${response.contacts.pageTwitterUrl}">${response.contacts.pageTwitterUrl}</a>`;
+
+                            $("#col_3_footer").html(contacts);
+
+
+                            //response.forEach(function(item){
+
+                            //    var rowElement = `<div class="row">
+                            //    <h5>${item.name}</h5><a href="${item.value}">${item.name}</a>
+                            //    </div>`;
+
+                            //    if(item.colNumber == 1)
+                            //    {
+                            //        $("#col_1_footer").html(rowElement);
+                            //    }
+                            //    else if(item.colNumber == 2)
+                            //    {
+                            //        $("#col_2_footer").html(rowElement);
+                            //    }
+                            //    else if(item.colNumber == 3)
+                            //    {
+                            //        $("#col_3_footer").html(rowElement);
+                            //    }
+
+                            //});
+                        }
+                    }
+
+                }
+
+            });
+        });
+    </script>
+    <script>
+        function RegisterProOfUser() {
+            var id = $("#myModal3 #provinceId2").val();
+            $.ajax({
+                url: '/Home2/ChangeProOfUser?id=' + id,
+                type: 'Post',
+
+                success: function (response) {
+
+
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true,
+                        onOpen: (toast) => {
+                            toast.addEventListener('mouseenter', Swal.stopTimer)
+                            toast.addEventListener('mouseleave', Swal.resumeTimer)
+                        }
+                    });
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'موفقیت آمیز',
+                        footer: 'ویرایش شهرستان شما با موفقیت انجام شد',
+                    });
+                }
+
+            });
+        }
+    </script>
+
+    <script>
+
+        function Register() {
+
+            var cellphone = $("#myModal input").val();
+            $.ajax({
+                url: "/User2/Register",
+                method: "POST",
+                data: { cellphone: cellphone },
+                success: function (data) {
+                    if (data == "success") {
+                        $("#myModal").modal('hide');
+                        $("#myModal2 #cellPhone").val(cellphone);
+                        $("#myModal2 #cell-span").html(cellphone);
+                        $('#myModal2').modal({ backdrop: 'static', keyboard: false });
+                        $("#myModal2").modal('show');
+
+
+                        $("#myModal2 #errorText").html("");
+
+                        var modal2 = document.getElementById("myModal2");
+
+                        window.onclick = function (event) {
+                            if (event.target == modal2) {
+                                modal2.style.display = "none";
+                            }
+                        }
+
+                        var fiveMinutes = 60 * 2,
+                            display = document.querySelector('#myModal2 #time');
+                        startTimer(fiveMinutes, display);
+                    }
+                    else
+                        $("#myModal #errorText").html("خطا در ارسال پیام کوتاه");
+                },
+                error: function () {
+
+                }
+            })
+        }
+        function Login() {
+
+            var cellphone = $("#myModal2 #cellPhone").val();
+            var code = $("#myModal2 #code").val();
+            $.ajax({
+                url: "/User2/Login",
+                method: "POST",
+                data: { cellphone: cellphone, code: code },
+                success: function (data) {
+                    if (data == "success") {
+                        $("#myModal2").hide();
+                        window.location.href = "/Home2/Index"
+                    }
+                    else
+                        if (data == "FailToLogin")
+                            $("#myModal2 #errorText").html("خطا در ورود");
+                        else if (data == "FailCode")
+                            $("#myModal2 #errorText").html("کد ارسالی نامعتبر است");
+                },
+                error: function () {
+
+                }
+            })
+        }
+    </script>
+    <script>
+        function myFunction() {
+            $(".main-menu-mobile").css('display', 'block');
+        }
+    </script>
+    <script>
+
+        function startTimer(duration, display) {
+            var timer = duration, minutes, seconds;
+            setInterval(function () {
+                minutes = parseInt(timer / 60, 10);
+                seconds = parseInt(timer % 60, 10);
+
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                display.textContent = minutes + ":" + seconds;
+
+                if (--timer < 0) {
+                    timer = duration;
+                }
+                if (seconds == "00" && minutes == "00") {
+                    $("#myModal2").hide();
+                    $("#myModal").show();
+                }
+            }, 1000);
+        }
+    </script>
+    @RenderSection("Scripts", required: false)
+</body>
+
+</html>

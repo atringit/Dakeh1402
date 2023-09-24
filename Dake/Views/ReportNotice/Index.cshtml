@@ -1,0 +1,141 @@
+﻿@model PagedList.Core.IPagedList<Dake.Models.ReportNotice>
+
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title">گزارش های خرابی</h3>
+                    
+                </div>
+               
+               
+                <!-- /.box-header -->
+                <div class="box-body table-responsive">
+                    <table id="example2" class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>آگهی</th>
+                                <th>کاربر</th>
+                                <th>امکانات</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.notice.title</td>
+                                    <td>@item.user.cellphone</td>
+									<td>
+										<button name="Edit-ReportNotice" data-toggle="modal" data-id="@item.id" class="btn btn-default">جزییات</button>
+										<a href="/Notice/Details/@item.noticeId" class="btn btn-default">مشاهده اگهی</a>
+										<a asp-action="AllChats" asp-route-id="@item.id" class="btn btn-default">مشاهده چت ها</a>
+									</td>
+                                </tr>
+                            }
+                        </tbody>
+                        <tfoot>
+                        </tfoot>
+                    </table>
+                </div>
+                <!-- /.box-body -->
+                <div class="row">
+                    <div class="col-sm-5">
+                    </div>
+                    <div class="col-sm-7">
+                        <div class="dataTables_paginate paging_simple_numbers" id="example1_paginate">
+                            <ul class="pagination">
+                                <li>
+                                    <pager list="@Model" asp-controller="ReportNotice" asp-action="Index" />
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- /.col -->
+    </div>
+    <div class="modal fade" id="modal-default">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">گزارش خرابی</h4>
+                </div>
+                <div id="ReportNoticeForm">
+                    <input type="hidden" id="id" name="id" value="" />
+                    <div class="modal-body">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                        <div class="form-group">
+                            <label class="control-label">کاربر</label>
+                            <input class="form-control" disabled type="text" id="cellphone" name="cellphone" value="">
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">آگهی</label>
+                            <input class="form-control" disabled type="text" id="noticeTitle" name="noticeTitle" value="">
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">پیغام</label>
+                            <textarea class="form-control" disabled type="text" id="message" name="message"></textarea>
+                           
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">خروج</button>
+                    </div>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    @section scripts
+    {
+        <script>
+        
+        $("button[name='Edit-ReportNotice']").click(function (e) {
+            $("#City-header").html("گزارش خرابی");
+            var Id = $(this).attr("data-id");
+            $.ajax({
+                url: "/ReportNotice/GetReportNotice?id=" + Id + "",
+                method: "Get",
+                dataType: "json",
+                success: function (data) {
+                    if (data.id != 0) {
+                        $("#ReportNoticeForm #id").val(data.id);
+                        $("#ReportNoticeForm #cellphone").val(data.user.cellphone);
+                        $("#ReportNoticeForm #noticeTitle").val(data.notice.title);
+                        $("#ReportNoticeForm #message").val(data.message);
+                        
+                        $('#modal-default').modal('show');
+                    }
+                    else {
+                        alert("ID is incorrect");
+                    }
+                },
+                error: function () {
+                    alert("Ajax call failed");
+                }
+            })
+        })
+
+        $('#modal-default').on('hidden.bs.modal', function () {
+            $('#modal-default').find('input,textarea,select').each(function (key) {
+                if ($(this).attr('id') == "id") {
+                    $(this).val(0);
+                }
+                else
+                    if ($(this).attr('name') != '__RequestVerificationToken')
+                        $(this).val('');
+            })
+        })
+        </script>
+
+
+    }
+

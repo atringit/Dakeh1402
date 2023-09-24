@@ -1,0 +1,78 @@
+﻿@model PagedList.Core.IPagedList<Dake.Models.Slider>
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">اسلایدرها</h3>
+            </div>
+            <div class="row">
+                <form>
+                    <div class="box-body">
+                        <div class="col-md-4 form-group">
+                            <input type="text" name="filterLink" class="form-control" placeholder="لینک" />
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <button type="submit" class="btn btn-default">جستجو</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <a class="btn btn-default" asp-action="Create">اسلایدر جدید</a>
+                </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <table id="example2" class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>ردیف</th>
+                            <th>لینک</th>
+                            <th>امکانات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                        <tr>
+                            <td>@item.id</td>
+                            <td>@item.link</td>
+                            <td>
+                                <a asp-action="Edit" asp-route-id="@item.id" class="btn btn-default">ویرایش</a>
+                                <a asp-action="Delete" asp-route-id="@item.id" class="btn btn-default">حذف</a>
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                    <tfoot>
+                    </tfoot>
+                </table>
+            </div>
+            <!-- /.box-body -->
+            <div class="row">
+                <div class="col-sm-5">
+                </div>
+                <div class="col-sm-7">
+                    <div class="dataTables_paginate paging_simple_numbers" id="example1_paginate">
+                        <ul class="pagination">
+                            @*@for (int i = 1; i <= Model.PageCount; i++)
+                                {
+                                    <li class="paginate_button  @((i==Model.CurrentPage?"active":""))">
+                                        <a href="/Admin/Users?pageId=@i" aria-controls="example1" data-dt-idx="1" tabindex="0">@i</a>
+                                    </li>
+                                }*@
+                            <li>
+                                <pager list="@Model" asp-controller="Sliders" asp-action="Index" />
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.col -->
+</div>
+
+
+

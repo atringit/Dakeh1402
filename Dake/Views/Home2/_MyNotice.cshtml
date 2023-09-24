@@ -1,0 +1,22 @@
+﻿@model List<Dake.Models.Notice>
+
+<div class="photos">
+    <div class="row" data-space="20">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-3 col-sm-6 col-6">
+                <figure class="photos__item">
+                    <a href="/Notice2/Index?id=@item.id" title=""><img src="@item.image" alt="@item.title" title="@item.title"></a>
+                    @if (item.isSpecial && item.expireDateIsespacial >= DateTime.Now)
+                    {
+                        <figcaption>آگهی ویژه</figcaption>
+                    }
+                    @if (item.isEmergency && item.ExpireDateEmergency >= DateTime.Now)
+                    {
+                        <a href="#" class="photos__item__bell"><img src="~/assets/img/fury1.gif" /></a>
+                    }
+                </figure>
+            </div>
+        }
+    </div>
+</div>

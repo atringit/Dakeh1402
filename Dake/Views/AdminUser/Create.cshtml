@@ -1,0 +1,125 @@
+﻿@model Dake.ViewModel.AdminUserViewModel
+
+
+<section class="content">
+    <div class="row">
+        <!-- left column -->
+        <div class="col-md-12">
+            <!-- general form elements -->
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">کاربر ادمین</h3>
+                </div>
+                @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+                <div class="row">
+                    <form asp-action="Create" method="post">
+                        <div class="box-body">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label">رمز عبور</label>
+                                    <input asp-for="passwordShow" class="form-control" />
+                                    <span asp-validation-for="passwordShow" class="text-danger"></span>
+
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label">نام کاربری</label>
+                                    <input asp-for="cellphone" class="form-control" />
+                                    <span asp-validation-for="cellphone" class="text-danger"></span>
+
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label  class="control-label">نقش ها</label>
+                                    <select id="adminRole" name="adminRole" class="form-control select2" required multiple="multiple" data-placeholder="Select a State"
+                                            style="width: 100%;">
+                                        <option value="">انتخاب کنید</option>
+                                        <option value="A1">فاکتور</option>
+                                        <option value="A2">آگهی ها</option>
+                                        <option value="A3">اطلاعیه ها</option>
+                                        <option value="A4">استان و شهرستان و حومه</option>
+                                        <option value="A5">تنظیمات</option>
+                                        <option value="A6">نحوه فعالیت</option>
+                                        <option value="A7">قوانین و مقررات</option>
+                                        <option value="A8">تماس با ما</option>
+                                        <option value="A9">درباره ما</option>
+                                        <option value="B1">دسته بندی</option>
+                                        <option value="B2">کاربران</option>
+                                        <option value="B3">کاربران ادمین</option>
+                                        <option value="B4">گزارش خرابی</option>
+                                    </select>
+                                    <span asp-validation-for="adminRole" class="text-danger"></span>
+
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label  class="control-label">شهرها</label>
+                                    <select id="adminCitys" name="adminCitys" class="form-control select2" required multiple="multiple" data-placeholder="Select a City"
+                                            style="width: 100%;" asp-items=ViewBag.citys>
+                                        <option value="">انتخاب کنید</option>                                        
+                                    </select>
+                                    <span asp-validation-for="adminCitys" class="text-danger"></span>
+
+                                </div>
+                            </div>                          
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <input type="submit" value="تایید" class="btn btn-default" />
+                                    <a class="btn btn-danger" asp-action="Index">بازگشت</a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>               
+</section>
+
+@section Scripts
+    {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+
+        <script>
+           
+            $(function () {
+                //Initialize Select2 Elements
+                $('.select2').select2()
+
+                $('.datepick').persianDatepicker(
+                {
+                    format: 'YYYY/MM/DD',
+                     autoClose: true,
+                });
+            });
+           
+
+            function fn_getNoticeCnt()
+            {
+                var data ={
+                    fromd: $("#fromd").val(),
+                    tod: $("#tod").val()         
+                }
+                $.ajax(
+                    {
+                        url: "GetNoticeCount",
+                        data: data,
+                        success: function(res){
+                            //if(res)
+                            {
+                                $("#noticeCnt").text(res);
+                            }
+                        }
+                    }
+                )
+            }
+
+        </script>
+}

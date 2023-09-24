@@ -1,0 +1,193 @@
+﻿@model PagedList.Core.IPagedList<Dake.Models.City>
+
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title">استان ها</h3>
+                    <br />
+                    <p style="color:red">@ViewBag.success</p>
+                </div>
+                <div class="row">
+                    <form>
+                        <div class="box-body">
+                            <div class="col-md-4 form-group">
+                                <input type="text" name="filterTitle" class="form-control" placeholder="عنوان" />
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <button type="submit" class="btn btn-default">جستجو</button>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <a class="btn btn-default" data-toggle="modal" data-target="#modal-default">استان جدید</a>
+                    </div>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body table-responsive">
+                    <table id="example2" class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>عنوان</th>
+
+                                <th>امکانات</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.name</td>
+
+                                    <td>
+                                        <button name="Edit-City" data-toggle="modal" data-id="@item.id" class="btn btn-default">ویرایش</button>
+                                        <a href="/City/Province?id=@item.id" class="btn btn-default">شهرستان</a>
+                                        <a asp-action="Delete" asp-route-id="@item.id" class="btn btn-default">حذف</a>
+
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                        <tfoot>
+                        </tfoot>
+                    </table>
+                </div>
+                <!-- /.box-body -->
+                <div class="row">
+                    <div class="col-sm-5">
+                    </div>
+                    <div class="col-sm-7">
+                        <div class="dataTables_paginate paging_simple_numbers" id="example1_paginate">
+                            <ul class="pagination">
+                                @*@for (int i = 1; i <= Model.PageCount; i++)
+                                    {
+                                        <li class="paginate_button  @((i==Model.CurrentPage?"active":""))">
+                                            <a href="/Admin/Users?pageId=@i" aria-controls="example1" data-dt-idx="1" tabindex="0">@i</a>
+                                        </li>
+                                    }*@
+                                <li>
+                                    <pager list="@Model" asp-controller="City" asp-action="Index" />
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- /.col -->
+    </div>
+    <div class="modal fade" id="modal-default">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">استان</h4>
+                </div>
+                <form id="CityForm">
+                    <input type="hidden" id="id" name="id" value="" />
+                    <div class="modal-body">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                        <div class="form-group">
+                            <label class="control-label">نام استان</label>
+                            <input class="form-control" type="text" data-val="true" data-val-maxlength="عنوان استان نمی تواند بیشتر از 50 کاراکتر باشد ." data-val-maxlength-max="50" data-val-required="لطفا عنوان استان را وارد کنید" id="name" name="name" value="">
+                            <span class="text-danger field-validation-valid" data-valmsg-for="name" data-valmsg-replace="true"></span>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">خروج</button>
+                        <button type="submit" class="btn btn-primary">ذخیره</button>
+                    </div>
+                </form>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    @section scripts
+    {
+        <script>
+        $("#CityForm").submit(function (event) {
+            event.preventDefault();
+            if ($('#CityForm').valid()) {
+                var pagenumber = $("#PageNumber").val();
+                var form = $(this).serialize();
+                $.ajax({
+                    url: "/City/CreateOrEdit",
+                    method: "POST",
+                    data: form,
+                    success: function (data) {
+                        $('#modal-default').modal('hide');
+                        var messageText = "";
+                        if ($('#modal-default #id').val() != '' && $('#modal-default #id').val() != 0) {
+                            messageText = 'ویرایش  استان با موفقیت انجام شد';
+                        }
+                        else {
+                            messageText = 'اضافه کردن استان با موفقیت انجام شد';
+                        }
+                        swal({
+                            title: '!  موفقیت آمیز',
+                            text: messageText,
+                            type: 'success',
+                            buttonsStyling: false,
+                            confirmButtonClass: 'btn btn-sm btn-light',
+                            background: 'rgba(0, 0, 0, 0.96)',
+                            timer: 1500
+                        })
+                        var id = $("#CityForm #id").val();
+                        if(id!="")
+                            location.reload();
+                        else
+                        window.location.href = "/City/Index?page=1";
+                    },
+                    error: function () {
+                        alert("Ajax call failed");
+                    }
+                })
+            }
+        });
+        $("button[name='Edit-City']").click(function (e) {
+            $("#City-header").html("ویرایش استان");
+            var Id = $(this).attr("data-id");
+            $.ajax({
+                url: "/City/GetCity?id=" + Id + "",
+                method: "Get",
+                dataType: "json",
+                success: function (data) {
+                    if (data.id != 0) {
+                        $("#CityForm #id").val(data.id);
+                        $("#CityForm #name").val(data.name);
+                        $('#modal-default').modal('show');
+                    }
+                    else {
+                        alert("ID is incorrect");
+                    }
+                },
+                error: function () {
+                    alert("Ajax call failed");
+                }
+            })
+        })
+
+        $('#modal-default').on('hidden.bs.modal', function () {
+            $('#modal-default').find('input,textarea,select').each(function (key) {
+                if ($(this).attr('id') == "id") {
+                    $(this).val(0);
+                }
+                else
+                    if ($(this).attr('name') != '__RequestVerificationToken')
+                        $(this).val('');
+            })
+        })
+        </script>
+
+
+    }
+

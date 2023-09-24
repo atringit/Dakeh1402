@@ -1,0 +1,298 @@
+﻿@model Dake.Models.ViewModels.BannerGetData
+
+
+<div class="row">
+    
+    <div class="col-lg-12">
+        <div class="panel-heading clearfix">
+            <h3 class="panel-title">لیست</h3>
+        </div>
+        <div class="panel-heading clearfix">
+            <input class="form-control" placeholder="جستجو..." id="tbl_search" />
+        </div>
+        <div class="panel-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>عکس</th>
+                            <th>نام</th>
+                            <th>لینک</th>
+                            <th>وضعیت</th>
+                            <th>#</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.banners.Any())
+                        {
+                            int row = 0;
+                            foreach (var item in Model.banners)
+                            {
+                                row += 1;
+                                //var img = item.BannerImage.FirstOrDefault
+                                <tr>
+                                    <td>@row</td>
+                                    <td><img height="100" width="100" src="@item?.BannerImage?.FirstOrDefault()?.FileLocation" /></td>
+                                    <td>@item.title</td>
+                                    <td>@item.Link</td>
+                                    <td>
+                                         @if (item.adminConfirmStatus == Dake.Models.EnumStatus.Accept)
+                                {
+                                    <span style="color:green">تایید شده</span>
+                                }
+                                @if (item.adminConfirmStatus == Dake.Models.EnumStatus.NotAccept)
+                                {
+                                    <span style="color:red">تایید نشده</span>
+                                }
+                                @if (item.adminConfirmStatus == Dake.Models.EnumStatus.Pending)
+                                {
+                                    <span style="color:yellow">در انتظار تایید</span>
+                                }
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-primary fa fa-edit"
+                                                id="@item.Id"
+                                                itemName="@item.title"
+                                                itemLink="@item.Link"
+                                                onclick="edit_data(this)"></button>
+                                        <button class="btn btn-danger fa fa-trash" onclick="delete_data(@item.Id)"></button>
+                                        <button class="btn btn-default fa fa-camera" onclick="image_handler(@item.Id)"></button>
+                                        <button class="btn btn-default" onclick="isAccept(@item.Id, 2)">تایید</button>
+                                        <button class="btn btn-default" onclick="isAccept(@item.Id,3)">عدم تایید</button>
+                                    </td>
+
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="panel-footer">
+            <ul class="pagination" id="paging">
+            </ul>
+        </div>
+    </div>
+</div>
+
+<button id="showLoading" style="display:none; position:absolute; top:50%; left:40%" class="btn btn-primary" disabled>
+    <span class="spinner-border spinner-border-sm"></span>
+    Loading..
+</button>
+
+
+
+<div class="modal fade" id="ModalDeleteConfirm" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">آیا از حذف اطمینان دارید؟</h4>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">بستن</button>
+                <button type="button" class="btn btn-default" onclick="DeleteConfirm()" data-dismiss="modal">بله</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="ModalEditBanner" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">ویرایش بنر</h4>
+            </div>
+            <div class="modal-body">
+            <div class="form-group">
+                <label for="Name">نام</label>
+                <input type="text" class="form-control" id="Name" placeholder="نام">
+            </div>
+            <div class="form-group">
+                <label for="Link">لینک</label>
+                <input type="text" class="form-control" id="Link" placeholder="لینک">
+            </div>
+            </div>
+           
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">بستن</button>
+                <button type="button" class="btn btn-default" onclick="Register()" data-dismiss="modal">ثبت</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade" id="ModalImagesHandler" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">عکس ها</h4>
+            </div>
+
+            <div class="modal-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>عکس</th>
+                            <th>#</th>
+                        </tr>
+                    </thead>
+                    <tbody id="list_data">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+    <script>
+        var id = 0;
+        function Reset() {
+            id = 0;
+            $('#Name').val('');
+            $('#Link').val('');
+            $('#image').val('');
+            $("#showLoading").hide();
+        }
+
+       
+
+        function edit_data(item) {
+           
+            $("#ModalEditBanner").modal("show");
+
+             id = item.id;
+            $('#Name').val(item.getAttribute('itemName'));
+            $('#Link').val(item.getAttribute('itemLink'));
+
+        }
+
+        function delete_data(Id) {
+            id = Id;
+            $("#ModalDeleteConfirm").modal('show');
+        }
+
+        function DeleteConfirm() {
+            $("#ModalDeleteConfirm").modal('hide');
+            $("#showLoading").show();
+            $.ajax({
+                url: "/Banner/DeleteBanner",
+                data: { id: id },
+                type: "Delete",
+                success: function (data) {
+                    Reset();
+                    setTimeout(() => {
+                        location.reload();
+                    }, 2000)
+                }
+            });
+        }
+
+         function isAccept(id, sta) {
+                       
+            var formdata = new FormData();
+
+            formdata.append("Id", id);
+            formdata.append("adminConfirmStatus", sta);
+
+            $.ajax({
+                url: "/Banner/Accepted",
+                type: "Post",
+                data: formdata,
+                //enctype: 'multipart/form-data',
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                   setTimeout(() => {
+                        location.reload();
+                    }, 2000);
+                }
+            });
+        }
+
+
+
+        function image_handler(id) {
+
+            $.ajax({
+                url: "/Banner/BannerGetById",
+                data: { id: id },
+                type: "Get",
+                success: function (data) {
+                    var str = "";
+                    var row = 0;
+                    for (var i in data) {
+                        row += 1;
+                        str += "<tr>";
+                        str += "<td>" + row + "</td>"
+                        str += "<td><img height='50' width='100' src=" + data[i].fileLocation + " /></td>";
+                        str += "<td><button class='btn btn-danger fa fa-trash' onclick=delete_bannerImage(" + data[i].id + ")></button></td>"
+                        str += "</tr>";
+                    }
+                    $("#list_data").html(str);
+                }
+            });
+
+            $("#ModalImagesHandler").modal('show');
+        }
+
+        function delete_bannerImage(id) {
+            $("#ModalImagesHandler").modal('hide');
+            $("#showLoading").show();
+            $.ajax({
+                url: "/Banner/DeleteBannerImage",
+                data: { id: id },
+                type: "Delete",
+                success: function (data) {
+                    Reset();
+                    setTimeout(() => {
+                        location.reload();
+                    }, 2000)
+                }
+            });
+        }
+
+        function Register() {
+
+            //$("#showLoading").show();
+
+            var formdata = new FormData();
+
+            formdata.append("Id", id);
+            formdata.append("Name", $('#Name').val());
+            formdata.append("Link", $('#Link').val());
+
+
+            $.ajax({
+                url: "/Banner/AddOrUpdate",
+                type: "Post",
+                data: formdata,
+                //enctype: 'multipart/form-data',
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                  $("#ModalEditBanner").modal("hide");
+                   setTimeout(() => {
+                        location.reload();
+                    }, 2000);
+                }
+            });
+        }
+    </script>
+}

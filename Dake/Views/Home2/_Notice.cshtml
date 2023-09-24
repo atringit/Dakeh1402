@@ -1,0 +1,160 @@
+﻿@model Dake.ViewModel.FirstHomeViewModel
+@{
+    Layout = null;
+}
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    /* Create two equal columns that floats next to each other */
+    .column {
+        float: left;
+        width: 100%;
+        padding: 10px;
+        height: 300px; /* Should be removed. Only for demonstration */
+    }
+
+    /* Clear floats after the columns */
+    .row:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+    .price {
+    position: absolute;
+    bottom: 25px;
+    right: 30px;
+    margin-bottom: 10px;
+    background: #52525285;
+    padding: 5px 10px;
+    border-radius: 10px;
+    z-index: 1;
+    color: white;
+    }
+    .photos__item figcaption {
+    bottom: unset;
+    top: 0;
+    }
+</style>
+<link href="~/css/site.css" rel="stylesheet">
+
+@if (Model.notices != null && Model.notices.Count() > 0)
+{
+    <div class="photos" id="main-div">
+        <div class="row">
+
+            <div class="column">
+                <div class="grid sss">
+                    
+                    @if (Model.espacialNotices.Any())
+                    {
+                        foreach (var esp2 in Model.espacialNotices)
+                        {
+                            <div class="" style="position: relative;grid-column: span 2 / span 2;grid-row: span 2 / span 2;">
+                            <div style="right: 5px;left: 5px;margin-right: auto;margin-left: auto;bottom: 22px;" class="price">@String.Format("{0:0,0}", @esp2.price) تومان</div>
+                                <figure class="photos__item photos__item--big">
+                                    <a href="/Notice2/Index?id=@esp2?.id" title="@esp2?.title">
+                                        @if (!(String.IsNullOrEmpty(esp2?.image) || esp2?.image == "undefined"))
+                                        {
+                                            <img src="@esp2?.image" title="@esp2?.title" alt="@esp2?.title">
+                                        }
+                                        @if ((String.IsNullOrEmpty(esp2?.image) || esp2?.image == "none") && !(String.IsNullOrEmpty(esp2?.movie) || esp2?.movie == "undefined"))
+                                        {
+                                            <video src="@esp2?.movie" alt="@esp2?.title" title="@esp2?.title"></video>
+                                        }
+                                        else
+                                        {
+                                            if (!String.IsNullOrEmpty(esp2?.category.image))
+                                            {
+                                                <img src="@esp2?.category.image" title="@esp2?.title" alt="@esp2?.title">
+                                            }
+                                            else
+                                            {
+                                                var esp2_img = Model.Categories.Where(x => x.id == esp2?.category.parentCategory.id).FirstOrDefault();
+                                                if (!String.IsNullOrEmpty(esp2_img.image))
+                                                {
+                                                    <img src="@esp2_img.image" alt="@esp2?.title" title="@esp2?.title">
+                                                }
+                                                else
+                                                {
+                                                    var esp2_img2 = Model?.Categories?.Where(x => x?.id == esp2_img.parentCategory?.id)?.FirstOrDefault();
+                                                    if (esp2_img2 != null && !String.IsNullOrEmpty(esp2_img2.image))
+                                                    {
+                                                        <img src="@esp2_img2.image" alt="@esp2?.title" title="@esp2?.title">
+                                                    }
+                                                    else
+                                                    {
+                                                        @*<img src="@esp2_img2?.parentCategory?.image" alt="@esp2?.title" title="@esp2?.title">*@
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    </a>
+                                    <figcaption>@esp2.title</figcaption>
+
+                                </figure>
+
+                            </div>
+                            
+                        }
+                    }
+                    @foreach (var notic in Model.notices.OrderByDescending(p => p.id))
+                    {
+                        <div class="" style="position: relative;">
+                            <div style="right: 5px;left: 5px;margin-right: auto;margin-left: auto;bottom: 10px;" class="price">@String.Format("{0:0,0}", @notic.price) تومان</div>
+                            <figure class="photos__item">
+                                <a href="/Notice2/Index?id=@notic.id" title="@notic.title">
+                                    @if (!(String.IsNullOrEmpty(notic?.image) || notic?.image == "none"))
+                                    {
+                                        <img src="@notic?.image" alt="@notic?.title" title="@notic?.title">
+                                    }
+                                    @if ((String.IsNullOrEmpty(notic?.image) || notic?.image == "none") && !(String.IsNullOrEmpty(notic?.movie) || notic?.movie == "undefined"))
+                                    {
+                                        <video width="200px" src="@notic?.movie" alt="@notic?.title" title="@notic?.title"></video>
+                                    }
+                                    else
+                                    {
+                                        if (!String.IsNullOrEmpty(notic?.category.image))
+                                        {
+                                            <img src="@notic?.category.image" alt="@notic?.title" title="@notic?.title">
+                                        }
+                                        else
+                                        {
+                                            var not1_img = Model.Categories.Where(x => x.id == notic?.category.parentCategory.id).FirstOrDefault();
+                                            if (!String.IsNullOrEmpty(not1_img.image))
+                                            {
+                                                <img src="@not1_img.image" alt="@notic?.title" title="@notic?.title">
+                                            }
+                                        }
+                                    }
+                                </a>
+                                <figcaption>@notic.title</figcaption>
+                            </figure>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            @*<div class="column">
+            <div class="row">
+            else {
+                foreach (var banner in Model.Banner)
+                {
+                <div class="col-md-12">
+                    <figure class="photos__item photos__item--big">
+                        <a href="/Banner2/Index?id=@banner.Id" title="@banner.title">
+                          <img src="@banner.BannerImage.First().FileLocation" title="@banner.BannerImage.First().Name" alt="@banner.BannerImage.First().Name">
+                        </a>
+                        <figcaption>@banner.title</figcaption>
+                    </figure>
+                </div>
+                }
+            }
+            </div>
+        </div>*@
+
+        </div>
+    </div>
+}

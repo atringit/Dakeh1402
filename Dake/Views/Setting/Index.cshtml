@@ -1,0 +1,103 @@
+﻿@model Dake.Models.Setting
+
+<section class="content">
+    <div class="row">
+        <!-- left column -->
+        <div class="col-md-12">
+            <!-- general form elements -->
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">تنظیمات</h3>
+                </div>
+                <div class="row">
+                    <form asp-action="CreateOrEdit" method="post" enctype="multipart/form-data">
+						<div class="box-body">
+							<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+							<input asp-for="id" type="hidden" class="form-control" />
+							<div class="col-md-6">
+								<div class="form-group">
+									<label asp-for="countExpireDate" class="control-label"></label>
+									<input asp-for="countExpireDate" class="form-control" />
+									<span asp-validation-for="countExpireDate" class="text-danger"></span>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<label asp-for="countExpireDateIsespacial" class="control-label"></label>
+									<input asp-for="countExpireDateIsespacial" class="form-control" />
+									<span asp-validation-for="countExpireDateIsespacial" class="text-danger"></span>
+								</div>
+							</div>
+
+							<div class="col-md-6">
+								<div class="form-group">
+									<label asp-for="countExpireDateEmergency" class="control-label"></label>
+									<input asp-for="countExpireDateEmergency" class="form-control" />
+									<span asp-validation-for="countExpireDateEmergency" class="text-danger"></span>
+								</div>
+							</div>
+
+							<div class="col-md-6">
+								<div class="form-group">
+									<label asp-for="showPriceForCars" class="control-label"></label>
+									@{
+										if (Model.showPriceForCars)
+										{
+
+											<input type="checkbox" checked asp-for="showPriceForCars" />
+										}
+										else
+										{
+											<input type="checkbox" asp-for="showPriceForCars"   />
+
+										}
+									}
+									<span asp-validation-for="showPriceForCars" class="text-danger"></span>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<label asp-for="AutoAccept" class="control-label"></label>
+									@{
+										if (Model.AutoAccept)
+										{
+
+											<input type="checkbox" checked asp-for="AutoAccept" />
+										}
+										else
+										{
+											<input type="checkbox" asp-for="AutoAccept"   />
+
+										}
+									}
+									@*<span asp-validation-for="showPriceForCars" class="text-danger"></span>*@
+								</div>
+							</div>
+
+							<div class="col-md-12">
+								<div class="form-group">
+									<label asp-for="wrongWord" class="control-label"></label>
+									<br />
+									<label class="control-label">لطفا کلمات را با - از هم جدا کنید</label>
+
+									<textarea asp-for="wrongWord" class="form-control"></textarea>
+									<span asp-validation-for="wrongWord" class="text-danger"></span>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<input type="submit" value="ثبت" class="btn btn-default" />
+								</div>
+							</div>
+						</div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+@section Scripts
+    {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+}

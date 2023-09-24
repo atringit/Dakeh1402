@@ -1,0 +1,58 @@
+﻿@model List<Dake.Models.FactorItem>
+
+<div class="col-md-12" style="direction:rtl">
+    <div style="padding-top:30px;text-align:right">
+        <h5 style="margin:40px auto">جزییات خرید فاکتور به شماره @Model.FirstOrDefault().Factor.id &nbsp; در تاریخ @Model.FirstOrDefault().Factor.createDatePersian</h5>
+        @if (Model != null)
+        {
+
+            foreach (var f in Model)
+            {
+                <div class="row" style="background-color:white;border:1px solid #e7e7e7;text-align:right;box-shadow:2px 3px #e7e7e7;margin-bottom:15px">
+                    @*<div class="col-md-3 col-sm-6">
+                        <img src="@f.Product.image1" style="max-height:100px;display:block;margin:20px auto" />
+                    </div>*@
+                    <div class="col-md-3 col-sm-6" style="display:table-cell;vertical-align:middle;padding-top:10px">
+                        <b>نام محصول  </b>
+                        <div style="margin-top:30px">
+                            @f.Product.title
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 col-sm-6">
+                        <div style="text-align:center;font-size:16px;vertical-align:middle;display:table-cell;height:100px">
+                            <b>قیمت </b>
+                            <br />
+                            <br />
+                            @string.Format("{0:0,0}", f.price)
+                            تومان
+
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        <div class="row" style="background-color:white;border:1px solid #e7e7e7;text-align:right;box-shadow:2px 3px #e7e7e7;margin-bottom:15px">
+            <div class="col-md-3 col-sm-6">
+                
+            </div>
+            <div class="col-md-3 col-sm-6" style="display:table-cell;vertical-align:middle;padding-top:10px">
+                
+            </div>
+
+            <div class="col-md-3 col-sm-6">
+                <b>قیمت کل </b>
+                <br />
+                <br />
+                @string.Format("{0:0,0}",Model.FirstOrDefault().Factor.totalPrice)
+                تومان
+
+            </div>
+        </div>
+    </div>
+    <div>
+        <a asp-action="Index" class="btn btn-danger">بازگشت</a>
+
+    </div>
+   
+</div>

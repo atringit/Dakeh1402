@@ -1,0 +1,264 @@
+﻿@model PagedList.Core.IPagedList<Dake.Models.Notice>
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">آگهی ها</h3>
+            </div>
+            
+            <div class="row">
+                <form>
+                    <div class="box-body">
+                        <div class="col-md-3 form-group">
+                            <input type="text" name="filterTitle" class="form-control" placeholder="عنوان" />
+                        </div>
+                        <div class="col-md-3 form-group">
+                            <select class="form-control" id="filtercategory" name="filtercategory" asp-items="ViewBag.category">
+                                <option value="">انتخاب کنید</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-1 form-group">
+                            <button type="submit" class="btn btn-default">جستجو</button>
+                        </div>
+                        <div class="col-md-2 form-group">
+                            <a href="/Notice/Index" class="btn btn-default">مشاهده همه</a>
+                        </div>
+                        <div class="col-md-3 form-group">
+                            <span style="color:green;font-size:medium;font-weight:bolder"> تاییدشده  : @Model.Where(p=>p.adminConfirmStatus == Dake.Models.EnumStatus.Accept).Count()</span>
+                            <span style="color:red;font-size:medium;font-weight:bolder">  رد شده : @Model.Where(p=>p.adminConfirmStatus == Dake.Models.EnumStatus.NotAccept).Count()</span>
+                            <span style="color:yellow;font-size:medium;font-weight:bolder">  در انتظار تایید : @Model.Where(p=>p.adminConfirmStatus == Dake.Models.EnumStatus.Pending).Count()</span>
+                        </div>
+                    </div>
+                </form>
+                <p class="text text-danger" style="margin-right:20px">@TempData["SendSmsError"]</p>
+            </div>
+
+            <!-- /.box-header -->
+            <div class="box-body table-responsive">
+                <table id="example2" class="table table-bordered table-hover ">
+                    <thead>
+                        <tr>
+                            <th>کد</th>
+                            <th>عنوان</th>
+                            <th>دسته </th>
+                            <th>تعداد بازدید </th>
+                            <th>وضعیت</th>
+                            <th>وضعیت پرداخت</th>
+                            <th>امکانات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                        <tr>
+                            <td>@item.code</td>
+                            <td>@item.title</td>
+                            <td>@item.category.name</td>
+                            <td>@item.countView</td>
+                            <td>
+                                @if (item.adminConfirmStatus == Dake.Models.EnumStatus.Accept)
+                                {
+                                    <span style="color:green">تایید شده</span>
+                                }
+                                @if (item.adminConfirmStatus == Dake.Models.EnumStatus.NotAccept)
+                                {
+                                    <span style="color:red">تایید نشده</span>
+                                }
+                                @if (item.adminConfirmStatus == Dake.Models.EnumStatus.Pending)
+                                {
+                                    <span style="color:yellow">در انتظار تایید</span>
+                                }
+                            </td>
+                            @{
+                                if (item.category.registerPrice == 0)
+                                {
+                                    <td style="color:yellowgreen">رایگان</td>
+                                }
+                                else if (item.isPaid)
+                                {
+                                    <td style="color:seagreen">پرداخت شده</td>
+                                }
+                                else
+                                {
+                                    <td style="color:darkred">پرداخت نشده</td>
+
+                                }
+                            }
+
+
+
+
+                        <td>
+                            <a asp-action="Details" asp-route-id="@item.id" class="btn btn-default">مشاهده</a>
+                            <a asp-action="AllChats" asp-route-id="@item.id" class="btn btn-default">مشاهده چت ها</a>
+                            <a asp-action="Charts" asp-route-id="@item.id" class="btn btn-default">چارت</a>
+                            <a onclick="Active(@item.id)" class="btn btn-danger">رد/تایید کردن</a>
+                            <a asp-action="Delete" asp-route-id="@item.id" class="btn btn-default">حذف</a>
+                        </td>
+                        <td>
+                            @if (item.adminConfirmStatus == Dake.Models.EnumStatus.Accept)
+                                {
+                                    <span style="color:green">@item.AdminUserAccepted</span>
+                                }
+                        </td>
+                        </tr>
+                        }
+
+
+                    </tbody>
+                    <tfoot>
+
+                    </tfoot>
+                </table>
+            </div>
+            <!-- /.box-body -->
+            <div class="row">
+                <div class="col-sm-5">
+                </div>
+                <div class="col-sm-7">
+                    <div class="dataTables_paginate paging_simple_numbers" id="example1_paginate">
+                        <ul class="pagination">
+                            <li>
+                                <pager list="@Model" asp-controller="Notice" asp-action="Index" />
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- /.col -->
+</div>
+<div class="modal fade" id="modal-default">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">آگهی</h4>
+            </div>
+            <form id="NoticeConfirm">
+                <input type="hidden" id="id" name="id" value="" />
+                <div class="modal-body">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input id="titleNotice" class="form-control" name="titleNotice" disabled />
+                    <div class="form-group">
+                        <label>وضعیت</label>
+                        <select class="form-control" id="adminConfirmStatus" name="adminConfirmStatus">
+                            @foreach (var item in Enum.GetValues(typeof(Dake.Models.EnumStatus)))
+                            {
+                                if (item.Equals(Dake.Models.EnumStatus.Pending))
+                                {
+                                    <option selected value="1"> در انتظار تایید </option>
+                                }
+                                if (item.Equals(Dake.Models.EnumStatus.Accept))
+                                {
+                                    <option selected value="2"> تایید شده </option>
+                                }
+                                if (item.Equals(Dake.Models.EnumStatus.NotAccept))
+                                {
+                                    <option selected value="3"> تایید نشده </option>
+                                }
+                            }
+                        </select>
+                        <i class="form-group__bar"></i>
+                    </div>
+                    <div class="form-group" id="ConfirmDescriptiondivsms">
+                        <label>دل رد متن پیام کوتاه</label>
+                        <select class="form-control" id="adminConfirmsms" name="adminConfirmsms">
+                            <option selected value="1">دسته بندی آگهی شما اشتباه است. </option>
+                            <option selected value="2">فیلم آگهی شما دارای جهت نامناسب یا کیفیت پایین یا محتوای ضد اخلاقی است. </option>
+                            <option selected value="3">متن نوشته شده را مجدد بررسی و جمله بندی ها و کلمات را اصلاح کنید. </option>
+                            <option selected value="4">تصاویر آگهی شما مناسب نیست(مراجعه به قوانین و مقررات سایت). </option>
+                            <option selected value="5">لینک درج شده دارای محتوای خلاف قوانین فضای مجازی کشور است. </option>
+
+                        </select>
+                        <i class="form-group__bar"></i>
+                    </div>
+                    <div class="form-group" id="ConfirmDescriptiondiv">
+                        <label class="control-label">دلیل رد</label>
+                        <textarea class="form-control" type="text" data-val="true" data-val-maxlength="دلیل رد نمی تواند بیشتر از 1000 کاراکتر باشد ." data-val-maxlength-max="1000" id="notConfirmDescription" name="notConfirmDescription" value=""></textarea>
+                        <span class="text-danger field-validation-valid" data-valmsg-for="notConfirmDescription" data-valmsg-replace="true"></span>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">خروج</button>
+                    <button type="submit" class="btn btn-primary">ذخیره</button>
+                </div>
+            </form>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+@section scripts
+    {
+    <script>
+        function Active(id) {
+
+            $.ajax({
+                url: "/Notice/GetNotice?id=" + id,
+                method: "Get",
+                dataType: "json",
+                success: function (data) {
+                    if (data.id != 0) {
+                        $("#titleNotice").val(data.title);
+                        $("#notConfirmDescription").val(data.notConfirmDescription);
+                        $("#adminConfirmStatus").val(data.adminConfirmStatus);
+                        $("#id").val(data.id);
+                        $(function () {
+                            $('#NoticeConfirm #ConfirmDescriptiondiv').hide();
+                            if ($('#adminConfirmStatus').val() == '3') {
+                                $('#NoticeConfirm #ConfirmDescriptiondiv').show();
+                            } else {
+                                $('#NoticeConfirm #ConfirmDescriptiondiv').hide();
+                            }
+                        });
+                        $('#modal-default').modal('show');
+                    }
+                    else {
+                        alert("ID is incorrect");
+                    }
+                },
+                error: function () {
+                    alert("Ajax call failed");
+                }
+            })
+        }
+        $("#NoticeConfirm").submit(function (event) {
+
+            event.preventDefault();
+            var form = $(this).serialize();
+            $.ajax({
+                url: "/Notice/InActive",
+                method: "POST",
+                data: form,
+                success: function (data) {
+                    $('#modal-default').modal('hide');
+                    location.reload();
+                }
+
+            })
+        });
+    </script>
+    <script>
+        $(function () {
+            $('#NoticeConfirm #ConfirmDescriptiondiv').hide();
+            $('#adminConfirmStatus').change(function () {
+                if ($('#adminConfirmStatus').val() == '3') {
+                    $('#NoticeConfirm #ConfirmDescriptiondiv').show();
+                    $('#NoticeConfirm #ConfirmDescriptiondivsms').show();
+                } else {
+                    $('#NoticeConfirm #ConfirmDescriptiondiv').hide();
+                    $('#NoticeConfirm #ConfirmDescriptiondivsms').hide();
+                }
+            });
+        });
+    </script>
+}
+
+

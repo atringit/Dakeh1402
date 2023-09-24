@@ -1,0 +1,689 @@
+﻿@model Dake.ViewModel.DetailNoticeViewModel
+@using Dake.Utility
+@{
+    Layout = "_Layout";
+}
+
+<head>
+    <link href="~/assets/css/mobilenav.css" rel="stylesheet" />
+</head>
+
+
+<section class="detail">
+    <div class="container">
+        <div class="detail__breadcrumb">
+            <ul>
+                <li><a title="همه آگهی ها" href="/Home2/Index">همه آگهی ها</a></li>
+                @foreach (var item in Enumerable.Reverse(Model.Categorys))
+                {
+                    <li><a href="~/Home2/Index?catId=@item.id">@item.name</a></li>
+                }
+            </ul>
+        </div>
+        <p class="text text-danger" id="errortext">
+
+        </p>
+        <input id="noticelink" style="display:none" />
+        <div class="detail__wrapper">
+            <div class="row" dir="ltr">
+                <div class="col-lg-7" style="margin-bottom: 40px;">
+                    <div class="detail__side">
+                        <div class="detail__slider">
+                            <div class="detail__slider__main">
+                                <div class="swiper-container">
+                                    <div class="swiper-wrapper">
+
+                                        @if (!String.IsNullOrEmpty(Model.notice.movie))
+                                        {
+                                            <div class="swiper-slide">
+                                                <video poster="" controls>
+                                                    <source src="@Model.notice.movie" type="video/mp4">
+                                                </video>
+                                            </div>
+                                        }
+
+
+                                        @foreach (var item in Model.noticeImages)
+                                        {
+                                            <div class="swiper-slide" data-role="imagemagnifier" data-magnifier-mode="glass"
+                                                data-lens-type="circle" data-lens-size="200">
+                                                <img src="@item.image" alt="" title="" data-magnify-src="@item.image"
+                                                    class="zoom">
+                                            </div>
+                                        }
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <div class="detail__slider__thumb">
+                                <div class="swiper-container">
+                                    <div class="swiper-wrapper">
+
+                                        @if (!String.IsNullOrEmpty(Model.notice.movie))
+                                        {
+                                            <div class="swiper-slide swiper-slide-video">
+                                                <i class="dk-play"></i>
+                                                <video src="@Model.notice.movie"
+                                                    style="display: block; width: 100%; height: 100%; object-fit: cover; opacity: 0.75;"></video>
+                                            </div>
+                                        }
+
+                                        @foreach (var item in Model.noticeImages)
+                                        {
+                                            <div class="swiper-slide">
+                                                <img class="img-border" src="@item.image">
+                                            </div>
+                                        }
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="detail__btn">
+                            <a class="show-info-btn" href="#" data-toggle="modal" data-target="#myModal4">نمایش مشخصات
+                                تماس</a>
+                        </div>
+                        <div class="detail__share">
+                            <a class="show-info-btn2" style="cursor:pointer" data-toggle="modal"
+                                data-target="#myModallink" onclick="getlink()">اشتراک گذاری</a>
+                            <a class="show-info-btn2" onclick="AddToFavorite(@Model.notice.id)"
+                                style="padding-left: 0.5rem;cursor:pointer">علاقه‌مندی</a>
+                            <a class="show-info-btn2" href="#" data-toggle="modal" data-target="#myModal5">گزارش
+                                خرابی</a>
+                        </div>
+
+                    </div>
+                </div>
+                <div dir="rtl" class="col-lg-5">
+                    <div class="detail__title">
+                        <h1>@Model.notice.title</h1>
+                        @{
+                            Uri uriResult;
+                            bool result = Uri.TryCreate(@Model.notice.link, UriKind.Absolute, out uriResult)
+                            && uriResult.Scheme == Uri.UriSchemeHttp;
+                            if (!result)
+                            {
+                                Uri.TryCreate(@Model.notice.link, UriKind.Absolute, out uriResult);
+                            }
+                        }
+                        <time style="font-size: 17.5px;" class="ps-product__price"
+                            datetime="">@PersianCalendarDate.calculatDate(Model.notice.createDate)</time>
+                        <p></p>
+                        <div class="ps-product__desc">
+
+
+
+                        </div>
+                        <div class="ps-product__desc">
+                            <p>کد:<span>@Model.notice.code</span></p>
+                            <p>قیمت:<span>@String.Format("{0:0,0}", Model.notice.price) تومان</span></p>
+                            <p>قیمت نهایی:<span>@String.Format("{0:0,0}", Model.notice.lastPrice) تومان</span></p>
+                        </div>
+                        <p class="ps-product__price">لینک : <a href="@uriResult">@Model.notice.link</a></p>
+                        <p>تعداد مشاهده:<span>@Model.notice.countView</span></p>
+                        @if (Model.notice.userId == Model.userId)
+                        {
+                            @if (PersianCalendarDate.LeftDayToExpire(Model.notice.expireDate) > 0)
+                            {
+                                <a>@PersianCalendarDate.LeftDayToExpire(Model.notice.expireDate) روز مانده تا انقضای آگهی</a>
+                            }
+                            else
+                            {
+                                <a>آگهی شما منقضی شده است</a>
+
+                            }
+                            <br />
+
+                            @if (PersianCalendarDate.LeftDayToExpire(Model.notice.ExpireDateEmergency) > 0)
+                            {
+                                <a>@PersianCalendarDate.LeftDayToExpire(Model.notice.ExpireDateEmergency) روز مانده تا انقضای
+                                    اضطراری</a>
+                            }
+                            else
+                            {
+                                <a>آگهی شما اضطراری نمی باشد</a>
+
+                            }
+                            <br />
+
+                            @if (PersianCalendarDate.LeftDayToExpire(Model.notice.expireDateIsespacial) > 0)
+                            {
+                                <a>@PersianCalendarDate.LeftDayToExpire(Model.notice.expireDateIsespacial) روز مانده تا انقضای
+                                    ویژه</a>
+                            }
+                            else
+                            {
+                                <a>آگهی شما ویژه نمی باشد</a>
+
+                            }
+                        }
+                        <br />
+
+
+
+                    </div>
+                    @if (Model.notice.userId == Model.userId)
+                    {
+                        <div class="deitise">
+                            <a class="btn btn-outline-success border border-success-0" style="cursor:pointer;"
+                                data-target="#myModalRemove" data-toggle="modal">حذف آگهی</a>
+
+                            <a class="btn btn-outline-success border border-success-0" style="cursor:pointer"
+                                onclick="LadderNotice(@Model.notice.id)">نردبان</a>
+                            <a class="btn btn-outline-success border border-success-0" style="cursor:pointer"
+                                onclick="location.href='/Home2/ProfileEdit?id=@Model.notice.id'">ویرایش</a>
+                            <a class="btn btn-outline-success border border-success-0" style="cursor:pointer"
+                                onclick="EmergencyNotice(@Model.notice.id)">اضطراری</a>
+                            <a class="btn btn-outline-success border border-success-0" style="cursor:pointer"
+                                onclick="ExtendNotice(@Model.notice.id)">تمدید</a>
+                            <a class="btn btn-outline-success border border-success-0"
+                                style="cursor:pointer; margin-top: 5px;" onclick="MakeSpecial(@Model.notice.id)">تبدیل به
+                                آگهی ویژه</a>
+
+                        </div>
+                        <hr />
+                        <div>
+                            <div class="col-lg-6">
+                                <div class="form__wrapper" style="width:400px">
+                                    <div class="form__box">
+                                        <div class="form__box__title">
+                                            <h3>کدتخفیف</h3>
+                                        </div>
+                                        <div class="form-group">
+                                            <input maxlength="6" placeholder="کدتخفیف" class="title form-control"
+                                                id="DiscountCode" name="discountcode" />
+                                            <p class="text text-danger">@TempData["DiscountErrorMessage"]</p>
+
+                                            <span id="DiscountCodeMessage" class="text-danger"></span>
+                                            <div class="form__box__info">
+                                                <ul>
+                                                    <li>در صورت تمایل کد تخفیف وارد کنید </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <p>کدهای تخفیف مناسب شما :</p>
+
+
+                                        </div>
+
+                                        <div class="form__btn">
+                                            <button class="btn btn-primary" onclick="DisCountCodeCheckValidity()"
+                                                type="button" style="width:80px">برسی</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+
+                    <div class="detail__info">
+                        <ul>
+                            <li>
+                                <span>دسته بندی:</span>
+
+                                @{
+                                    var isFirst = true;
+                                }
+                                @foreach (var item in Enumerable.Reverse(Model.Categorys))
+                                {
+                                    if (isFirst)
+                                    {
+                                        <span>
+                                            @item.name
+                                        </span>
+                                        isFirst = false;
+                                    }
+                                    else
+                                    {
+                                        <span>
+                                            - @item.name
+                                        </span>
+                                    }
+
+                                }
+                            </li>
+                            <li>
+                                <span>استان:</span>
+                                <span>
+                                    @Model.notice.city.name
+                                </span>
+                            </li>
+                            <li>
+                                <span>شهرستان:</span>
+                                <span>
+                                    @Model.notice.province.name
+                                </span>
+                            </li>
+                            <li>
+                                <span>منطقه:</span>
+                                <span>
+                                    @Model.notice.area.name
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div id="textContainer">
+                        <p id="text">@Model.notice.description</p>
+
+                    </div>
+                    <button class="showmore" id="btnshowmore" onclick="showMore()" style="display: none;">مشاهده بیشتر</button>
+                    <button class="showmore" id="closeBtn" onclick="closeMore()" style="display: none;">بستن</button>
+                    <style>
+                        #textContainer {
+                            color: #555353;
+                            line-height: 40px;
+                            font-size: 14px;
+                            text-align: justify;
+                        }
+
+                        #textContainer {
+                            overflow: hidden;
+                            height: 10em;
+                        }
+
+                        #textContainer.expanded {
+                            height: auto;
+                        }
+
+                        .showmore {
+                            margin: auto;
+                            border: none;
+                            font-size: 18px;
+                            background: none;
+                            color: #83c030;
+                            border-radius: 8px;
+                            outline: none;
+                            margin-top: 5px;
+
+
+                        }
+
+                        .showmore:hover {
+                            color: rgb(48, 192, 82);
+                        }
+                    </style>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br />
+    <br />
+    <br />
+    @if (Model.Relatednotices != null && Model.Relatednotices.Any())
+    {
+        <h3 style="margin-right:40%">آگهی های مشابه</h3>
+    }
+    <br />
+    <br />
+
+    <div class="photos" id="main-div">
+        <div class="row" data-space="20">
+            @foreach (var item in Model.Relatednotices)
+            {
+                <div class="col-md-3 col-sm-6 col-6">
+                    <figure class="photos__item">
+                        <a href="/Notice2/Index/@item.id" title="@item.title">
+                            <img src="@item.image" style="height:100%" alt="@item.title" title="@item.title">
+                        </a>
+                        <figcaption>@item.title</figcaption>
+                    </figure>
+
+                </div>
+            }
+        </div>
+    </div>
+
+
+
+
+    <form id="LadderNoticeHome" method="post" action="../Home2/LadderNotice" enctype="multipart/form-data">
+        <input name="laddernoticeid" id="laddernoticeid" hidden />
+    </form>
+
+    <form id="EmergencyNoticeHome" method="post" action="../Home2/EmergencyNotice" enctype="multipart/form-data">
+        <input name="EmergencyNoticeid" id="EmergencyNoticeid" hidden />
+    </form>
+
+    <form id="ExtendNoticeHome" method="post" action="../Home2/ExtendedNotice" enctype="multipart/form-data">
+        <input name="Extendnoticeid" id="Extendnoticeid" hidden />
+    </form>
+    <form id="SpecialNoticeHome" method="post" action="../Home2/SpecialNotice" enctype="multipart/form-data">
+        <input name="Specialdnoticeid" id="Specialdnoticeid" hidden />
+    </form>
+
+</section>
+<div id="myModal4" class="modal">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="border-radius: 10px;">
+            <div data-dismiss="modal" class="btn-close"></div>
+
+            <div class="modal-body">
+                <div class="profile-modal">
+                    <div class="profile-modal__title">
+                        <b style="font-size: 25px;">@Model.notice.title</b>
+                    </div>
+                    <br />
+                    <div class="profile-modal__list">
+                        <ul>
+                            <li>
+                                <p style="font-size: 20px;font-weight: bold;">شماره تماس شخص آگهی دهنده</p>
+                            </li>
+                            <li style="font-size: 18px;font-weight: bold;">
+                                <p><a href="tel:@Model.notice.user.cellphone">تماس با : @Model.notice.user.cellphone</a>
+                                </p>
+                            </li>
+                        </ul>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="myModalRemove" class="modal">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div data-dismiss="modal" class="mmybtn"></div>
+
+            <div class="modal-body">
+                <div class="profile-modal">
+                    <div class="profile-modal__title">
+                        <b>حذف آگهی</b>
+                    </div>
+                    <br />
+                    <div class="profile-modal__list">
+                        <p>آیا مایل به حذف آگهی @Model.notice.title هستید ؟</p>
+                    </div>
+                    <div class="profile-modal__list">
+                        <button class="btn btn-dark" onclick="RemoveNotice(@Model.notice.id)">بلی</button>
+                        <button type="button" class="btn btn-dark" data-dismiss="modal"></button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div id="myModallink" class="modal">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div data-dismiss="modal" class="mmybtn"></div>
+
+            <div class="modal-body">
+                <div class="profile-modal">
+                    <div class="profile-modal__title">
+                        <b></b>
+                    </div>
+                    <br />
+                    <div class="profile-modal__list">
+                        <p>لینک آگهی کپی گردید</p>
+                    </div>
+                    <div class="profile-modal__list">
+
+                        <button type="button" class="btn btn-dark" data-dismiss="modal"></button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div id="myModal5" class="modal">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div data-dismiss="modal" class="mmybtn"></div>
+            <div class="modal-body">
+                <div class="profile-modal">
+                    <div class="profile-modal__title">
+                        <h3>گزارش خرابی آگهی :@Model.notice.title</h3>
+                    </div>
+                    <br />
+                    <div class="profile-modal__list">
+
+                        <textarea rows="1" cols="50" class="form-control title" id="yourMessage"
+                            placeholder="پیغام شما"></textarea>
+                        <br />
+                        <div class="form__btn">
+                            <button onclick="AddToDestroy(@Model.notice.id)">ارسال پیغام</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+@section scripts{
+    <script src="~/js/sweetalert.min.js"></script>
+    <script>
+        $(document).ready(function () {
+
+            var modal = document.getElementById("myModal4");
+
+            var _btn = document.getElementById("myBtn4");
+
+            _btn.onclick = function () {
+                modal.style.display = "block";
+            }
+
+            window.onclick = function (event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            }
+            var modal5 = document.getElementById("myModal5");
+            var btn5 = document.getElementById("myBtn5");
+            btn5.onclick = function () {
+                modal5.style.display = "block";
+            }
+
+            window.onclick = function (event) {
+                if (event.target == modal5) {
+                    modal5.style.display = "none";
+                }
+            }
+        });
+
+    </script>
+    <script>
+        $(document).ready(function () {
+            $("ul.img-detail-notice>li").click(function () {
+                if ($(this).hasClass('video')) {
+                    var src = $(this).find('video').attr('src');
+                    var str = "<video class='img-border' style='width: 100%' controls ><source src='";
+                    str += src;
+                    str += "' type='video/mp4'></video>";
+                    $("#main-tag").html(str);
+                }
+                else {
+                    $("#main-tag").html("");
+                    var scr = $(this).find('img').attr('src');
+                    //$("#main-image1").attr('src', scr);
+                    var str = "<img id='main-image1' style='width: 100%' class='img-border' src='";
+                    str += scr;
+                    str += "' />";
+                    $("#main-tag").html(str);
+                }
+            });
+        })
+        window.addEventListener("DOMContentLoaded", function () {
+            var textElement = document.getElementById("text");
+            var showMoreBtn = document.getElementById("btnshowmore");
+
+            var lineHeight = parseInt(window.getComputedStyle(textElement).lineHeight);
+            var containerHeight = document.getElementById("textContainer").offsetHeight;
+            var textHeight = textElement.offsetHeight;
+
+            if (textHeight <= lineHeight * 3) {
+                showMoreBtn.style.display = "none";
+            } else {
+                showMoreBtn.style.display = "inline";
+            }
+        });
+        function showMore() {
+            var textContainer = document.getElementById("textContainer");
+            textContainer.classList.add("expanded");
+
+            var button = document.getElementById("btnshowmore");
+            button.style.display = "none";
+
+            var closeBtn = document.getElementById("closeBtn");
+            closeBtn.style.display = "inline";
+        }
+        function closeMore() {
+            var textContainer = document.getElementById("textContainer");
+            textContainer.classList.remove("expanded");
+
+            var showMoreBtn = document.getElementById("btnshowmore");
+            showMoreBtn.style.display = "inline";
+
+            var closeBtn = document.getElementById("closeBtn");
+            closeBtn.style.display = "none";
+        }
+        function AddToFavorite(id) {
+            $.ajax({
+                type: "POST",
+                url: "/Home2/AddToFavorite?id=" + id,
+                success: function (response) {
+                    if (response == "Success") {
+
+                        swal({
+                            title: '!  موفقیت آمیز',
+                            text: "با موفقیت تغییر اعمال شد",
+                            type: 'success',
+                            buttonsStyling: false,
+                            confirmButtonClass: 'btn btn-sm btn-light',
+                            background: 'rgba(0, 0, 0, 0.96)',
+                            timer: 1500
+                        })
+                        location.reload();
+                    }
+                    else if (response == "UserNull") {
+                        swal({
+                            title: 'نا موفق',
+                            text: "ابتدا وارد حساب خود شوید",
+                            type: 'warning',
+                            buttonsStyling: false,
+                            confirmButtonClass: 'btn btn-sm btn-light',
+                            background: 'rgba(0, 0, 0, 0.96)',
+                            timer: 1500
+                        })
+                        location.reload();
+                    }
+                    else {
+                       
+                        swal({
+                            title: 'نا موفق',
+                            text: 'قبلا این آگهی به لیست علاقه مندی شما اضافه شده است',
+                            type: 'warning',
+                            buttonsStyling: false,
+                            confirmButtonClass: 'btn btn-black',
+                            background: 'rgba(0, 0, 0, 0.96)',
+                            timer: 1500
+                        })
+                        location.reload();
+                    }
+
+                }
+            });
+        }
+        function AddToDestroy(id) {
+            $.ajax({
+                type: "POST",
+                url: "/Home2/AddToDestroy?id=" + id + "&message=" + $("#yourMessage").val(),
+                success: function (response) {
+                    if (response == "Success") {
+                        $("#myModal5").hide();
+                        $(".modal-backdrop").hide();
+                        swal({
+                            title: 'موفقیت آمیز',
+                            text: 'گزارش خطا شما ثبت شد',
+                            type: 'success',
+                            confirmButtonColor: '#8fb253',
+                            timer: 5000
+                        })
+                    }
+                    else {
+                        swal({
+                            title: 'نا موفق',
+                            text: 'قبلا این آگهی توسط شما گزارش شده است',
+                            type: 'warning',
+                            confirmButtonColor: '#8fb253',
+                            timer: 5000
+                        })
+                    }
+
+                }
+            });
+        }
+        function LadderNotice(id) {
+
+            $("#laddernoticeid").val(id);
+            $("#LadderNoticeHome").submit();
+
+
+
+        }
+
+        function EmergencyNotice(id) {
+            $("#EmergencyNoticeid").val(id);
+            $("#EmergencyNoticeHome").submit();
+        }
+
+        function ExtendNotice(id) {
+            $("#Extendnoticeid").val(id);
+            $("#ExtendNoticeHome").submit();
+
+        }
+        function MakeSpecial(id) {
+            $("#Specialdnoticeid").val(id);
+            $("#SpecialNoticeHome").submit();
+
+
+        }
+
+
+        function RemoveNotice(id) {
+            $.ajax({
+                type: "POST",
+                url: "/Home2/RemoveNotice?id=" + id,
+                success: function (response) {
+                    if (response == "Success") {
+                        location.href = "../Home2/Profile2"
+                    }
+                    else {
+                        $("#errortext").text('این آگهی قابل حذف نیست');
+
+                        $("#myModalRemove").modal('toggle');
+
+                    }
+
+                }
+            });
+        }
+
+        function getlink() {
+            var mylink = window.location.href;
+            $("#noticelink").val(mylink);
+            var copyTextarea = document.getElementById('noticelink');
+            $("#noticelink").css("display", "block");
+            copyTextarea.focus();
+            copyTextarea.select();
+            document.execCommand("copy");
+            $("#noticelink").css("display", "none");
+        }
+
+    </script>
+}

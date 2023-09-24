@@ -1,0 +1,89 @@
+﻿
+<section class="content">
+    <div class="row">
+        <!-- left column -->
+        <div class="col-md-12">
+            <!-- general form elements -->
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">ثبت اطلاعیه</h3>
+                </div>
+                @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+                <div>
+                    <form asp-action="Create" method="post" enctype="multipart/form-data">
+                        <div class="box-body">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label">عنوان</label>
+                                    <input required name="title" class="form-control" placeholder="عنوان اطلاعیه را وارد کنید" />
+
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="control-label">متن</label>
+                                <div class="form-group">
+                                    <textarea required name="description" style="max-width:500px;max-height:450px" placeholder="متن اطلاعیه را وارد کنید"></textarea>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label">لینک</label>
+                                    <input name="Link" class="form-control" placeholder="لینک اطلاعیه را وارد کنید" />
+
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+
+                                <div class="form-group " style="margin-right:5px">
+                                    <label for="exampleInputEmail1"> عکس  :</label>
+                                    <div id="main-container">
+                                        <input display="Image" id="file" name="files" class="TheFile" onchange="SetPictures('file','ImageItems');" style="display:none" type="file" multiple>
+                                        <button type="button" style="height:20%;margin-left:15px;top:0;" class="btn btn-primary" onclick="file.click()"><i class="fa fa-camera"></i>انتخاب کنید</button>
+                                        <div id="ImageItems" style="width:400px;height:auto;margin-left:5px;">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <input type="submit" value="تایید" class="btn btn-default" />
+                                    <a class="btn btn-danger" asp-action="Index">بازگشت</a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<script>
+    window.onload = Load;
+    function Load() {
+
+
+
+
+    }
+
+    function SetPictures(inputtarget, target, type) {
+        var myURL = window.URL || window.webkitURL;
+        var result = "";
+        var tag = "";
+        var _File = document.getElementById("" + inputtarget + "").files;
+        for (var i = 0; i < _File.length; i++) {
+            var fileURL = myURL.createObjectURL(_File[i]);
+            tag = "<img src='" + fileURL + "' style='width:80px;height:60px;'>";
+            result += tag;
+        }
+
+        $('#' + target + '').html(result);
+    }
+
+</script>

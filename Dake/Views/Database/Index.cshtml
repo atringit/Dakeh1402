@@ -1,0 +1,17 @@
+﻿@model Dake.Models.ViewModels.DbIndexVM
+
+
+<div class="row">
+    <div class="col-12" style="margin-right:50px;">
+        <div class="col-6">
+            <form method="post" action="/Database/GetBackUp">
+                <button class="btn btn-primary" type="submit"><span>بک آپ دیتابیس</span></button>
+            </form>
+        </div>
+    </div>
+
+    @if (Model.IsSuccess == true)
+    {
+        <h3>@Model.Message</h3>
+    }
+</div>

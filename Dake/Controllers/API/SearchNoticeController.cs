@@ -1,0 +1,199 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Dake.DAL;
+using Dake.Models;
+using Dake.Service.Interface;
+using Newtonsoft.Json.Linq;
+using Dake.Utility;
+using System.IO;
+using DocumentFormat.OpenXml.Office2010.ExcelAc;
+using Microsoft.AspNetCore.Hosting;
+
+namespace Dake.Controllers.API
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class SearchNoticeController : ControllerBase
+    {
+        private readonly Context _context;
+        private INotice _notice;
+        private readonly IHostingEnvironment environment;
+
+        public SearchNoticeController(Context context, INotice notice, IHostingEnvironment environment)
+        {
+            this.environment = environment;
+            _context = context;
+            _notice = notice;
+        }
+        [HttpPost]
+        public async Task<object> GetNotices(ProductSearch2 searchNotice)
+        {
+            var notices = _context.Notices.Where(p => p.isEmergency && p.ExpireDateEmergency < DateTime.Now).ToList();
+            foreach (var notice in notices)
+            {
+                notice.isEmergency = false;
+                await _context.SaveChangesAsync();
+            }
+
+            string Token = HttpContext.Request?.Headers["Token"];
+            var user = _context.Users.Where(p => p.token == Token).FirstOrDefault();
+            if (user == null)
+                return new { status = 3, message = "چنین کاربری وجود ندارد." };
+            var result = _context.Notices.Include(s => s.area).Include(s => s.category).Include(s => s.province).Include(s => s.city).Where(x => x.expireDate >= DateTime.Now && x.adminConfirmStatus == EnumStatus.Accept).ToList();
+            //if (user.provinceId != null)
+            //{
+            //    result = result.Where(x =>  x.provinceId == user.provinceId);
+            //}
+            int page = 1;
+            int pageSize = 10;
+            page = searchNotice.page;
+            page = page > 0 ? page : 1;
+            pageSize = pageSize > 0 ? pageSize : 10;
+            if (!String.IsNullOrEmpty(searchNotice.title))
+                result = result.Where(x => x.title.Contains(searchNotice.title) || (x.description != null && x.description.Contains(searchNotice.title))).ToList();
+
+
+
+            if (searchNotice.areaId != 0 && searchNotice.areaId != null)
+                result = result.Where(x => x.areaId == searchNotice.areaId).ToList();
+            if (searchNotice.categoryId != 0 && searchNotice.categoryId != null)
+            {
+                var categoryId = searchNotice.categoryId;
+                //get all subcategory by using GetSubCategories method
+                List<Category> subCategories = this.GetSubCategories(categoryId);
+                //add category to subcategory
+                subCategories.Add(_context.Categorys.Where(x => x.id == categoryId).FirstOrDefault());
+                //get all notices by using subcategory
+                result = result.Where(x => subCategories.Any(y => y.id == x.categoryId)).ToList();
+            }
+            if (searchNotice.cityId != 0 && searchNotice.cityId != null)
+                result = result.Where(x => x.cityId == searchNotice.cityId).ToList();
+            if (searchNotice.provinceId != 0 && searchNotice.provinceId != null)
+                result = result.Where(x => x.provinceId == searchNotice.provinceId).ToList();
+            //result where deletedAt is null and adminConfirmStatus is accept
+            result = result.Where(x => x.deletedAt == null && x.adminConfirmStatus == EnumStatus.Accept).ToList();
+            //special notices
+            var specialNotices = result.Where(x => x.isSpecial && x.expireDateIsespacial >= DateTime.Now).ToList();
+
+            foreach (var item in result)
+            {
+                if (string.IsNullOrEmpty(item.image) == false && item.image.Contains("/images/Category/"))
+                {
+                    item.image = getCategoryImage(item.categoryId);
+                }
+            }
+            foreach (var item in specialNotices)
+            {
+                if (string.IsNullOrEmpty(item.image) == false && item.image.Contains("/images/Category/"))
+                {
+                    GetNoticeCategoryImage getNoticeCategoryImage = new GetNoticeCategoryImage(_context);
+                    item.image = getNoticeCategoryImage.getCategoryImage(item.categoryId);
+                }
+            }
+            int pagesize = 10;
+            // int skip = (page - 1) * pagesize;
+            var res = result.Skip((page - 1) * pagesize).Take(pagesize).Select(x => new
+            {
+                x.id,
+                x.title,
+                x.description,
+                x.image,
+                x.category.name,
+                x.categoryId,
+                x.isEmergency,
+                x.price,
+                x.lastPrice
+            }).ToList();
+
+            var resEspacial = specialNotices.Skip((page - 1) * pagesize).Take(pagesize).Select(x => new
+            {
+                x.id,
+                x.title,
+                x.description,
+                x.image,
+                x.category.name,
+                x.movie,
+                x.isSpecial,
+                x.price,
+                x.lastPrice
+            }).ToList();
+            return new { data = res, resEspacial, totalCount = result.Count() };
+        }
+
+        private List<Category> GetSubCategories(int? categoryId)
+        {
+            var subCategories = new List<Category>();
+            if (_context.Categorys.Any(x => x.parentCategoryId == categoryId))
+            {
+                foreach (var item in _context.Categorys.Where(x => x.parentCategoryId == categoryId).ToList())
+                {
+                    subCategories.Add(item);
+                    subCategories.AddRange(GetSubCategories(item.id));
+                }
+            }
+            return subCategories;
+        }
+
+        private string getCategoryImage(int catId)
+        {
+            var categoryItem = _context.Categorys.FirstOrDefault(s => s.id == catId);
+            if (!categoryItem.parentCategoryId.HasValue)
+            {
+                return categoryItem.image;
+            }
+            var categoryItem2 = _context.Categorys.FirstOrDefault(s => s.id == categoryItem.parentCategoryId);
+            if (!categoryItem2.parentCategoryId.HasValue)
+            {
+                return categoryItem2.image;
+            }
+            var categoryItem3 = _context.Categorys.FirstOrDefault(s => s.id == categoryItem2.parentCategoryId);
+            if (!categoryItem3.parentCategoryId.HasValue)
+            {
+                return categoryItem3.image;
+            }
+            var categoryItem4 = _context.Categorys.FirstOrDefault(s => s.id == categoryItem3.parentCategoryId);
+            if (!categoryItem4.parentCategoryId.HasValue)
+            {
+                return categoryItem4.image;
+            }
+            var categoryItem5 = _context.Categorys.FirstOrDefault(s => s.id == categoryItem4.parentCategoryId);
+            if (!categoryItem5.parentCategoryId.HasValue)
+            {
+                return categoryItem5.image;
+            }
+            var categoryItem6 = _context.Categorys.FirstOrDefault(s => s.id == categoryItem5.parentCategoryId);
+            if (!categoryItem6.parentCategoryId.HasValue)
+            {
+                return categoryItem6.image;
+            }
+            var categoryItem7 = _context.Categorys.FirstOrDefault(s => s.id == categoryItem6.parentCategoryId);
+            if (!categoryItem7.parentCategoryId.HasValue)
+            {
+                return categoryItem7.image;
+            }
+            var categoryItem8 = _context.Categorys.FirstOrDefault(s => s.id == categoryItem7.parentCategoryId);
+            if (!categoryItem8.parentCategoryId.HasValue)
+            {
+                return categoryItem8.image;
+            }
+            var categoryItem9 = _context.Categorys.FirstOrDefault(s => s.id == categoryItem8.parentCategoryId);
+            if (!categoryItem9.parentCategoryId.HasValue)
+            {
+                return categoryItem9.image;
+            }
+            var categoryItem10 = _context.Categorys.FirstOrDefault(s => s.id == categoryItem9.parentCategoryId);
+            if (!categoryItem10.parentCategoryId.HasValue)
+            {
+                return categoryItem10.image;
+            }
+            return string.Empty;
+        }
+
+
+    }
+}

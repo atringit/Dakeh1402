@@ -1,0 +1,62 @@
+﻿@model IEnumerable<Dake.Models.Notice>
+<div class="row">
+	<div class="col-xs-12">
+		<div class="box">
+			<div class="box-header">
+				<h3 class="box-title">آگهی های @ViewBag.UserName</h3>
+			</div>
+			<div>
+				<button class="btn btn-warning" onclick="window.history.back()" style="margin-right:10px">بازگشت</button>
+			</div>
+						<!-- /.box-header -->
+			<div class="box-body table-responsive">
+				<table id="example2" class="table table-bordered table-hover">
+					<thead>
+						<tr>
+							<th>ردیف</th>
+							<th>عنوان</th>
+							<th>دسته بندی</th>
+							<th>استان</th>
+							<th>کد</th>
+							<th>تعدادبازدید</th>
+							<th> توضیحات</th>
+							<th> قیمت</th>
+							<th> مشاهده آگهی</th>
+							<th>تاریخ ایجاد</th>
+							<th>تاریخ انقضا</th>
+						</tr>
+					</thead>
+					<tbody>
+						@if(Model!=null){
+							int row = 1;
+							foreach (var item in Model)
+							{
+								<tr>
+									<td>@row</td>
+									<td>@item.title</td>
+									<td>@item.category.name</td>
+									<td>@item.city.name</td>
+									<td>@item.code</td>
+									<td>@item.countView</td>
+									<td>@item.description</td>
+									<td>@item.price</td>
+									<td><a href="~/Notice/Details/@item.id"  class="btn btn-default">مشاهده</a></td>
+									<td>@Dake.Utility.PersianCalendarDate.PersianCalendarResult(item.createDate)</td>
+									<td>@Dake.Utility.PersianCalendarDate.PersianCalendarResult(item.expireDate)</td>
+								</tr>
+								row++;
+							}
+						}
+					</tbody>
+					<tfoot>
+
+					</tfoot>
+				</table>
+			</div>
+			<!-- /.box-body -->
+		
+		</div>
+
+	</div>
+	<!-- /.col -->
+</div>

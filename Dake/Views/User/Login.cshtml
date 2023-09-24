@@ -1,0 +1,75 @@
+﻿@model Dake.Utility.LoginUserAdmin
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
+@{
+    Layout = null;
+
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <meta name="google" content="notranslate" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="~/AdminContent/AdminLogin/material-design-iconic-font.min.css" rel="stylesheet" />
+    <link href="~/AdminContent/AdminLogin/animate.min.css" rel="stylesheet" />
+    <link href="~/AdminContent/AdminLogin/app.min.css" rel="stylesheet" />
+    <link href="~/AdminContent/AdminLogin/MyStyle.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/AdminContent/bower_components/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/AdminContent/bower_components/Ionicons/css/ionicons.min.css">
+</head>
+
+<body data-sa-theme="1">
+
+    <div class="login">
+
+        <!-- Login -->
+        <div class="login__block active" id="l-login">
+            <div class="login__block__header">
+                ! لطفا وارد شوید
+
+            </div>
+
+            <div class="login__block__body">
+                <div style="color:red;text-align:right">
+                    @Html.ValidationSummary()
+                </div>
+                <form action="~/User/SignIn" method="post">
+                    <div class="form-group">
+                        @Html.TextBoxFor(m => m.cellphone, new { placeholder = "تلفن همراه", @class = "form-control text-center" })
+                    </div>
+
+                    <div class="form-group">
+                        @Html.PasswordFor(m => m.password, new { placeholder = "رمز عبور", @class = "form-control text-center" })
+                    </div>
+
+                    <div class="form-group">
+                        <div class="remember-me">
+                            <label><input type="checkbox" name="RememberMe" value="true">  مرا بخاطر بسپار </label>
+                        </div>
+                    </div>
+                    <div class="g-recaptcha" data-sitekey="@Configuration["GoogleRecaptcha:Site_Key"]"></div>
+
+                    <button type="submit" class="btn btn--icon login__block__btn">
+                        <i class="fa fa-fw fa-arrow-right"></i>
+                    </button>
+                    <br />
+                    <br />
+                    <span class="text-danger">@ViewBag.Error</span>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="~/AdminContent/bower_components/jquery/dist/jquery.js"></script>
+
+    <script src="~/AdminContent/AdminLogin/popper.min.js"></script>
+    <script src="~/AdminContent/AdminLogin/bootstrap.min.js"></script>
+    <script src="~/AdminContent/AdminLogin/app.min.js"></script>
+
+    @* <script src="~/js/jquery.validate.min.js"></script> *@
+    <script src="~/js/jquery.validate.unobtrusive.min.js"></script>
+    
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+</body>
+</html>

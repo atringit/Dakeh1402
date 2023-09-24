@@ -1,0 +1,351 @@
+﻿@model PagedList.Core.IPagedList<Dake.Models.Category>
+
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">دسته بندی ها</h3>
+                <br />
+                <p style="color:red">@ViewBag.success</p>
+            </div>
+            <div class="row">
+                <form>
+                    <div class="box-body">
+                        <div class="col-md-4 form-group">
+                            <input type="text" name="filterTitle" class="form-control" placeholder="عنوان" />
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <button type="submit" class="btn btn-default">جستجو</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="row">
+				<div class="col-md-12">
+					<a class="btn btn-default" data-toggle="modal" data-target="#modal-default">دسته بندی جدید</a>
+					<a class="btn btn-default" data-toggle="modal" data-target="#modal-default2">رایگان کردن همه دسته ها</a>
+					<p class="text text-success" style="margin-top:5px;margin-right:5px">@TempData["Done"]</p>
+				</div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body table-responsive">
+                <table id="example2" class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>عنوان</th>
+
+                            <th>امکانات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.name</td>
+
+                                <td>
+                                    <button name="Edit-category" data-toggle="modal" data-id="@item.id" class="btn btn-default">ویرایش</button>
+                                    <a href="/Category/SubCategory?id=@item.id" class="btn btn-default">زیر دسته</a>
+                                    <a asp-action="Delete" asp-route-id="@item.id" class="btn btn-default">حذف</a>
+
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                    <tfoot>
+                    </tfoot>
+                </table>
+            </div>
+            <!-- /.box-body -->
+            <div class="row">
+                <div class="col-sm-5">
+                </div>
+                <div class="col-sm-7">
+                    <div class="dataTables_paginate paging_simple_numbers" id="example1_paginate">
+                        <ul class="pagination">
+                            
+                            <li>
+                                <pager list="@Model" asp-controller="category" asp-action="Index" />
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- /.col -->
+</div>
+<div class="modal fade" id="modal-default">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">دسته بندی</h4>
+            </div>
+            <form id="categoryForm" enctype="multipart/form-data">
+                <input type="hidden" id="id" name="id" value="" />
+                <div class="modal-body">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <div class="form-group">
+                        <label class="control-label">عنوان دسته بندی</label>
+                        <input class="form-control" type="text" data-val="true" data-val-maxlength="عنوان دسته بندی نمی تواند بیشتر از 500 کاراکتر باشد ." data-val-maxlength-max="500" data-val-required="لطفا عنوان دسته بندی را وارد کنید" id="name" name="name" value="">
+                        <span class="text-danger field-validation-valid" data-valmsg-for="name" data-valmsg-replace="true"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label">قیمت ثبت برای دسته بندی</label>
+                        <input class="form-control" type="text" data-val="true" data-val-required="لطفا قیمت ثبت دسته بندی را وارد کنید" id="registerPrice" name="registerPrice" value="">
+                        <span class="text-danger field-validation-valid" data-valmsg-for="registerPrice" data-valmsg-replace="true"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">قیمت  یرای ثبت دسته بندی در اپلیکیشن</label>
+                        <select class="form-control"  id="staticregisterPriceId" name="staticregisterPriceId">
+                            <option value="0">انتخاب کنید</option>
+
+                            @foreach (var item in (IEnumerable<StaticPrice>)ViewData["StaticPrice"])
+                            {
+                                <option value="@item.code">@item.price</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label">قیمت نردبان برای دسته بندی</label>
+                        <input class="form-control" type="text" data-val="true" data-val-required="لطفا قیمت نردبان دسته بندی را وارد کنید" id="laderPrice" name="laderPrice" value="">
+                        <span class="text-danger field-validation-valid" data-valmsg-for="laderPrice" data-valmsg-replace="true"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">قیمت نردبان برای دسته بندی در اپلیکشن</label>
+                        <select class="form-control " id="staticladerPriceId" name="staticladerPriceId">
+                            <option value="0">انتخاب کنید</option>
+
+                            @foreach (var item in (IEnumerable<StaticPrice>)ViewData["StaticPrice"])
+                            {
+                                <option value="@item.code">@item.price</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label">قیمت اضظراری برای دسته بندی</label>
+                        <input class="form-control" type="text" data-val="true" data-val-required="لطفا قیمت اضظراری دسته بندی را وارد کنید" id="emergencyPrice" name="emergencyPrice" value="">
+                        <span class="text-danger field-validation-valid" data-valmsg-for="emergencyPrice" data-valmsg-replace="true"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">قیمت اضطراری برای دسته بندی در اپلیکیشن</label>
+                        <select class="form-control "  id="staticemergencyPriceId" name="staticemergencyPriceId">
+                            <option value="0">انتخاب کنید</option>
+
+                            @foreach (var item in (IEnumerable<StaticPrice>)ViewData["StaticPrice"])
+                            {
+                                <option value="@item.code">@item.price</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label">قیمت تمدید برای دسته بندی</label>
+                        <input class="form-control" type="text" data-val="true" data-val-required="لطفا قیمت تمدید دسته بندی را وارد کنید" id="expirePrice" name="expirePrice" value="">
+                        <span class="text-danger field-validation-valid" data-valmsg-for="expirePrice" data-valmsg-replace="true"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">قیمت تمدید برای دسته بندی در اپلیکیشن</label>
+                        <select class="form-control "  id="staticexpirePriceId" name="staticexpirePriceId">
+                            <option value="0">انتخاب کنید</option>
+
+                            @foreach (var item in (IEnumerable<StaticPrice>)ViewData["StaticPrice"])
+                            {
+                                <option value="@item.code">@item.price</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">قیمت ویژه کردن آگهی برای  دسته بندی</label>
+                        <input class="form-control" type="text" data-val="true" data-val-required="لطفا قیمت ویژه کردن آگهی دسته بندی را وارد کنید" id="espacialPrice" name="espacialPrice" value="">
+                        <span class="text-danger field-validation-valid" data-valmsg-for="espacialPrice" data-valmsg-replace="true"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">قیمت ویژه کردن آگهی برای دسته بندی در اپلیکیشن</label>
+                        <select class="form-control " id="staticespacialPriceId" name="staticespacialPriceId">
+                            <option value="0">انتخاب کنید</option>
+
+                            @foreach (var item in (IEnumerable<StaticPrice>)ViewData["StaticPrice"])
+                            {
+                                <option value="@item.code">@item.price</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">تصویر دسته بندی</label>
+
+                        <img id="imgCategory" class="thumbnail" style="width:100px;height:100px;" src="" />
+                        <div class="form-group">
+                            <label>انتخاب تصویر</label>
+                            <input type="file" id="imageUrl" name="imageUrl">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">خروج</button>
+                    <button type="submit" class="btn btn-primary">ذخیره</button>
+                </div>
+            </form>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<div class="modal fade" id="modal-default2">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<h4 class="modal-title">اخطار ! آیا مایل به رایگان کردن همه دسته ها هستید؟</h4>
+			</div>
+
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default pull-left" data-dismiss="modal">نه</button>
+				<a  href="/Category/RemoveRegisterPrice"  class="btn btn-primary">بله</a>
+			</div>
+		</div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal-dialog -->
+</div>
+@section scripts
+    {
+
+    <script>
+        $('#modal-default').on('hidden.bs.modal', function () {
+            location.reload();
+		})
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#imgCategory').attr('src', e.target.result);
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+        $("#imageUrl").change(function () {
+            readURL(this);
+        });
+    </script>
+    <script>
+
+        $("#categoryForm").submit(function (event) {
+            event.preventDefault();
+            if ($('#categoryForm').valid()) {
+                //var pagenumber = $("#PageNumber").val();
+                //var form = $(this).serialize();
+                var fd = new FormData();
+                fd.append('id', $("#categoryForm #id").val());
+                fd.append('name', $("#categoryForm #name").val());
+                fd.append('espacialPrice', $("#categoryForm #espacialPrice").val());
+                fd.append('expirePrice', $("#categoryForm #expirePrice").val());
+				fd.append('registerPrice', $("#categoryForm #registerPrice").val());
+				fd.append('laderPrice', $("#categoryForm #laderPrice").val());
+                fd.append('imageUrl', $("#categoryForm #imageUrl")[0].files[0]);
+                fd.append('image', $("#categoryForm #imgCategory").attr('src'));
+                fd.append('staticregisterPriceId', $("#categoryForm #staticregisterPriceId").find('option:selected').val());
+                fd.append('staticemergencyPriceId', $("#categoryForm #staticemergencyPriceId").find('option:selected').val());
+                fd.append('staticladerPriceId', $("#categoryForm #staticladerPriceId").find('option:selected').val());
+                fd.append('staticexpirePriceId', $("#categoryForm #staticexpirePriceId").find('option:selected').val());
+                fd.append('staticespacialPriceId', $("#categoryForm #staticespacialPriceId").find('option:selected').val());
+
+
+                fd.append('emergencyPrice', $("#categoryForm #emergencyPrice").val());
+                $.ajax({
+                    url: "/Category/CreateOrEdit",
+                    method: "POST",
+                    data: fd,
+                    contentType: false,
+                    processData: false,
+                    success: function (data) {
+                        $('#modal-default').modal('hide');
+                        var messageText = "";
+                        if ($('#modal-default #id').val() != '' && $('#modal-default #id').val() != 0) {
+                            messageText = 'ویرایش  دسته بندی با موفقیت انجام شد';
+                        }
+                        else {
+                            messageText = 'اضافه کردن دسته بندی با موفقیت انجام شد';
+                        }
+                        swal({
+                            title: '!  موفقیت آمیز',
+                            text: messageText,
+                            type: 'success',
+                            buttonsStyling: false,
+                            confirmButtonClass: 'btn btn-sm btn-light',
+                            background: 'rgba(0, 0, 0, 0.96)',
+                            timer: 1500
+                        })
+                        var id = $("#categoryForm #id").val();
+                        if (id != "")
+                            location.reload();
+                        else
+                            window.location.href = "/Category/Index?page=1";
+                    },
+                    error: function () {
+                        alert("Ajax call failed");
+                    }
+                })
+            }
+        });
+        $("button[name='Edit-category']").click(function (e) {
+            $("#category-header").html("ویرایش دسته بندی");
+            var Id = $(this).attr("data-id");
+            $.ajax({
+                url: "/Category/GetCategory?id=" + Id + "",
+                method: "Get",
+                dataType: "json",
+                success: function (data) {
+                    if (data.id != 0) {
+					
+                        $("#categoryForm #id").val(data.id);
+                        $("#categoryForm #name").val(data.name);
+                        $("#categoryForm #espacialPrice").val(data.espacialPrice);
+                        $("#categoryForm #expirePrice").val(data.expirePrice);
+						$("#categoryForm #registerPrice").val(data.registerPrice);
+						$("#categoryForm #laderPrice").val(data.laderPrice);
+
+                        $('#categoryForm #emergencyPrice').val(data.emergencyPrice);
+
+						$("#categoryForm #staticregisterPriceId option[value=" + data.staticregisterPriceId + "]").attr("selected", true); 
+						$("#categoryForm #staticladerPriceId option[value=" + data.staticladerPriceId + "]").attr("selected", true); 
+						$("#categoryForm #staticexpirePriceId option[value=" + data.staticexpirePriceId + "]").attr("selected", true); 
+						$("#categoryForm #staticespacialPriceId option[value=" + data.staticespacialPriceId + "]").attr("selected", true); 
+                        
+                        $("#categoryForm #imgCategory").attr('src',data.image);
+                        $('#modal-default').modal('show');
+                    }
+                    else {
+                        alert("ID is incorrect");
+                    }
+                },
+                error: function () {
+                    alert("Ajax call failed");
+                }
+            })
+        })
+        $('#modal-default').on('hidden.bs.modal', function () {
+            $('#modal-default').find('input,textarea,select').each(function (key) {
+                if ($(this).attr('id') == "id") {
+                    $(this).val(0);
+                }
+                else
+                    if ($(this).attr('name') != '__RequestVerificationToken')
+                        $(this).val('');
+            })
+        })
+    </script>
+
+
+}
+
