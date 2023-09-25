@@ -742,6 +742,7 @@ namespace Dake.Controllers
                             {
                                 addNotice.image[i].CopyTo(stream);
                             }
+                            images.Add("/Notice/" + namefile);
                             string text = "Dakeh.Net";
                             using (Image originalImage = Image.FromStream(addNotice.image[i].OpenReadStream()))
                             {
