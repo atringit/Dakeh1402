@@ -30,9 +30,9 @@ namespace Dake.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index(int page)
+        public async Task<IActionResult> Index(int page , string search)
         {
-            return View(await _repository.GetAllData(page));
+            return View(await _repository.GetAllData(page , search));
         }
 
         [HttpGet]

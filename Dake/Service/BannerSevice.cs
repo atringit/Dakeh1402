@@ -25,20 +25,34 @@ namespace Dake.Service
 
         }
 
-        public async Task<BannerGetData> GetAllData(int page = 0)
+        public async Task<BannerGetData> GetAllData(int page = 0, string search = "")
         {
-            IList<Banner> banners = await _context.Banner
-                 .Skip(page)
-                 .Take(10)
+            if (search == null)
+            {
+                IList<Banner> banners = await _context.Banner
+
                  .Include(p => p.BannerImage)
                  .OrderByDescending(p => p.Id)
                  .ToListAsync();
-
-            return new BannerGetData
+                return new BannerGetData
+                {
+                    banners = banners,
+                    bannersCount = banners.Count
+                };
+            }
+            else
             {
-                banners = banners,
-                bannersCount = banners.Count
-            };
+                IList<Banner> banners = await _context.Banner
+                 .Where(p=>p.title.Contains(search))
+                 .Include(p => p.BannerImage)
+                 .OrderByDescending(p => p.Id)
+                 .ToListAsync();
+                return new BannerGetData
+                {
+                    banners = banners,
+                    bannersCount = banners.Count
+                };
+            }  
         }
 
 

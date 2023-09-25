@@ -61,7 +61,15 @@
 								{
 									<td>بنری</td>
 								}
-								<td><a href="/Notice/Details/@item.noticeId" class="btn btn-default">مشاهده اگهی</a></td>
+								@if (item.bannerId == null)
+								{
+									<td><a href="/Notice/Details/@item.noticeId" class="btn btn-default">مشاهده اگهی</a></td>
+								}
+								else
+								{
+									<td><button disabled href="/Notice/Details/@item.noticeId" class="btn btn-default">مشاهده اگهی</button></td>
+								}
+
 							</tr>
 						}
 
