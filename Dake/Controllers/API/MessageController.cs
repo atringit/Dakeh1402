@@ -257,7 +257,7 @@ namespace Dake.Controllers.API
         public object GetAllMessageUser([FromRoute] string phone)
         {
             //2207
-            int userId = _context.Users.Single(u => u.cellphone == phone).id;
+            int userId = _context.Users.Single(u => u.cellphone == phone && u.deleted == null).id;
             var result = _context.Messages
                 .Where(m => m.ssenderId == userId || m.Notice.userId == userId)
                 .Select(s => new

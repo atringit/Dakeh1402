@@ -371,8 +371,8 @@ namespace Dake.Controllers
         [HttpPost]
         public async Task<IActionResult> AddNotice(AddNotice addNotice, List<IFormFile> image)
         {
+            var test = _context.StaticPrices;
             Progress = 0;
-
             PaymentRequest _paymentRequest = new PaymentRequest();
             long discountprice = 0;
             bool havediscount = false;
@@ -613,15 +613,34 @@ namespace Dake.Controllers
                     });
                     await _context.SaveChangesAsync();
                 }
-
-
+                var totalp = 0;
+                List<Models.Category> cats = new List<Models.Category>();
+                int cat = notice.categoryId;
+                for (int i = 0; i < 10; i++)
+                {
+                    var categorys = _context.Categorys.FirstOrDefault(x => x.id == cat);
+                    if (categorys == null)
+                        break;
+                    cats.Add(categorys);
+                    if (categorys.parentCategoryId != null)
+                        cat = (int)categorys.parentCategoryId;
+                    else
+                        break;
+                }
+                foreach (var item in cats)
+                {
+                    if (item.registerPrice > 0)
+                    {
+                        totalp = (int)item.registerPrice;
+                    }
+                }
                 Factor factor = new Factor();
                 factor.state = State.IsPay;
                 factor.userId = user.id;
                 factor.createDatePersian = PersianCalendarDate.PersianCalendarResult(DateTime.Now);
                 factor.noticeId = notice.id;
                 factor.factorKind = FactorKind.Add;
-                factor.totalPrice = havediscount ? category.registerPrice - discountprice : category.registerPrice;
+                factor.totalPrice = havediscount ? totalp - discountprice : totalp;
                 _context.Factors.Add(factor);
                 //Payment
                 await _context.SaveChangesAsync();
@@ -638,7 +657,7 @@ namespace Dake.Controllers
                         _context.Add(request);
                         _context.SaveChanges();
 
-                        var res = PaymentHelper.SendRequest(request.Id, havediscount ? category.registerPrice - discountprice : category.registerPrice, "http://dakeh.net/Purshe/VerifyRequest");
+                        var res = PaymentHelper.SendRequest(request.Id, havediscount ? totalp - discountprice : totalp, "http://dakeh.net/Purshe/VerifyRequest");
                         if (res != null && res.Result != null)
                         {
                             if (res.Result.ResCode == "0")
