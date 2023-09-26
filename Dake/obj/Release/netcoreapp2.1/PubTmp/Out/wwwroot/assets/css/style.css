@@ -9680,7 +9680,7 @@ html.magnifying > body {
   content: "\e902"; }
 
 .dk-plus:before {
-  content: "\e903"; }
+  content: "\e903" !important; }
 
 .dk-heart:before {
   content: "\e904"; }
@@ -10703,7 +10703,7 @@ h6 {
         .form__box__upload__add i {
           display: block;
           line-height: inherit; }
-.form__btn button:before {
+/*.form__btn button:before {
     position: absolute;
     top: 15px;
     left: -5px;
@@ -10723,7 +10723,7 @@ h6 {
     width: 40px;
     height: 1px;
     background: #000;
-}
+}*/
   .form__btn {
     display: flex;
     flex-direction: row-reverse; }

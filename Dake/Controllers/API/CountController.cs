@@ -17,7 +17,7 @@ namespace Dake.Controllers.API
         [HttpGet("{phone}")]
         public object GetCount([FromRoute] string phone)
         {
-            int userId = _context.Users.Single(u => u.cellphone == phone).id;
+            int userId = _context.Users.Single(u => u.cellphone == phone && u.deleted == null).id;
             int notification = _context.Informations.Count();
             int userNotice = _context.Notices.Where(n => n.userId == userId && n.adminConfirmStatus == Models.EnumStatus.Accept&&n.deletedAt == null).Count();
             int userFavorite = _context.UserFavorites.Where(u => u.userId == userId&&u.notice.deletedAt ==  null).Count();

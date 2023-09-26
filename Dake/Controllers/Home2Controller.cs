@@ -28,6 +28,7 @@ using System.Threading.Tasks;
 using System.Security.Cryptography.Xml;
 using System.Drawing;
 using DocumentFormat.OpenXml.Vml;
+using DocumentFormat.OpenXml.Office.CustomUI;
 
 namespace Dake.Controllers
 {
@@ -254,6 +255,7 @@ namespace Dake.Controllers
                     item.image = string.Empty;
                 }
             }
+            
 
 
             firstHomeViewModel.Banner = _context.Banner.Include(p => p.BannerImage).ToList();
@@ -272,6 +274,13 @@ namespace Dake.Controllers
                         item.price = 0;
                         item.lastPrice = 0;
                     }
+                }
+            }
+            foreach(var item in firstHomeViewModel.notices)
+            {
+                if (item.image == "")
+                {
+                    item.image = "/images/empyty.png";
                 }
             }
 
@@ -576,7 +585,7 @@ namespace Dake.Controllers
 
                 if (string.IsNullOrEmpty(notice.image))
                 {
-                    notice.image = "/images/nopic.jpg";
+                    notice.image = "";
                 }
 
                 _context.Notices.Add(notice);
@@ -1008,6 +1017,13 @@ namespace Dake.Controllers
                 user = _context.Users.FirstOrDefault(x => x.cellphone + x.adminRole == User.Identity.Name);
             }
             IQueryable<Notice> result = _context.Notices.Where(x => x.userId == user.id && x.deletedAt == null);
+            foreach (var item in result)
+            {
+                if (item.image == "")
+                {
+                    item.image = "/images/empyty.png";
+                }
+            }
             int skip = (page - 1) * 8;
 
             if (user != null)
@@ -1034,6 +1050,13 @@ namespace Dake.Controllers
                 user = _context.Users.FirstOrDefault(x => x.cellphone + x.adminRole == User.Identity.Name);
             }
             IQueryable<UserFavorite> result = _context.UserFavorites.Include(x => x.notice).Where(x => x.userId == user.id && x.notice.deletedAt == null);
+            foreach (var item in result)
+            {
+                if (item.notice.image == "")
+                {
+                    item.notice.image = "/images/empyty.png";
+                }
+            }
             int skip = (page - 1) * 8;
             if (user != null)
             {
