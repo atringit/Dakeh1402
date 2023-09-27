@@ -19,7 +19,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-
+using Dake.ViewModel;
+using Dake.Service.Common;
+using System.Drawing;
+using DocumentFormat.OpenXml.Presentation;
 
 namespace Dake.Controllers.API
 {
@@ -266,118 +269,257 @@ namespace Dake.Controllers.API
             TimeSpan timeSpan = date - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             return (long)timeSpan.TotalSeconds;
         }
-        [HttpPost]
-        public object PostNotice()
+        private string GetPathAndFilename(string filename)
         {
-            long totalPrice = 0;
-            if (!ModelState.IsValid)
+            string path = System.IO.Path.Combine(environment.WebRootPath, "Notice/", filename);
+            if (!System.IO.File.Exists(path))
+                Directory.CreateDirectory(path);
+            return path;
+        }
+        private async Task ProgressMethod(IFormFile file, string namefile)
+        {
+            long totalBytes = file.Length;
+            long totalReadBytes = 0;
+            byte[] buffer = new byte[16 * 1024];
+            int readBytes;
+            using (FileStream output = System.IO.File.Create(this.GetPathAndFilename(namefile)))
             {
-                return BadRequest(ModelState);
+                using (Stream input = file.OpenReadStream())
+                {
+                    while ((readBytes = input.Read(buffer, 0, buffer.Length)) > 0)
+                    {
+                        await output.WriteAsync(buffer, 0, readBytes);
+                        totalReadBytes += readBytes;
+                        int Progress = (int)((float)totalReadBytes / (float)totalBytes * 100.0);
+                        await Task.Delay(10);
+                    }
+
+                }
+
             }
-            Notice notice = new Notice();
+        }
+        [HttpPost("PostNotice")]
+        public async  Task<IActionResult> PostNotice([FromForm] AddNotice addNotice, List<IFormFile> image)
+        {
+            var test = _context.StaticPrices;
+            int Progress = 0;
+            PaymentRequest _paymentRequest = new PaymentRequest();
+            long discountprice = 0;
+            bool havediscount = false;
             int _code = 0;
             try
             {
+                int number;
                 string Token = HttpContext.Request?.Headers["Token"];
-                string DiscountCode = HttpContext.Request?.Headers["DiscountCode"];
-                var user = _context.Users.Where(p => p.token == Token).FirstOrDefault();
+                var setting = _context.Settings.FirstOrDefault();
+                var category = _context.Categorys.Find(addNotice.categoryId);
+                var user = _context.Users.FirstOrDefault(x => x.token == Token);
+                
+
+
                 if (user == null)
-                    return new { status = 3, message = "چنین کاربری وجود ندارد." };
+                {
+                    return BadRequest("لطفا از حساب کاربری خود خارج ، و مجددا وارد شوید");
+                }
 
-                long priceDiscount = 0;
+                //////
+                if (user.IsBlocked)
+                {
+                    return BadRequest("شما در لیست سیاه قرار دارید و مجاز به ثبت آگهی نمی باشید");
+                }
 
-                if (!string.IsNullOrEmpty(DiscountCode))
+                var _price1 = addNotice.price.Replace(",", "");
+                var _price2 = addNotice.lastPrice.Replace(",", "");
+                //if (!int.TryParse(_price1, out number) || !int.TryParse(_price2, out number))
+                //{
+                //    TempData["PursheResult"] = "قیمت را به عدد وارد کنید";
+                //    return View("Profile2");
+                //}
+                //discount
+                if (!string.IsNullOrEmpty(addNotice.discountcode) && category.registerPrice > 1000)
                 {
                     int n;
-                    if (int.TryParse(DiscountCode, out n))
+                    if (!int.TryParse(addNotice.discountcode, out n))
                     {
-                        _code = Convert.ToInt32(DiscountCode);
-                        if (_DiscountCode.IsAlreadyUsed(user.id, _DiscountCode.GetIdByCode(_code)) == false && _DiscountCode.CheckCode(_code))
-                        {
-                            priceDiscount = _DiscountCode.GetDiscountPrice(_code);
-                            _DiscountCode.AddUserToDiscountCode(user.id, _code);
-                        }
+                        return NotFound("کد وارد شده معتبر نیست");
+                    }
+                    _code = Convert.ToInt32(addNotice.discountcode);
+
+                    if (!_DiscountCode.CheckCode(_code))
+                    {
+                        return NotFound("کد وارد شده معتبر نیست");
+
+                    }
+                    if (_DiscountCode.IsAlreadyUsed(user.id, _DiscountCode.GetIdByCode(_code)))
+                    {
+                        return NotFound("این کد قبلا توسط شما استفاده شده است");
+
+                    }
+                    else
+                    {
+                        discountprice = _DiscountCode.GetDiscountPrice(_code);
+                        havediscount = true;
                     }
                 }
-                string data = HttpContext.Request?.Form["data"];
 
-                JObject json = JObject.Parse(data);
-                JObject jalbum = json as JObject;
-                var movie = "";
-                Notice noticedata = jalbum.ToObject<Notice>();
-                string imageUrl = "";
-                var setting = _context.Settings.FirstOrDefault();
-                var category = _context.Categorys.Find(noticedata.categoryId);
+                bool checkWrongWords()
+                {
+                    if (setting.wrongWord.Contains(addNotice.title) || setting.wrongWord.Contains(addNotice.description))
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        return true;
+                    }
+                }
 
-                notice.title = noticedata.title;
-                notice.lastPrice = noticedata.lastPrice;
-                notice.areaId = noticedata.areaId;
-                notice.cityId = noticedata.cityId;
-                notice.provinceId = noticedata.provinceId;
-                notice.price = noticedata.price;
-                notice.categoryId = noticedata.categoryId;
-                notice.description = noticedata.description;
+                if (checkWrongWords() == false)
+                {
+                    return BadRequest("لطفا در توضیحات و عنوان از کلمات مناسب استفاده نمایید.");
+                }
+
+                var notice = new Notice();
+                notice.title = addNotice.title;
+                notice.lastPrice = Convert.ToInt64(addNotice.lastPrice.Replace(",", ""));
+                notice.areaId = addNotice.areaId;
+                notice.cityId = addNotice.cityId;
+                notice.provinceId = addNotice.provinceId;
+                notice.price = Convert.ToInt64(addNotice.price.Replace(",", ""));
+                notice.categoryId = addNotice.categoryId;
+                notice.description = addNotice.description;
                 notice.createDate = DateTime.Now;
                 notice.expireDateIsespacial = DateTime.Now;
                 notice.expireDate = DateTime.Now.AddDays(Convert.ToInt64(setting.countExpireDate));
                 notice.adminConfirmStatus = EnumStatus.Pending;
-                notice.isPaid = true;
-                notice.link = noticedata.link;
+                notice.link = addNotice.link;
                 notice.userId = user.id;
-
                 if (_context.Notices.Count() == 0)
                     notice.code = "1";
                 else
                     notice.code = (Convert.ToInt32(_context.Notices.LastOrDefault().code) + 1).ToString();
-                var httpRequest = HttpContext.Request;
-                var hfc = HttpContext.Request.Form.Files;
                 List<string> images = new List<string>();
 
-                if (hfc == null || hfc.Count <= 0)
+                if (image != null && image.Count > 0)
                 {
-                    notice.image = "/images/nopic.jpg";
-                }
-                else
-                {
-                    for (int i = 0; i < hfc.Count; i++)
+                    foreach (var file in image)
                     {
-                        var namefile = Guid.NewGuid().ToString().Replace('-', '0').Substring(0, 7) + Path.GetExtension(hfc[i].FileName).ToLower();
-                        var filePath = Path.Combine(environment.WebRootPath, "Notice/", namefile);
+                        string text = "Dakeh.Net";
+                        string files = System.IO.Path.GetFileNameWithoutExtension(file.FileName) + ".png";
+                        var namefile = Guid.NewGuid().ToString().Replace('-', '0').Substring(0, 7) + System.IO.Path.GetExtension(file.FileName).ToLower();
+                        string filePath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Notice", namefile);
 
-                        if (hfc[i].Name == "imageUrl")
+
+
+                        //var filePath = System.IO.Path.Combine(environment.WebRootPath, "Notice/", namefile);
+                        string e = System.IO.Path.GetExtension(namefile);
+
+                        if (e == ".jpg" || e == ".webp" || e == ".jpeg" || e == ".png" || e == ".gif")
                         {
-                            imageUrl = "/Notice/" + namefile;
-                        }
+                            images.Add("/Notice/" + namefile);
 
-
-                        else if (hfc[i].Name == "movie")
-                        {
-                            movie = "/Notice/" + namefile;
-                        }
-
-                        using (var stream = new FileStream(filePath, FileMode.Create))
-                        {
-                            hfc[i].CopyTo(stream);
-                            if (Path.GetExtension(namefile) != ".mp4")
+                            if (String.IsNullOrEmpty(notice.image))
                             {
-                                images.Add("/Notice/" + namefile);
-                            }
+                                notice.image = "/Notice/" + namefile;
+                                using (var stream = new FileStream(filePath, FileMode.Create))
+                                {
 
-                            //if == .mp4 create thumbnail from video
-                            if (Path.GetExtension(namefile) == ".mp4" && imageUrl == "")
+                                    await file.CopyToAsync(stream);
+                                }
+                                await ProgressMethod(file, namefile);
+                                using (Image originalImage = Image.FromStream(file.OpenReadStream()))
+                                {
+
+                                    using (Bitmap oBitmap = new Bitmap(originalImage))
+                                    {
+                                        using (Graphics g = Graphics.FromImage(oBitmap))
+                                        {
+
+                                            Brush oBrush = new SolidBrush(Color.Green);
+                                            System.Drawing.Font oFont = new System.Drawing.Font("ARial", 25, FontStyle.Bold, GraphicsUnit.Pixel);
+                                            SizeF osizef = new SizeF();
+                                            osizef = g.MeasureString(text, oFont);
+                                            Point oPoint = new Point(oBitmap.Width - ((int)osizef.Width + 10), oBitmap.Height - ((int)osizef.Height + 10));
+                                            g.DrawString(text, oFont, oBrush, oPoint);
+                                        }
+                                        oBitmap.Save(filePath, System.Drawing.Imaging.ImageFormat.Jpeg);
+                                    }
+
+                                }
+                            }
+                            else
                             {
-                                var bitMap = GetBitMap.GetThumbnail(filePath.Replace('/', '\\'), System.IO.Directory.GetCurrentDirectory() + "\\wwwroot\\Notice\\" + namefile.Replace(".mp4", ".jpg"));
-                                imageUrl = "/Notice/" + namefile.Replace(".mp4", ".jpg");
+                                using (var stream = new FileStream(filePath, FileMode.Create))
+                                {
+
+                                    await file.CopyToAsync(stream);
+                                }
+                                await ProgressMethod(file, namefile);
+                                using (Image originalImage = Image.FromStream(file.OpenReadStream()))
+                                {
+
+                                    using (Bitmap oBitmap = new Bitmap(originalImage))
+                                    {
+                                        using (Graphics g = Graphics.FromImage(oBitmap))
+                                        {
+
+                                            Brush oBrush = new SolidBrush(Color.Green);
+                                            System.Drawing.Font oFont = new System.Drawing.Font("ARial", 25, FontStyle.Bold, GraphicsUnit.Pixel);
+                                            SizeF osizef = new SizeF();
+                                            osizef = g.MeasureString(text, oFont);
+                                            Point oPoint = new Point(oBitmap.Width - ((int)osizef.Width + 10), oBitmap.Height - ((int)osizef.Height + 10));
+                                            g.DrawString(text, oFont, oBrush, oPoint);
+                                        }
+                                        oBitmap.Save(filePath, System.Drawing.Imaging.ImageFormat.Jpeg);
+                                    }
+
+                                }
+
                             }
-
-
                         }
+                        else if (e == ".mp4")
+                        {
+                            if (String.IsNullOrEmpty(notice.movie))
+                            {
+                                notice.movie = "/Notice/" + namefile;
+                                using (var stream = new FileStream(filePath, FileMode.Create))
+                                {
+                                    await file.CopyToAsync(stream);
+                                }
+                                await ProgressMethod(file, namefile);
+
+                                //if (String.IsNullOrEmpty(notice.image))
+                                //{
+                                //    GetBitMap.GetThumbnail(filePath.Replace('/', '\\'), System.IO.Directory.GetCurrentDirectory() +  "\\wwwroot\\Notice\\" + namefile);
+                                //    //notice.image = "/Notice/" + namefile.Replace(".mp4", ".jpg");
+                                //}
+                            }
+                        }
+
                     }
-                    notice.movie = movie;
-                    notice.image = imageUrl;
+
+                }
+
+                if (string.IsNullOrEmpty(notice.image))
+                {
+                    notice.image = "";
                 }
 
                 _context.Notices.Add(notice);
+
+
+                ////تایید خودکار آگهی //////////////////////
+                if (setting.AutoAccept)
+                {
+                    notice.adminConfirmStatus = EnumStatus.Accept;
+
+                    CommonService.SendSMS_Accept(user.cellphone, notice.title);
+                }
+
+
+
+                await _context.SaveChangesAsync();
+
 
                 foreach (var item in images)
                 {
@@ -386,36 +528,78 @@ namespace Dake.Controllers.API
                         noticeId = notice.id,
                         image = item
                     });
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
                 }
-
-                var registerPrice = category.registerPrice;
-
-                totalPrice = registerPrice - priceDiscount;
-
-                if (totalPrice < 0)
+                var totalp = 0;
+                List<Models.Category> cats = new List<Models.Category>();
+                int cat = notice.categoryId;
+                for (int i = 0; i < 10; i++)
                 {
-                    totalPrice = 0;
+                    var categorys = _context.Categorys.FirstOrDefault(x => x.id == cat);
+                    if (categorys == null)
+                        break;
+                    cats.Add(categorys);
+                    if (categorys.parentCategoryId != null)
+                        cat = (int)categorys.parentCategoryId;
+                    else
+                        break;
                 }
-
-                var factor = new Factor
+                foreach (var item in cats)
                 {
-                    state = State.IsPay,
-                    userId = user.id,
-                    createDatePersian = PersianCalendarDate.PersianCalendarResult(DateTime.Now),
-                    noticeId = notice.id,
-                    factorKind = FactorKind.Add,
-                    totalPrice = totalPrice
-                };
+                    if (item.registerPrice > 0)
+                    {
+                        totalp = (int)item.registerPrice;
+                    }
+                }
+                Factor factor = new Factor();
+                factor.state = State.IsPay;
+                factor.userId = user.id;
+                factor.createDatePersian = PersianCalendarDate.PersianCalendarResult(DateTime.Now);
+                factor.noticeId = notice.id;
+                factor.factorKind = FactorKind.Add;
+                factor.totalPrice = havediscount ? totalp - discountprice : totalp;
                 _context.Factors.Add(factor);
-                _context.SaveChanges();
+                //Payment
+                await _context.SaveChangesAsync();
+
+                if (factor.totalPrice >= 10000)
+                {
+                    try
+                    {
+                        PaymentRequestAttemp request = new PaymentRequestAttemp();
+                        request.FactorId = factor.id;
+                        request.NoticeId = notice.id;
+                        request.UserId = user.id;
+                        request.pursheType = pursheType.RegisterNotice;
+                        _context.Add(request);
+                        _context.SaveChanges();
+
+                        var res = PaymentHelper.SendRequest(request.Id, havediscount ? totalp - discountprice : totalp, "http://dakeh.net/Purshe/VerifyRequest");
+                        if (res != null && res.Result != null)
+                        {
+                            if (res.Result.ResCode == "0")
+                            {
+                                if (havediscount)
+                                {
+                                    _DiscountCode.AddUserToDiscountCode(user.id, _code);
+                                }
+                                Response.Redirect(string.Format("{0}/Purchase/Index?token={1}", PaymentHelper.PurchasePage, res.Result.Token));
+                            }
+                            return Ok(res.Result.Description);
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        return Ok( new { status = 2, title = "ثبت آگهی", message = "امکان اتصال به درگاه بانکی وجود ندارد." });
+                    }
+                }
+
             }
             catch (Exception ex)
             {
-                return new { status = 2, title = "خطا در ثبت آگهی", message = ex.Message + " " + ex.StackTrace + " " + ex.InnerException?.Message + " " + ex.InnerException?.InnerException?.Message };
-
+                return Ok( new { status = 2, title = "خطا در ثبت آگهی", message = ex.Message + " " + ex.StackTrace + " " + ex.InnerException?.Message + " " + ex.InnerException?.InnerException?.Message });
             }
-            return new { noticeId = notice.id, status = 1, title = "ثبت آگهی", message = "آگهی شما با موفقیت ثبت گردید." };
+            return Ok( new { status = 1, title = "ثبت آگهی", message = "آگهی شما با موفقیت ثبت گردید." });
         }
 
         [Route("RemoveNotice")]
