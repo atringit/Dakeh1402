@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Dake.DAL;
 using Dake.Utility;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -63,6 +65,15 @@ namespace Dake.Controllers.API
                 return 0;
             else
                 return Convert.ToInt32(provinceId);
+        }
+        [HttpPost("LogOut")]
+        public IActionResult LogOut(int userId)
+        {
+            var user = _context.Users.Find(userId);
+            user.token = null;
+            _context.Users.Update(user);
+            _context.SaveChanges();
+            return Ok("LogOut Succsed");
         }
     }
 }
