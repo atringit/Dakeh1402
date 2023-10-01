@@ -17,19 +17,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Migrations\**" />
-    <Content Remove="Migrations\**" />
-    <EmbeddedResource Remove="Migrations\**" />
-    <None Remove="Migrations\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Include="Migrations\20230923065140_InitialCatalog.cs" />
-    <Compile Include="Migrations\20230923065140_InitialCatalog.Designer.cs" />
-    <Compile Include="Migrations\ContextModelSnapshot.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Content Include="wwwroot\AdminContent\bower_components\bootstrap-colorpicker\.bower.json" />
     <Content Include="wwwroot\AdminContent\bower_components\bootstrap-colorpicker\bower.json" />
     <Content Include="wwwroot\AdminContent\bower_components\bootstrap-colorpicker\dist\css\bootstrap-colorpicker.css" />
@@ -2344,6 +2331,8 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\AdminContent\AdminLogin\" />
+    <Folder Include="wwwroot\Apps\DakehApp\" />
+    <Folder Include="wwwroot\Apps\Freevideocompressor\" />
     <Folder Include="wwwroot\images\Advisor\" />
     <Folder Include="wwwroot\images\Category\" />
     <Folder Include="wwwroot\images\Information\" />

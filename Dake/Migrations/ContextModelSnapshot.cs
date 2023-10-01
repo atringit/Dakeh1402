@@ -345,6 +345,20 @@ namespace Dake.Migrations
                     b.ToTable("FactorItems");
                 });
 
+            modelBuilder.Entity("Dake.Models.FileManager", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("FilePach")
+                        .HasMaxLength(50);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("FileManagers");
+                });
+
             modelBuilder.Entity("Dake.Models.Information", b =>
                 {
                     b.Property<int>("id")

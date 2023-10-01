@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Dake.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20230923065140_InitialCatalog")]
+    [Migration("20231001062433_InitialCatalog")]
     partial class InitialCatalog
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -345,6 +345,20 @@ namespace Dake.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("FactorItems");
+                });
+
+            modelBuilder.Entity("Dake.Models.FileManager", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("FilePach")
+                        .HasMaxLength(50);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("FileManagers");
                 });
 
             modelBuilder.Entity("Dake.Models.Information", b =>

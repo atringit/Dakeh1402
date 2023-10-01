@@ -89,15 +89,123 @@
 									<input type="submit" value="ثبت" class="btn btn-default" />
 								</div>
 							</div>
+								
+							
 						</div>
                     </form>
                 </div>
             </div>
+			<div class="box box-primary">
+				<div class="box-header with-border">
+                    <h3 class="box-title">مدریت اپلیکیشن ها</h3>
+                </div>
+				<div class="row">
+					<div class="col-md-7" style="width: 100%;">
+								<div class="form-group" style="padding: 10px;" >
+									<label class="control-label">اپلیکیشن دکه</label>
+									<div style="border: 2px solid #cdcdcd;border-radius: 5px;padding: 10px;"> 
+										<input id="filedakehapk" name="File" type="file">
+										<br>
+									<button class="btn btn-default" onclick="uploadFileDakehApk()">ثبت</button>
+									</div>
+									<br>
+									<br>
+									<br>
+									<label class="control-label">نرم افزارکمپرسورفیلم</label>
+									<div style="border: 2px solid #cdcdcd;border-radius: 5px;padding: 10px;"> 
+										<input id="Freevideocompressor" name="File" type="file">
+										<br>
+									<button class="btn btn-default" onclick="Freevideocompressor()">ثبت</button>
+									</div>
+									<br>
+									<br>
+									<label class="control-label">نرم افزاراندرویدکمپرسورفیلم</label>
+									<div style="border: 2px solid #cdcdcd;border-radius: 5px;padding: 10px;"> 
+										<input id="Freevideocompressorapk" name="File" type="file">
+										<br>
+									<button class="btn btn-default" onclick="Freevideocompressorapk()">ثبت</button>
+									</div>
+
+								</div>
+							</div>
+				</div>
+			</div>
         </div>
     </div>
 </section>
 @section Scripts
     {
+	<script>
+		function uploadFileDakehApk() {
+  var fileInput = document.getElementById('filedakehapk');
+  var file = fileInput.files[0];
+
+  var formData = new FormData();
+  formData.append('file', file);
+
+  $.ajax({
+    url: '/AppManager/AddDakehApp',
+    type: 'POST',
+    data: formData,
+    processData: false,
+    contentType: false,
+    success: function(response) {
+      console.log(response);
+	  alert("با موفقیت انجام شد")
+    },
+    error: function(xhr, status, error) {
+      console.log(error);
+	  alert("مشکلی در ثبت پیش امد")
+    }
+  });
+}
+function Freevideocompressor() {
+  var fileInput = document.getElementById('Freevideocompressor');
+  var file = fileInput.files[0];
+
+  var formData = new FormData();
+  formData.append('file', file);
+
+  $.ajax({
+    url: '/AppManager/AddFreevideocompressor',
+    type: 'POST',
+    data: formData,
+    processData: false,
+    contentType: false,
+    success: function(response) {
+      console.log(response);
+	  alert("با موفقیت انجام شد")
+    },
+    error: function(xhr, status, error) {
+      console.log(error);
+	  alert("مشکلی در ثبت پیش امد")
+    }
+  });
+}
+function Freevideocompressorapk() {
+  var fileInput = document.getElementById('Freevideocompressorapk');
+  var file = fileInput.files[0];
+
+  var formData = new FormData();
+  formData.append('file', file);
+
+  $.ajax({
+    url: '/AppManager/AddFreevideocompressorapp',
+    type: 'POST',
+    data: formData,
+    processData: false,
+    contentType: false,
+    success: function(response) {
+      console.log(response);
+	  alert("با موفقیت انجام شد")
+    },
+    error: function(xhr, status, error) {
+      console.log(error);
+	  alert("مشکلی در ثبت پیش امد")
+    }
+  });
+}
+	</script>
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     
 }

@@ -100,6 +100,19 @@ namespace Dake.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "FileManagers",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    FilePach = table.Column<string>(maxLength: 50, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FileManagers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Informations",
                 columns: table => new
                 {
@@ -984,6 +997,9 @@ namespace Dake.Migrations
 
             migrationBuilder.DropTable(
                 name: "FactorItems");
+
+            migrationBuilder.DropTable(
+                name: "FileManagers");
 
             migrationBuilder.DropTable(
                 name: "InformationMedias");
