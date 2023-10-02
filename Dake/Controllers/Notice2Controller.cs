@@ -115,9 +115,12 @@ namespace Dake.Controllers
             
 
             detailNoticeViewModel.Relatednotices = relatednotice;
-            if(muser.IsBlocked == true)
+            if(user != null)
             {
-                detailNoticeViewModel.notice.user.cellphone = "حساب شما مسدود است و قادر به دیدن شماره تماس اگهی گذار نیستید.";
+                if (muser.IsBlocked == true)
+                {
+                    detailNoticeViewModel.notice.user.cellphone = "حساب شما مسدود است و قادر به دیدن شماره تماس اگهی گذار نیستید.";
+                }
             }
             //
             return View(detailNoticeViewModel);
