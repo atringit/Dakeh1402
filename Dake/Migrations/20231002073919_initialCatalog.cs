@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Dake.Migrations
 {
-    public partial class InitialCatalog : Migration
+    public partial class initialCatalog : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -76,7 +76,8 @@ namespace Dake.Migrations
                     pageInstagramUrl = table.Column<string>(maxLength: 200, nullable: true),
                     pageTwitterUrl = table.Column<string>(maxLength: 200, nullable: true),
                     email = table.Column<string>(maxLength: 200, nullable: true),
-                    androidVersion = table.Column<string>(maxLength: 20, nullable: true)
+                    androidVersion = table.Column<string>(maxLength: 20, nullable: true),
+                    PageEitta = table.Column<string>(maxLength: 200, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -97,19 +98,6 @@ namespace Dake.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_DiscountCodes", x => x.id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "FileManagers",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    FilePach = table.Column<string>(maxLength: 50, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_FileManagers", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -997,9 +985,6 @@ namespace Dake.Migrations
 
             migrationBuilder.DropTable(
                 name: "FactorItems");
-
-            migrationBuilder.DropTable(
-                name: "FileManagers");
 
             migrationBuilder.DropTable(
                 name: "InformationMedias");

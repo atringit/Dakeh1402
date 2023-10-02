@@ -32,5 +32,8 @@ namespace Dake.Models
         [Display(Name = "ورژن اندروید")]
         [MaxLength(20, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد .")]
         public string androidVersion { get; set; }
-    }
+		[Display(Name = "ادرس ایتا")]
+		[MaxLength(200, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد .")]
+		public string PageEitta { get; set; }
+	}
 }
