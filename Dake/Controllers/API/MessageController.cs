@@ -36,7 +36,7 @@ namespace Dake.Controllers.API
         public async Task<IActionResult> AddMessage([FromBody] AddMessageDto dto)
         {
             
-            var user = _context.Users.FirstOrDefault(u => u.cellphone == dto.phone);
+            var user = _context.Users.FirstOrDefault(u => u.cellphone == dto.phone && u.deleted == null);
             var receiver = _context.Users.FirstOrDefault(u => u.cellphone == dto.receiverPhone);
             
             Message message = new Message()
@@ -49,8 +49,16 @@ namespace Dake.Controllers.API
                 date = DateTime.Now
             };
 
-            _context.Messages.Add(message);
-            _context.SaveChanges();
+            if(user.IsBlocked != true)
+            {
+				_context.Messages.Add(message);
+				_context.SaveChanges();
+			}
+            else
+            {
+                return new JsonResult("شما قادر به ارسال پیام نمیباشید");
+
+			}
 
             if (dto.messageType == 0 )
             {

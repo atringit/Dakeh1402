@@ -29,8 +29,10 @@ namespace Dake.Controllers
         public IActionResult Index(int id)
         {
             var settings = _context.Settings.FirstOrDefault();
+            var nuser = User.Identity.Name;
+            var muser = _context.Users.FirstOrDefault(p=>p.cellphone == nuser && p.deleted == null);
 
-            DetailNoticeViewModel detailNoticeViewModel = new DetailNoticeViewModel();
+			DetailNoticeViewModel detailNoticeViewModel = new DetailNoticeViewModel();
             var Notice = _context.Notices.Include(x => x.user).Include(x => x.area).Include(x => x.city).Include(x => x.province).Include(x => x.category).FirstOrDefault(x => x.id == id  && x.deletedAt == null);
             //if (Notice == null)
             if ( Notice == null)
@@ -113,6 +115,10 @@ namespace Dake.Controllers
             
 
             detailNoticeViewModel.Relatednotices = relatednotice;
+            if(muser.IsBlocked == true)
+            {
+                detailNoticeViewModel.notice.user.cellphone = "حساب شما مسدود است و قادر به دیدن شماره تماس اگهی گذار نیستید.";
+            }
             //
             return View(detailNoticeViewModel);
         }

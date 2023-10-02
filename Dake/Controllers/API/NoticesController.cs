@@ -23,6 +23,7 @@ using Dake.ViewModel;
 using Dake.Service.Common;
 using System.Drawing;
 using DocumentFormat.OpenXml.Presentation;
+using Microsoft.VisualStudio.Web.CodeGeneration.Contracts.Messaging;
 
 namespace Dake.Controllers.API
 {
@@ -118,6 +119,7 @@ namespace Dake.Controllers.API
             var user = _context.Users.Where(p => p.token == Token).FirstOrDefault();
             if (user == null)
                 return new { status = 3, message = "چنین کاربری وجود ندارد." };
+			
             var Notice = _context.Notices.Where(n => n.id == id && n.deletedAt == null).FirstOrDefault();
             if (Notice.userId != user.id)
             {
@@ -253,7 +255,11 @@ namespace Dake.Controllers.API
                     noticeViewModels.lastPrice = 0;
                 }
             }
-            return new { Notice = noticeViewModels, images };
+			if (user.IsBlocked)
+			{
+                noticeViewModels.user = "حساب شما مسدود است و قادر به دیدن شماره تماس اگهی گذار نیستید.";
+			}
+			return new { Notice = noticeViewModels, images };
         }
         private object DailyVisit(long noticeId)
         {
