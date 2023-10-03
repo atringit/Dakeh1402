@@ -31,5 +31,11 @@ namespace Dake.Controllers.API
               data=  _context.ContactUss.FirstOrDefault();
             return data;
         }
+        [HttpGet("GetVersion")]
+        public IActionResult GetVersion()
+        {
+            var v = _context.ContactUss.FirstOrDefault();
+            return Ok(v.androidVersion);
+        }
     }
 }

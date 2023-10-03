@@ -305,7 +305,7 @@ namespace Dake.Controllers.API
             }
         }
         [HttpPost("PostNotice")]
-        public async  Task<IActionResult> PostNotice(AddNotice addNotice, List<IFormFile> image)
+        public async  Task<IActionResult> PostNotice([FromForm]AddNotice addNotice,[FromForm] List<IFormFile> image)
         {
             var test = _context.StaticPrices;
             int Progress = 0;
