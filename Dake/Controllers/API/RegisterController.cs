@@ -81,8 +81,10 @@ namespace Dake.Controllers.API
                 cellphone = user1.cellphone,
                 code = random.Next(1000, 9999).ToString(),
                 oTPDate = DateTime.Now,
-                PushNotifToken = user1.PushNotifToken
-            };
+                PushNotifToken = user1.PushNotifToken,
+                Invite_Link = $"{random.Next(1000, 9999)}{user1.cellphone}{random.Next(1000, 9999)}",
+                Invite_Price = 0
+        };
 
             Role r = _context.Roles.Where(p => p.RoleNameEn == "Member").FirstOrDefault();
             user.role = r;

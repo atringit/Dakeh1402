@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Dake.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20231002073919_initialCatalog")]
-    partial class initialCatalog
+    [Migration("20231004095916_InitialCatalog")]
+    partial class InitialCatalog
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -697,6 +697,11 @@ namespace Dake.Migrations
                     b.Property<int>("id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Invite_Link")
+                        .HasMaxLength(55);
+
+                    b.Property<int>("Invite_Price");
 
                     b.Property<bool>("IsBlocked");
 

@@ -45,14 +45,17 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li>
-                                    <a style="margin-right:5px" href="/Apps/Freevideocompressor/Freevideocompressor-[dakeh.net].zip"
-                                        title="نرم افزارکمپرسورفیلم">نرم افزارکمپرسورفیلم</a></li>
+                                    <a style="margin-right:5px"
+                                        href="/Apps/Freevideocompressor/Freevideocompressor-[dakeh.net].zip"
+                                        title="نرم افزارکمپرسورفیلم">نرم افزارکمپرسورفیلم</a>
+                                </li>
                                 <li>
                                     <a style="margin-right:5px" href="/Apps/Freevideocompressor/app1.apk"
-                                        title="نرم افزارکمپرسورفیلم(نسخه اندروید)">نرم افزاراندرویدکمپرسورفیلم</a></li>
+                                        title="نرم افزارکمپرسورفیلم(نسخه اندروید)">نرم افزاراندرویدکمپرسورفیلم</a>
+                                </li>
                                 @* <li><a style="margin-right:5px"
-                                        href="/Applications/VideoCompressorFastCompressVideoPhoto_v1.2.02_DakehNET.apk"
-                                        title="نرم افزاراندرویدکمپرسورفیلم">نرم افزاراندرویدکمپرسورفیلم</a></li> *@
+                                href="/Applications/VideoCompressorFastCompressVideoPhoto_v1.2.02_DakehNET.apk"
+                                title="نرم افزاراندرویدکمپرسورفیلم">نرم افزاراندرویدکمپرسورفیلم</a></li> *@
                             </ul>
                         </li>
 
@@ -108,12 +111,50 @@
                                     <i class="dk-gps"></i>
                                     <div class="profile-modal__list__item">
                                         <div class="profile-modal__list__item__inner" id="proOfUser"></div>
-                                        <button class="btn btn-color" onclick="RegisterProOfUser()">تایید
+                                        <button class="btn btn-color" onclick="Reg
+                                        isterProOfUser()">تایید
                                             شهرستان</button>
                                     </div>
                                 </li>
+                                <li>
+                                    <button onclick="copitoclip()" class="btn btn-color">کپی لینک</button>
+                                    <input id="generatelinkk" disabled
+                                        style="width: 45%;height: 30px;outline: none;border-radius: 5px;border: 0px solid black;border-bottom: 1px solid;box-shadow: 1px 1px 1px #cdcdcdcd;"
+                                        type="text">
+                                    <button onclick="GenerateLink()" class="btn btn-color">ساخت لینک دعوت</button>
+                                </li>
                                 <li><i class="dk-logout"></i><a href="~/Home2/Logout" title="">خروج از حساب</a></li>
                             </ul>
+                            <script>
+                                const generatelink = document.getElementById("generatelinkk")
+
+
+                                function GenerateLink() {
+
+                                    $.ajax({
+                                        url: '/api/InviteLinlk/GenrateInviteForWeb',
+                                        type: 'Post',
+                                        success: function (response) {
+                                            if (response) {
+                                                var res = "https://dakeh.net/api/InviteLinlk/" + response
+                                                document.getElementById("generatelinkk").value = res
+                                                console.log(res)
+                                            }
+                                        }
+                                    });
+                                }
+                                function copitoclip() {
+                                    // Get the text field
+                                    var copyText = document.getElementById("generatelinkk");
+
+                                    // Select the text field
+                                    copyText.select();
+                                    copyText.setSelectionRange(0, 99999); // For mobile devices
+
+                                    // Copy the text inside the text field
+                                    navigator.clipboard.writeText(copyText.value);
+                                }
+                            </script>
                         </div>
                     </div>
                 </div>
@@ -174,28 +215,32 @@
         <div class="mobile-menu__close-menu"></div>
         <nav class="mobile-nav">
             <ul>
-                <li style="display: flex;background-color: #fff;box-shadow: 0px 0px 0px 0px #fff;"><img src="~/assets/img/dakeh-wh512.jpg" style="width: 40%;" alt=""><h2 style="font-size: 25px;margin-top: 35px;">سامانه<span style="color: #83c030;"> دکه</span></h2></li>
+                <li style="display: flex;background-color: #fff;box-shadow: 0px 0px 0px 0px #fff;"><img
+                        src="~/assets/img/dakeh-wh512.jpg" style="width: 40%;" alt="">
+                    <h2 style="font-size: 25px;margin-top: 35px;">سامانه<span style="color: #83c030;"> دکه</span></h2>
+                </li>
                 <li><a href="/Home2/Index">خانه</a></li>
                 @* @if (User.Identity.IsAuthenticated)
                 {
-                    <li><a href="/Home2/AboutUs">پروفایل</a></li>
+                <li><a href="/Home2/AboutUs">پروفایل</a></li>
                 } *@
                 <li><a href="/Home2/AboutUs">درباره ما</a></li>
                 <li><a href="/Home2/Rule">قوانین و مقررات</a></li>
                 <li><a href="/Home2/Stir">نحوه فعالیت</a></li>
                 <li><a href="/Home2/Contact">تماس با ما</a></li>
                 <li><a href="/Apps/DakehApp/dakeh.apk">اپلیکیشن دکه</a></li>
-                <li><a href="/Apps/Freevideocompressor/Freevideocompressor-[dakeh.net].zip">نرم افزارکمپرسورفیلم</a></li>
+                <li><a href="/Apps/Freevideocompressor/Freevideocompressor-[dakeh.net].zip">نرم افزارکمپرسورفیلم</a>
+                </li>
                 <li><a href="/Apps/Freevideocompressor/app1.apk">نرم افزاراندرویدکمپرسورفیلم</a></li>
                 @* @if (!User.Identity.IsAuthenticated)
                 {
-                    <li style="background-color: #fff;" ><a id="Login_Notice" href="#">ورود / ایجاد آگهی</a></li>
+                <li style="background-color: #fff;" ><a id="Login_Notice" href="#">ورود / ایجاد آگهی</a></li>
                 } *@
                 @* else
                 {
-                    <li><a href="#">ایجاد آگهی</a></li>
-                    <li><a href="#">عادی</a></li>
-                    <li><a href="#">بنری</a></li>
+                <li><a href="#">ایجاد آگهی</a></li>
+                <li><a href="#">عادی</a></li>
+                <li><a href="#">بنری</a></li>
                 } *@
             </ul>
         </nav>
@@ -247,7 +292,16 @@
 
         $(document).ready(function () {
             if ('@User.Identity.IsAuthenticated' == 'True') {
-
+                $.ajax({
+                    url: '/api/InviteLinlk/GetInviteLinkForUserweb',
+                    type: 'Get',
+                    success: function (response) {
+                        if (response) {
+                            var res = "https://dakeh.net/api/InviteLinlk/" + response
+                            document.getElementById("generatelinkk").value = res
+                        }
+                    }
+                });
                 $.ajax({
                     url: '/Home2/GetInfoOfProfile',
                     type: 'Get',

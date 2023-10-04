@@ -109,6 +109,8 @@ namespace Dake.Controllers
             {
                 return Json("FailTosendSMS");
             }
+            user.Invite_Link = $"{random.Next(1000, 9999)}{user1.cellphone}{random.Next(1000, 9999)}";
+            user.Invite_Price = 0;
             _context.Users.Add(user);
             _context.SaveChanges();
 

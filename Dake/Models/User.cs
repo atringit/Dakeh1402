@@ -56,5 +56,8 @@ namespace Dake.Models
         public bool IsBlocked { get; set; } = false;
         public string PushNotifToken { get; set; }
         public string deleted { get; set; }
+        [MaxLength(100, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد .")]
+        public string Invite_Link { get; set; }
+        public int Invite_Price { get; set; }
     }
 }

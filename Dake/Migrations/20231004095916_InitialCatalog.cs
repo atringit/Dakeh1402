@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Dake.Migrations
 {
-    public partial class initialCatalog : Migration
+    public partial class InitialCatalog : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -295,7 +295,9 @@ namespace Dake.Migrations
                     adminRole = table.Column<string>(maxLength: 50, nullable: true),
                     IsBlocked = table.Column<bool>(nullable: false),
                     PushNotifToken = table.Column<string>(nullable: true),
-                    deleted = table.Column<string>(nullable: true)
+                    deleted = table.Column<string>(nullable: true),
+                    Invite_Link = table.Column<string>(maxLength: 55, nullable: true),
+                    Invite_Price = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {

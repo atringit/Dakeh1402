@@ -696,6 +696,11 @@ namespace Dake.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("Invite_Link")
+                        .HasMaxLength(55);
+
+                    b.Property<int>("Invite_Price");
+
                     b.Property<bool>("IsBlocked");
 
                     b.Property<string>("PushNotifToken");
