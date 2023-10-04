@@ -31,6 +31,38 @@ namespace Dake.Controllers.API
                 return Redirect("https://cafebazaar.ir/app/com.dakeh.app/");
             }
         }
+        [HttpGet("GetUserPrice")]
+        public IActionResult GetUserPrice()
+        {
+            string usertoken = HttpContext.Request?.Headers["Token"];
+            var user = _context.Users.FirstOrDefault(u => u.token == usertoken);
+            if (user == null)
+            {
+
+                return NotFound();
+            }
+            else
+            {
+                var userprice = user.Invite_Price;
+                return Ok(userprice);
+            }
+        }
+        [HttpGet("GetUserPriceWeb")]
+        public IActionResult GetUserPriceWeb()
+        {
+            var usercell = User.Identity.Name;
+            var user = _context.Users.FirstOrDefault(p=>p.cellphone == usercell && p.deleted == null);
+            if (user == null)
+            {
+
+                return NotFound();
+            }
+            else
+            {
+                var userprice = user.Invite_Price;
+                return Ok(userprice);
+            }
+        }
         [HttpPost]
         public IActionResult GenrateInvite()
         {

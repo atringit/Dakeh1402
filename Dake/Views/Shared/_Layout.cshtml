@@ -94,7 +94,7 @@
     </header>
     <div id="myModal3" class="modal">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
+            <div style="border-radius: 8px;padding: 5px;" class="modal-content">
                 <div data-dismiss="modal"></div>
                 <div class="modal-body">
                     <div class="profile-modal">
@@ -123,6 +123,9 @@
                                         type="text">
                                     <button onclick="GenerateLink()" class="btn btn-color">ساخت لینک دعوت</button>
                                 </li>
+                                <li><li>موجودی شما : <input id="inviteprice" disabled
+                                        style="width: 45%;height: 30px;margin-left: 39% ;outline: none;border-radius: 5px;border: 0px solid black;border-bottom: 1px solid;box-shadow: 1px 1px 1px #cdcdcdcd;"
+                                        type="text"></li></li>
                                 <li><i class="dk-logout"></i><a href="~/Home2/Logout" title="">خروج از حساب</a></li>
                             </ul>
                             <script>
@@ -292,6 +295,17 @@
 
         $(document).ready(function () {
             if ('@User.Identity.IsAuthenticated' == 'True') {
+                $.ajax({
+                    url: '/api/InviteLinlk/GetUserPriceWeb',
+                    type: 'Get',
+                    success: function (response) {
+                        if (response) {
+                            var res = "تومان"+response
+                            document.getElementById("inviteprice").value = res
+                            console.log(res)
+                        }
+                    }
+                });
                 $.ajax({
                     url: '/api/InviteLinlk/GetInviteLinkForUserweb',
                     type: 'Get',
