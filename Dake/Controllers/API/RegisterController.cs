@@ -32,7 +32,7 @@ namespace Dake.Controllers.API
 
             User user;
             Random random = new Random();
-            if (_context.Users.IgnoreQueryFilters().Where(p=>p.deleted == null).Any(p => p.cellphone == user1.cellphone))
+            if (_context.Users.IgnoreQueryFilters().Where(p=>p.deleted == null).Any(p => p.cellphone == user1.cellphone ))
             {
                 user = _context.Users.IgnoreQueryFilters().Where(p=>p.deleted == null).FirstOrDefault(p => p.cellphone == user1.cellphone);
                 user.PushNotifToken = user1.PushNotifToken;
