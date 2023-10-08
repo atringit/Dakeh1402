@@ -14,7 +14,7 @@ namespace Dake.Controllers.API
         {
             _context = context;
         }
-        [HttpGet("{invitelink}")]
+        [HttpGet("GetInviteLink/{invitelink}")]
         public IActionResult GetInviteLink([FromRoute] string invitelink)
         {
             var user = _context.Users.Where(p=>p.deleted == null).FirstOrDefault(p=>p.Invite_Link == invitelink);
