@@ -121,7 +121,7 @@ namespace Dake.Controllers
 
             int _cityId = 0;
             IEnumerable<Notice> notices = null;
-            var user = _context.Users.FirstOrDefault(x => x.cellphone == User.Identity.Name);
+            var user = _context.Users.FirstOrDefault(x => x.cellphone == User.Identity.Name && x.deleted == null);
             IQueryable<Notice> resultEspacial = null;
             FirstHomeViewModel firstHomeViewModel = new FirstHomeViewModel();
 
@@ -288,10 +288,10 @@ namespace Dake.Controllers
         }
         public IActionResult Profile()
         {
-            var user = _context.Users.FirstOrDefault(x => x.cellphone == User.Identity.Name);
+            var user = _context.Users.FirstOrDefault(x => x.cellphone == User.Identity.Name && x.deleted == null);
             if(user == null)
             {
-				var user2 = _context.Users.FirstOrDefault(x => x.cellphone+x.adminRole == User.Identity.Name);
+				var user2 = _context.Users.FirstOrDefault(x => x.cellphone+x.adminRole == User.Identity.Name && x.deleted == null);
 				ViewData["Discounts"] = _IDiscountCode.GetDiscountCodeForUser(user2.id);
 			}
             else
@@ -382,7 +382,7 @@ namespace Dake.Controllers
                 int number;
                 var setting = _context.Settings.FirstOrDefault();
                 var category = _context.Categorys.Find(addNotice.categoryId);
-                var user1 = _context.Users.FirstOrDefault(x => x.cellphone == User.Identity.Name);
+                var user1 = _context.Users.FirstOrDefault(x => x.cellphone == User.Identity.Name && x.deleted == null);
                 User user = new User();
                 if(user1 != null)
                 {
@@ -390,7 +390,7 @@ namespace Dake.Controllers
                 }
                 else
                 {
-                     user = _context.Users.FirstOrDefault(x => x.cellphone + x.adminRole == User.Identity.Name);
+                     user = _context.Users.FirstOrDefault(x => x.cellphone + x.adminRole == User.Identity.Name && x.deleted == null);
                 }
                 
 
@@ -1025,7 +1025,7 @@ namespace Dake.Controllers
         }
         public IActionResult GetMyNotice(int page)
         {
-            var user1 = _context.Users.FirstOrDefault(x => x.cellphone == User.Identity.Name);
+            var user1 = _context.Users.FirstOrDefault(x => x.cellphone == User.Identity.Name && x.deleted == null);
             User user = new User();
             if (user1 != null)
             {
@@ -1033,7 +1033,7 @@ namespace Dake.Controllers
             }
             else
             {
-                user = _context.Users.FirstOrDefault(x => x.cellphone + x.adminRole == User.Identity.Name);
+                user = _context.Users.FirstOrDefault(x => x.cellphone + x.adminRole == User.Identity.Name && x.deleted == null);
             }
             IQueryable<Notice> result = _context.Notices.Where(x => x.userId == user.id && x.deletedAt == null);
             foreach (var item in result)
@@ -1058,7 +1058,7 @@ namespace Dake.Controllers
         }
         public IActionResult GetMyFavorite(int page)
         {
-            var user1 = _context.Users.FirstOrDefault(x => x.cellphone == User.Identity.Name);
+            var user1 = _context.Users.FirstOrDefault(x => x.cellphone == User.Identity.Name && x.deleted == null);
             User user = new User();
             if (user1 != null)
             {
@@ -1066,7 +1066,7 @@ namespace Dake.Controllers
             }
             else
             {
-                user = _context.Users.FirstOrDefault(x => x.cellphone + x.adminRole == User.Identity.Name);
+                user = _context.Users.FirstOrDefault(x => x.cellphone + x.adminRole == User.Identity.Name && x.deleted == null);
             }
             IQueryable<UserFavorite> result = _context.UserFavorites.Include(x => x.notice).Where(x => x.userId == user.id && x.notice.deletedAt == null);
             foreach (var item in result)
@@ -1092,7 +1092,7 @@ namespace Dake.Controllers
         [HttpPost]
         public IActionResult AddToFavorite(int id)
         {
-            var user = _context.Users.FirstOrDefault(x => x.cellphone == User.Identity.Name);
+            var user = _context.Users.FirstOrDefault(x => x.cellphone == User.Identity.Name && x.deleted == null);
             if (user == null)
             {
                 return Json("UserNull");
@@ -1116,7 +1116,7 @@ namespace Dake.Controllers
         [HttpPost]
         public IActionResult AddToDestroy(int id, string message)
         {
-            var user = _context.Users.FirstOrDefault(x => x.cellphone == User.Identity.Name);
+            var user = _context.Users.FirstOrDefault(x => x.cellphone == User.Identity.Name && x.deleted == null);
             if (_context.ReportNotices.Any(x => x.noticeId == id && x.userId == user.id))
             {
                 return Json("warning");
@@ -1370,7 +1370,7 @@ namespace Dake.Controllers
         [HttpGet]
         public object GetInfoOfProfile()
         {
-            var user = _context.Users.FirstOrDefault(x => x.cellphone == User.Identity.Name);
+            var user = _context.Users.FirstOrDefault(x => x.cellphone == User.Identity.Name && x.deleted == null);
             var provinces = _context.Provinces.OrderBy(x => x.name);
             string proContent = "<select class='title form-control selectpicker valid' data-size='5' data-val='true'  id='provinceId2' name='provinceId2' ><option value=''>انتخاب شهرستان</option>";
             foreach (var item in provinces)
@@ -1414,7 +1414,7 @@ namespace Dake.Controllers
         [HttpPost]
         public IActionResult ChangeProOfUser(int id)
         {
-            var user = _context.Users.FirstOrDefault(x => x.cellphone == User.Identity.Name);
+            var user = _context.Users.FirstOrDefault(x => x.cellphone == User.Identity.Name && x.deleted == null);
             if (id > 0)
             {
                 user.provinceId = id;

@@ -24,16 +24,16 @@ namespace Dake.Controllers.API
     {
         private readonly Context _context;
         private readonly IHostingEnvironment environment;
-        private IDiscountCode _DiscountCode;
         private readonly IBannerSevice _repository;
-      
+        private IDiscountCode _IDiscountCode;
+
 
 
         public BannerController(Context context,  IHostingEnvironment environment , IDiscountCode discountCode, IBannerSevice repository)
         {
             this.environment = environment;
             _context = context;
-            _DiscountCode = discountCode;
+            _IDiscountCode = discountCode;
             _repository = repository;
         }
    
@@ -211,142 +211,214 @@ namespace Dake.Controllers.API
             return (long)timeSpan.TotalSeconds;
         }
 
-
-
-        [HttpPost]
-        public object PostBanner()
+        [HttpPost("AddBanner")]
+        public async Task<IActionResult> AddBanner([FromForm]Banner banner,[FromForm] IList<IFormFile> files)
         {
-            long totalPrice = 0;
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            Banner notice = new Banner();
-            int _code = 0; 
+
             try
             {
                 string Token = HttpContext.Request?.Headers["Token"];
-                string DiscountCode = HttpContext.Request?.Headers["DiscountCode"];
-                var user = _context.Users.Where(p => p.token == Token).FirstOrDefault();
-                if (user == null)
-                    return new { status = 3, message = "چنین کاربری وجود ندارد." };
-                //string title = HttpContext.Request?.Form["title"];
-                //string description = HttpContext.Request?.Form["description"];
-                //bool isBarber =Convert.ToBoolean(HttpContext.Request?.Form["isBarber"]);
-                //int cityId =Convert.ToInt32(HttpContext.Request?.Form["cityId"]);
-                //int provinceId =Convert.ToInt32(HttpContext.Request?.Form["provinceId"]);
-                //int areaId =Convert.ToInt32(HttpContext.Request?.Form["areaId"]);
-                if(!string.IsNullOrEmpty(DiscountCode))
-                {
-                    int n;
-                    if (int.TryParse(DiscountCode, out n))
-                    {           
-                    _code = Convert.ToInt32(DiscountCode);
-                    if (_DiscountCode.IsAlreadyUsed(user.id, _DiscountCode.GetIdByCode(_code))==false && _DiscountCode.CheckCode(_code))
-                    {
-                            _DiscountCode.AddUserToDiscountCode(user.id, _code);
-                    }
-                    }
-                }
-                string data = HttpContext.Request?.Form["data"];
-
-                JObject json = JObject.Parse(data);
-                JObject jalbum = json as JObject;
-                var movie = "";
-                Banner noticedata = jalbum.ToObject<Banner>();
-                string imageUrl = "";
-                var setting = _context.Settings.FirstOrDefault();
-
-                notice.title = noticedata.title;              
-                notice.createDate = DateTime.Now;
-                notice.expireDateIsespacial = DateTime.Now;
-                notice.expireDate = DateTime.Now.AddDays(Convert.ToInt64(setting.countExpireDate));
-                notice.adminConfirmStatus = EnumStatus.Pending;
-                notice.isPaid = true; 
-                notice.Link = noticedata.Link;
-                notice.userId = user.id;
+                var user = _context.Users.FirstOrDefault(x => x.token == Token);
+                 banner.user = user;
                 
-                if (_context.Banner.Count() == 0)
-                    notice.code = "1";
-                else
-                    notice.code = (Convert.ToInt32(_context.Banner.LastOrDefault().code) + 1).ToString();
-                var httpRequest = HttpContext.Request;
-                var hfc = HttpContext.Request.Form.Files;
-                List<string> images = new List<string>();
-                for (int i = 0; i < hfc.Count; i++)
+                var bres = _repository.AddBanner(banner, files).Result;
+
+                if (bres.IsSuccess)
                 {
-                    if (hfc[i].Length > 1024 * 1024 * 10)
+
+
+                    var bannerId = long.Parse(bres.Data.ToString());
+
+                    Factor factor = new Factor();
+                    factor.state = State.IsPay;
+                    factor.userId = banner.user.id;
+                    factor.createDatePersian = PersianCalendarDate.PersianCalendarResult(DateTime.Now);
+                    factor.factorKind = FactorKind.Add;
+                    factor.bannerId = bannerId;
+
+                    //factor.totalPrice = havediscount ? category.registerPrice - discountprice : category.registerPrice;
+                    _context.Factors.Add(factor);
+                    //Payment
+                    await _context.SaveChangesAsync();
+
+                    if (factor.totalPrice >= 10000)
                     {
-                        return new { status = 1, message = "فایل ارسالی بزرگ تر از حد مجاز می باشد." };
+                        try
+                        {
+                            PaymentRequestAttemp request = new PaymentRequestAttemp();
+                            request.FactorId = factor.id;
+                            request.NoticeId = bannerId;
+                            request.UserId = user.id;
+                            request.pursheType = pursheType.RegisterNotice;
+
+                            _context.Add(request);
+                            _context.SaveChanges();
+
+                            var res = PaymentHelper.SendRequest(request.Id, 0, "http://dakeh.net/Purshe/VerifyRequest");
+                            if (res != null && res.Result != null)
+                            {
+                                if (res.Result.ResCode == "0")
+                                {
+                                    bool havediscount = false;
+                                    if (havediscount)
+                                    {
+                                        int _code = 0;
+                                        _IDiscountCode.AddUserToDiscountCode(user.id, _code);
+                                    }
+                                   
+                                }
+                                return Ok(res.Result.Description);
+                            }
+                        }
+                        catch (Exception)
+                        {
+                            return NotFound("امکان اتصال به درگاه بانکی وجود ندارد");
+                        }
                     }
-                    else
-                    {
-                        var namefile = Guid.NewGuid().ToString().Replace('-', '0').Substring(0, 7) + Path.GetExtension(hfc[i].FileName).ToLower();
-                        var filePath = Path.Combine(environment.WebRootPath, "Banner/", namefile);
-
-                        if (hfc[i].Name == "imageUrl")
-                        {
-                            imageUrl = "/Banner/" + namefile;
-                        }
-
-
-                        else if (hfc[i].Name == "movie")
-                        {
-                            movie = "/Banner/" + namefile;
-                        }
-
-                        else
-                        {
-
-                            images.Add("/Banner/" + namefile);
-
-                        }
-                        using (var stream = new FileStream(filePath, FileMode.Create))
-                        {
-                            hfc[i].CopyTo(stream);
-                        }
-                    }
                 }
-              
-                if(String.IsNullOrEmpty(imageUrl))
-                {
-                    
-                   
-
-                }
-                
-                _context.Banner.Add(notice);
-                foreach (var item in images)
-                {
-                    _context.BannerImage.Add(new BannerImage
-                    {
-                        BannerId = notice.Id,
-                        FileLocation = item
-                    });
-                }
-    //            var staticPriceItem = _context.StaticPrices.FirstOrDefault(s=>s.code == category.staticregisterPriceId);
-    //            if(staticPriceItem !=null)
-				//{
-    //                totalPrice = staticPriceItem.price;
-				//}
-
-                Factor factor = new Factor();
-                factor.state = State.IsPay;
-                factor.userId = user.id;
-                factor.createDatePersian = PersianCalendarDate.PersianCalendarResult(DateTime.Now);
-                factor.bannerId = notice.Id;
-                factor.factorKind = FactorKind.Add;
-                factor.totalPrice = totalPrice;
-                _context.Factors.Add(factor);
-                _context.SaveChanges();
             }
             catch (Exception ex)
             {
-                return new { status = 2, title = "خطا در ثبت بنر", message = "بنر شما ثبت نشد." };
-
+                return BadRequest(ex.Message);
             }
-            return new { noticeId = notice.Id, status = 1, title = "ثبت بنر", message = "بنر شما با موفقیت ثبت گردید." };
+            return Ok(new { status = 1, title = "ثبت آگهی", noticeid = banner.Id, message = "آگهی شما با موفقیت ثبت گردید." });
+
         }
+
+        //    [HttpPost]
+        //    public object PostBanner()
+        //    {
+        //        long totalPrice = 0;
+        //        if (!ModelState.IsValid)
+        //        {
+        //            return BadRequest(ModelState);
+        //        }
+        //        Banner notice = new Banner();
+        //        int _code = 0; 
+        //        try
+        //        {
+        //            string Token = HttpContext.Request?.Headers["Token"];
+        //            string DiscountCode = HttpContext.Request?.Headers["DiscountCode"];
+        //            var user = _context.Users.Where(p => p.token == Token).FirstOrDefault();
+        //            if (user == null)
+        //                return new { status = 3, message = "چنین کاربری وجود ندارد." };
+        //            //string title = HttpContext.Request?.Form["title"];
+        //            //string description = HttpContext.Request?.Form["description"];
+        //            //bool isBarber =Convert.ToBoolean(HttpContext.Request?.Form["isBarber"]);
+        //            //int cityId =Convert.ToInt32(HttpContext.Request?.Form["cityId"]);
+        //            //int provinceId =Convert.ToInt32(HttpContext.Request?.Form["provinceId"]);
+        //            //int areaId =Convert.ToInt32(HttpContext.Request?.Form["areaId"]);
+        //            if(!string.IsNullOrEmpty(DiscountCode))
+        //            {
+        //                int n;
+        //                if (int.TryParse(DiscountCode, out n))
+        //                {           
+        //                _code = Convert.ToInt32(DiscountCode);
+        //                if (_DiscountCode.IsAlreadyUsed(user.id, _DiscountCode.GetIdByCode(_code))==false && _DiscountCode.CheckCode(_code))
+        //                {
+        //                        _DiscountCode.AddUserToDiscountCode(user.id, _code);
+        //                }
+        //                }
+        //            }
+        //            string data = HttpContext.Request?.Form["data"];
+
+        //            JObject json = JObject.Parse(data);
+        //            JObject jalbum = json as JObject;
+        //            var movie = "";
+        //            Banner noticedata = jalbum.ToObject<Banner>();
+        //            string imageUrl = "";
+        //            var setting = _context.Settings.FirstOrDefault();
+
+        //            notice.title = noticedata.title;              
+        //            notice.createDate = DateTime.Now;
+        //            notice.expireDateIsespacial = DateTime.Now;
+        //            notice.expireDate = DateTime.Now.AddDays(Convert.ToInt64(setting.countExpireDate));
+        //            notice.adminConfirmStatus = EnumStatus.Pending;
+        //            notice.isPaid = true; 
+        //            notice.Link = noticedata.Link;
+        //            notice.userId = user.id;
+
+        //            if (_context.Banner.Count() == 0)
+        //                notice.code = "1";
+        //            else
+        //                notice.code = (Convert.ToInt32(_context.Banner.LastOrDefault().code) + 1).ToString();
+        //            var httpRequest = HttpContext.Request;
+        //            var hfc = HttpContext.Request.Form.Files;
+        //            List<string> images = new List<string>();
+        //            for (int i = 0; i < hfc.Count; i++)
+        //            {
+        //                if (hfc[i].Length > 1024 * 1024 * 10)
+        //                {
+        //                    return new { status = 1, message = "فایل ارسالی بزرگ تر از حد مجاز می باشد." };
+        //                }
+        //                else
+        //                {
+        //                    var namefile = Guid.NewGuid().ToString().Replace('-', '0').Substring(0, 7) + Path.GetExtension(hfc[i].FileName).ToLower();
+        //                    var filePath = Path.Combine(environment.WebRootPath, "Banner/", namefile);
+
+        //                    if (hfc[i].Name == "imageUrl")
+        //                    {
+        //                        imageUrl = "/Banner/" + namefile;
+        //                    }
+
+
+        //                    else if (hfc[i].Name == "movie")
+        //                    {
+        //                        movie = "/Banner/" + namefile;
+        //                    }
+
+        //                    else
+        //                    {
+
+        //                        images.Add("/Banner/" + namefile);
+
+        //                    }
+        //                    using (var stream = new FileStream(filePath, FileMode.Create))
+        //                    {
+        //                        hfc[i].CopyTo(stream);
+        //                    }
+        //                }
+        //            }
+
+        //            if(String.IsNullOrEmpty(imageUrl))
+        //            {
+
+
+
+        //            }
+
+        //            _context.Banner.Add(notice);
+        //            foreach (var item in images)
+        //            {
+        //                _context.BannerImage.Add(new BannerImage
+        //                {
+        //                    BannerId = notice.Id,
+        //                    FileLocation = item
+        //                });
+        //            }
+        ////            var staticPriceItem = _context.StaticPrices.FirstOrDefault(s=>s.code == category.staticregisterPriceId);
+        ////            if(staticPriceItem !=null)
+        ////{
+        ////                totalPrice = staticPriceItem.price;
+        ////}
+
+        //            Factor factor = new Factor();
+        //            factor.state = State.IsPay;
+        //            factor.userId = user.id;
+        //            factor.createDatePersian = PersianCalendarDate.PersianCalendarResult(DateTime.Now);
+        //            factor.bannerId = notice.Id;
+        //            factor.factorKind = FactorKind.Add;
+        //            factor.totalPrice = totalPrice;
+        //            _context.Factors.Add(factor);
+        //            _context.SaveChanges();
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            return new { status = 2, title = "خطا در ثبت بنر", message = "بنر شما ثبت نشد." };
+
+        //        }
+        //        return new { noticeId = notice.Id, status = 1, title = "ثبت بنر", message = "بنر شما با موفقیت ثبت گردید." };
+        //    }
 
 
         [Route("RemoveNotice")]

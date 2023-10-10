@@ -673,8 +673,12 @@ C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcorea
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\Magnifie\mag2\Magnifier.js
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\Magnifie\magnifier.css
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\Magnifie\magnifier.js
+C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\Notice\0e1aeb1.png
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\Notice\10dd73c.webp
+C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\Notice\37342dc.png
+C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\Notice\44340c2.png
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\Notice\5fb0f3e.png
+C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\Notice\6101b15.png
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\Notice\75a5dfe.jpg
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\Notice\7eeec75.mp4
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\Notice\7fa2621.jpg

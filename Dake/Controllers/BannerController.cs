@@ -81,10 +81,10 @@ namespace Dake.Controllers
            
             try
             {
-                var user = _context.Users.FirstOrDefault(x => x.cellphone == User.Identity.Name);
+                var user = _context.Users.FirstOrDefault(x => x.cellphone == User.Identity.Name && x.deleted == null);
                 if (user == null)
                 {
-                    var user2 = _context.Users.FirstOrDefault(x => x.cellphone+x.adminRole == User.Identity.Name);
+                    var user2 = _context.Users.FirstOrDefault(x => x.cellphone+x.adminRole == User.Identity.Name && x.deleted == null);
                     banner.user = user2;
                 }
                 else

@@ -567,7 +567,7 @@ namespace Dake.Controllers.API
                 _context.Factors.Add(factor);
                 //Payment
                 await _context.SaveChangesAsync();
-
+                
                 if (factor.totalPrice >= 10000)
                 {
                     try
@@ -599,13 +599,14 @@ namespace Dake.Controllers.API
                         return Ok( new { status = 2, title = "ثبت آگهی", message = "امکان اتصال به درگاه بانکی وجود ندارد." });
                     }
                 }
+                return Ok(new { status = 1, title = "ثبت آگهی", noticeid = notice.id, message = "آگهی شما با موفقیت ثبت گردید." });
 
             }
             catch (Exception ex)
             {
                 return Ok( new { status = 2, title = "خطا در ثبت آگهی", message = ex.Message + " " + ex.StackTrace + " " + ex.InnerException?.Message + " " + ex.InnerException?.InnerException?.Message });
             }
-            return Ok( new { status = 1, title = "ثبت آگهی", message = "آگهی شما با موفقیت ثبت گردید." });
+            
         }
 
         [Route("RemoveNotice")]

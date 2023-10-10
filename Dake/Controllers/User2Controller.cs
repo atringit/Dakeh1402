@@ -38,9 +38,9 @@ namespace Dake.Controllers
         {
             var user = new User();
             Random random = new Random();
-            if (_context.Users.IgnoreQueryFilters().Where(p=> p.deleted == null).Any(p => p.cellphone == user1.cellphone))
+            if (_context.Users.IgnoreQueryFilters().Where(p=> p.deleted == null).Any(p => p.cellphone == user1.cellphone && p.deleted == null))
             {
-                user = _context.Users.IgnoreQueryFilters().Where(p=> p.deleted == null).FirstOrDefault(p => p.cellphone == user1.cellphone);
+                user = _context.Users.Where(p=> p.deleted == null).FirstOrDefault(p => p.cellphone == user1.cellphone);
                 user.code = random.Next(1000, 9999).ToString();
                 user.oTPDate = DateTime.Now;
                 try

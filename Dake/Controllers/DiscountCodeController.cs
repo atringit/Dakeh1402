@@ -97,7 +97,7 @@ namespace Dake.Controllers
         [HttpGet]
         public JsonResult Validity(string code , string categoryId)
         {
-            var user = _context.Users.FirstOrDefault(x => x.cellphone == User.Identity.Name);
+            var user = _context.Users.FirstOrDefault(x => x.cellphone == User.Identity.Name && x.deleted == null);
             long totalprice = 0; 
             int n;
             if (string.IsNullOrEmpty(code))

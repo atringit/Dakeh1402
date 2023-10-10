@@ -42,7 +42,7 @@ namespace Dake.Controllers
             detailNoticeViewModel.notice = Notice;
             detailNoticeViewModel.noticeImages = _context.NoticeImages.Where(x => x.noticeId == id).ToList();
             List<Category> cats = new List<Category>();
-            var user = _context.Users.FirstOrDefault(x => x.cellphone == User.Identity.Name);
+            var user = _context.Users.FirstOrDefault(x => x.cellphone == User.Identity.Name && x.deleted == null);
             if (user != null)
             {
                 if (detailNoticeViewModel.notice.userId != user.id)

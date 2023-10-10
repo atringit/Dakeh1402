@@ -86,7 +86,7 @@ namespace Dake.Controllers.API
                             Credential = GoogleCredential.FromFile("./../Dake/wwwroot/FireBase/key.json"),
                         });
                     }
-                    var userr = _context.Users.FirstOrDefault(p => p.id == notice.userId && p.deleted == null);
+                    var userr = _context.Users.FirstOrDefault(p => p.id == notice.userId);
                     var messagee = new FirebaseAdmin.Messaging.Message()
                     {
                         Notification = new Notification
