@@ -51,6 +51,10 @@
               "target": "Package",
               "version": "[0.95.4, )"
             },
+            "FirebaseAdmin": {
+              "target": "Package",
+              "version": "[2.4.0, )"
+            },
             "Microsoft.AspNetCore": {
               "target": "Package",
               "version": "[2.1.7, )"

@@ -8,6 +8,9 @@ using Dake.Models;
 using Dake.Models.ViewModels;
 using Dake.Service;
 using Dake.Service.Interface;
+using FirebaseAdmin.Messaging;
+using FirebaseAdmin;
+using Google.Apis.Auth.OAuth2;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -70,14 +73,37 @@ namespace Dake.Controllers
 
             string host = Request.Host.Host;
 
-            var _VmPushNotification = new VmPushNotification
+            //var _VmPushNotification = new VmPushNotification
+            //{
+            //    Body = model.description,
+            //    Title = model.title,
+            //    Url = model.Link == null ? "https://dakeh.net" : model.Link,
+            //    // ImgUrl = $"{host}/images/Information/{model.InformationMedias.FirstOrDefault(p=>p.InformationId == model.id).Image}"
+            //};
+            //await _pushNotificationService.SendNotifToAll(_VmPushNotification);
+            
+            if (FirebaseApp.DefaultInstance == null)
             {
-                Body = model.description,
-                Title = model.title,
-                Url = model.Link == null ? "https://dakeh.net" : model.Link,
-               // ImgUrl = $"{host}/images/Information/{model.InformationMedias.FirstOrDefault(p=>p.InformationId == model.id).Image}"
+                FirebaseApp.Create(new AppOptions()
+                {
+                    Credential = GoogleCredential.FromFile("wwwroot/FireBase/key.json"),
+                });
+            }
+            var message = new FirebaseAdmin.Messaging.Message()
+            {
+                Notification = new Notification
+                {
+                    Title = model.title,
+                    Body = model.description,
+                    //ImageUrl = $"https://{host}/images/Information/{model.InformationMedias.FirstOrDefault(p => p.InformationId == model.id).Image}"
+                },
+                Topic = "weather"
+                //Token = "eSCkI0SBfet6ZP1JUN9UAz:APA91bGswUHU3orqxAD-q7dc0YnXEq5CfrsdlzfXeEOfvRPpBu8HfAAz65f6dk47IvL679uB_0Pqj4h9vvJaAw1ElxcLm5u1uPUjYlsH5ncZ4vCFSp69iB9i6v2qVKYyjl-n1qKkIBJ9"
             };
-            await _pushNotificationService.SendNotifToAll(_VmPushNotification);
+
+            // Send the message
+            var response = await FirebaseMessaging.DefaultInstance.SendAsync(message);
+
 
             return RedirectToAction(nameof(Index));
         }

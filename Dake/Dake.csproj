@@ -2308,6 +2308,7 @@
   <ItemGroup>
     <PackageReference Include="BCrypt.Net-Core" Version="1.6.0" />
     <PackageReference Include="ClosedXML" Version="0.95.4" />
+    <PackageReference Include="FirebaseAdmin" Version="2.4.0" />
     <PackageReference Include="Microsoft.AspNetCore" Version="2.1.7" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.1.3" />

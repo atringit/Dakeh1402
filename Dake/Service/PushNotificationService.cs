@@ -26,7 +26,7 @@ namespace Dake.Service
             _context = context;
 
             apiKey = "dc17d23e-8ff6-477e-a463-fa46f8d95ed4";
-            token = "c86d7cf2cd39350c624ef9101b4360e9bd9a6688";
+            token = "034b375439c56465c04f7f406af8d9f8473953e7";
             iconUrl = "https://dakeh.net/assets/img/dakeh-wh512.jpg";
             imageUrl = "https://dakeh.net/assets/img/dakeh-wh512.jpg";
         }
@@ -37,7 +37,7 @@ namespace Dake.Service
             var request = new RestRequest(Method.POST);
             request.AddHeader("cache-control", "no-cache");
             request.AddHeader("content-type", "application/json");
-            request.AddHeader("authorization", "Token " + token);
+            request.AddHeader("authorization", "Token " + token + "");
 
             dateSend = DateTime.Now.AddMinutes(1).ToString("yyyy-MM-ddTHH:mm:ss");
 
@@ -49,9 +49,10 @@ namespace Dake.Service
                 onclick_action = pushModel.OnclickAction == OnclickAction.OpenApp ? "open-app" : "open-link",
                 url = pushModel.Url,
                 icon = iconUrl,
-                image = string.IsNullOrEmpty(pushModel.ImgUrl)? imageUrl : pushModel.ImgUrl,
+                image = string.IsNullOrEmpty(pushModel.ImgUrl) ? imageUrl : pushModel.ImgUrl,
                 sent_time = dateSend,
                 one_signal_enabled = false
+
             };
 
 

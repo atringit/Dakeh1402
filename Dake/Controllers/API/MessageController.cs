@@ -14,6 +14,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore.Internal;
 using SmsIrRestfulNetCore;
+using FirebaseAdmin.Messaging;
+using FirebaseAdmin;
+using Google.Apis.Auth.OAuth2;
+using Microsoft.Extensions.Hosting;
 
 namespace Dake.Controllers.API
 {
@@ -37,9 +41,9 @@ namespace Dake.Controllers.API
         {
             
             var user = _context.Users.FirstOrDefault(u => u.cellphone == dto.phone && u.deleted == null);
-            var receiver = _context.Users.FirstOrDefault(u => u.cellphone == dto.receiverPhone);
-            
-            Message message = new Message()
+            var receiver = _context.Users.FirstOrDefault(u => u.cellphone == dto.receiverPhone && u.deleted == null);
+
+            Models.Message message = new Models.Message()
             {
                 text = dto.text,
                 ItemId = dto.itemId,
@@ -66,25 +70,72 @@ namespace Dake.Controllers.API
                 if (receiver.id == notice.userId)
                 {
                     
-                    var _VmPushNotification = new VmPushNotification
+                   // var _VmPushNotification = new VmPushNotification
+                    //{
+                      //  Body = $"{user.cellphone} بر روی آگهی شما پیام گذاشت",
+                    //    Title = notice.title,
+                        //Url = "https://dakeh.net",
+                      //  UserId = notice.userId
+                    //};
+                   // await _pushNotificationService.SendNotifToSpecialUser(_VmPushNotification);
+                    
+                    if (FirebaseApp.DefaultInstance == null)
                     {
-                        Body = $"{user.cellphone} بر روی آگهی شما پیام گذاشت",
-                        Title = notice.title,
-                        Url = "https://dakeh.net",
-                        UserId = notice.userId
+                        FirebaseApp.Create(new AppOptions()
+                        {
+                            Credential = GoogleCredential.FromFile("./../Dake/wwwroot/FireBase/key.json"),
+                        });
+                    }
+                    var userr = _context.Users.FirstOrDefault(p => p.id == notice.userId && p.deleted == null);
+                    var messagee = new FirebaseAdmin.Messaging.Message()
+                    {
+                        Notification = new Notification
+                        {
+                            Title = notice.title,
+                            Body = $"{user.cellphone} بر روی آگهی شما پیام گذاشت",
+
+
+                        },
+                        Token = userr.PushNotifToken
+                        
                     };
-                    await _pushNotificationService.SendNotifToSpecialUser(_VmPushNotification);
+
+                    // Send the message
+                    var response = await FirebaseMessaging.DefaultInstance.SendAsync(messagee);
                 }
                 else if (user.id == notice.userId)
                 {
-                    var _VmPushNotification = new VmPushNotification
+                    //var _VmPushNotification = new VmPushNotification
+                    //{
+                    //    Body = $"{user.cellphone} پاسخ شما را داد",
+                    //    Title = notice.title,
+                    //    Url = "https://dakeh.net",
+                    //    UserId = receiver.id
+                    //};
+                    //await _pushNotificationService.SendNotifToSpecialUser(_VmPushNotification);
+                    if (FirebaseApp.DefaultInstance == null)
                     {
-                        Body = $"{user.cellphone} پاسخ شما را داد",
-                        Title = notice.title,
-                        Url = "https://dakeh.net",
-                        UserId = receiver.id
+                        FirebaseApp.Create(new AppOptions()
+                        {
+                            Credential = GoogleCredential.FromFile("./../Dake/wwwroot/FireBase/key.json"),
+                        });
+                    }
+                    
+                    var messagee = new FirebaseAdmin.Messaging.Message()
+                    {
+                        Notification = new Notification
+                        {
+                            Title = notice.title,
+                            Body = $"{user.cellphone} پاسخ شما را داد",
+
+
+                        },
+                        Token = receiver.PushNotifToken
+
                     };
-                    await _pushNotificationService.SendNotifToSpecialUser(_VmPushNotification);   
+
+                    // Send the message
+                    var response = await FirebaseMessaging.DefaultInstance.SendAsync(messagee);
                 }
             }
 
@@ -95,7 +146,7 @@ namespace Dake.Controllers.API
         [HttpPost("DeleteAllNoticeMessageWithSpecifyUser")]
         public async Task<object> DeleteAllNoticeMessageWithSpecifyUser([FromBody] DeleteMessagDto model)
         {
-            List<Message> messages;
+            List<Models.Message> messages;
             if (_context.Users.Any(u => u.cellphone == model.phone))
             {
                 int userId = _context.Users.Single(u => u.cellphone == model.phone).id;
@@ -122,7 +173,7 @@ namespace Dake.Controllers.API
         [HttpPost("DeleteAllCrashReportMessageWithSpecifyUser")]
         public async Task<object> DeleteAllCrashReportMessageWithSpecifyUser([FromBody] DeleteMessagDto model)
         {
-            List<Message> messages;
+            List<Models.Message> messages;
             if (_context.Users.Any(u => u.cellphone == model.phone))
             {
                 int userId = _context.Users.Single(u => u.cellphone == model.phone).id;

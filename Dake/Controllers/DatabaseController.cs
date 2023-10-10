@@ -6,6 +6,8 @@ using Microsoft.SqlServer.Management.Common;
 using Microsoft.SqlServer.Management.Smo;
 using Microsoft.Extensions.Configuration;
 using Dake.Models.ViewModels;
+using System.IO;
+using Microsoft.CodeAnalysis.Options;
 
 namespace Dake.Controllers
 {
@@ -34,53 +36,53 @@ namespace Dake.Controllers
 
         }
 
-        [HttpPost]
-        public IActionResult GetBackUp()
-        {
-            //IF SQL Server Authentication then Connection String  
-            //con.ConnectionString = @"Server=MyPC\SqlServer2k8;database=" + YourDBName + ";uid=sa;pwd=password;";  
+        //[HttpPost]
+        //public IActionResult GetBackUp()
+        //{
+        //    //IF SQL Server Authentication then Connection String  
+        //    //con.ConnectionString = @"Server=MyPC\SqlServer2k8;database=" + YourDBName + ";uid=sa;pwd=password;";  
 
-            //IF Window Authentication then Connection String  
+        //    //IF Window Authentication then Connection String  
 
-            var connectionString = _configuration.GetConnectionString("DakeConnectionDb");
+        //    var connectionString = _configuration.GetConnectionString("DakeConnection");
 
-            var dbName = _configuration.GetValue<string>("ExtraInfo:dbName");
+        //    var dbName = _configuration.GetValue<string>("ExtraInfo:dbName");
 
-            con.ConnectionString = connectionString;
-            string dbbackNam = DateTime.Now.ToString("ddMMyyyy_HHmmss") + ".Bak'";
-            string backupDIR = _configuration.GetValue<string>("ExtraInfo:backupDIR");
+        //    con.ConnectionString = connectionString;
+        //    string dbbackNam = DateTime.Now.ToString("ddMMyyyy_HHmmss") + ".Bak'";
+        //    string backupDIR = _configuration.GetValue<string>("ExtraInfo:backupDIR");
+            
 
+        //    if (!System.IO.Directory.Exists(backupDIR))
+        //    {
+        //        System.IO.Directory.CreateDirectory(backupDIR);
+        //    }
+        //    try
+        //    {
+        //        con.Open();
+        //        sqlcmd = new SqlCommand("backup database " + dbName + " to disk='" + "\\" + dbbackNam, con);
+        //        sqlcmd.ExecuteNonQuery();
+        //        con.Close();
 
-            if (!System.IO.Directory.Exists(backupDIR))
-            {
-                System.IO.Directory.CreateDirectory(backupDIR);
-            }
-            try
-            {
-                con.Open();
-                sqlcmd = new SqlCommand("backup database " + dbName + " to disk='" + backupDIR + "\\" + dbbackNam, con);
-                sqlcmd.ExecuteNonQuery();
-                con.Close();
+        //        DbIndexVM db = new DbIndexVM
+        //        {
+        //            IsSuccess = true,
+        //            Message = "عملیات با موفقیت انجام شد و بک آپ دیتا بیس در مسیر " + backupDIR + " با نام " + dbbackNam + " ذخیره شد."
+        //        };
 
-                DbIndexVM db = new DbIndexVM
-                {
-                    IsSuccess = true,
-                    Message = "عملیات با موفقیت انجام شد و بک آپ دیتا بیس در مسیر " + backupDIR + " با نام " + dbbackNam + " ذخیره شد."
-                };
+        //        return RedirectToAction("Index", db);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        ViewBag.Text = "Error Occured During DB backup process !<br>" + ex.ToString();
 
-                return RedirectToAction("Index", db);
-            }
-            catch (Exception ex)
-            {
-                ViewBag.Text = "Error Occured During DB backup process !<br>" + ex.ToString();
-
-                DbIndexVM db = new DbIndexVM
-                {
-                    IsSuccess = true,
-                    Message = ex.Message
-                };
-                return RedirectToAction("Index", db);
-            }
-        }
+        //        DbIndexVM db = new DbIndexVM
+        //        {
+        //            IsSuccess = true,
+        //            Message = ex.Message
+        //        };
+        //        return RedirectToAction("Index", db);
+        //    }
+        //}
     }
 }
