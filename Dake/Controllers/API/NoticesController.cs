@@ -568,37 +568,7 @@ namespace Dake.Controllers.API
                 //Payment
                 await _context.SaveChangesAsync();
                 
-                if (factor.totalPrice >= 10000)
-                {
-                    try
-                    {
-                        PaymentRequestAttemp request = new PaymentRequestAttemp();
-                        request.FactorId = factor.id;
-                        request.NoticeId = notice.id;
-                        request.UserId = user.id;
-                        request.pursheType = pursheType.RegisterNotice;
-                        _context.Add(request);
-                        _context.SaveChanges();
-
-                        var res = PaymentHelper.SendRequest(request.Id, havediscount ? totalp - discountprice : totalp, "http://dakeh.net/Purshe/VerifyRequest");
-                        if (res != null && res.Result != null)
-                        {
-                            if (res.Result.ResCode == "0")
-                            {
-                                if (havediscount)
-                                {
-                                    _DiscountCode.AddUserToDiscountCode(user.id, _code);
-                                }
-                                Response.Redirect(string.Format("{0}/Purchase/Index?token={1}", PaymentHelper.PurchasePage, res.Result.Token));
-                            }
-                            return Ok(res.Result.Description);
-                        }
-                    }
-                    catch (Exception)
-                    {
-                        return Ok( new { status = 2, title = "ثبت آگهی", message = "امکان اتصال به درگاه بانکی وجود ندارد." });
-                    }
-                }
+                
                 return Ok(new { status = 1, title = "ثبت آگهی", noticeid = notice.id, message = "آگهی شما با موفقیت ثبت گردید." });
 
             }

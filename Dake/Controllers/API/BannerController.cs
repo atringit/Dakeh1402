@@ -281,7 +281,7 @@ namespace Dake.Controllers.API
             {
                 return BadRequest(ex.Message);
             }
-            return Ok(new { status = 1, title = "ثبت آگهی", noticeid = banner.Id, message = "آگهی شما با موفقیت ثبت گردید." });
+            return Ok(new { status = 1, title = "ثبت آگهی", BannerId = banner.Id, message = "آگهی شما با موفقیت ثبت گردید." });
 
         }
 
