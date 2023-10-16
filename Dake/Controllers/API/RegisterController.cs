@@ -73,7 +73,7 @@ namespace Dake.Controllers.API
                 {
                     return new { status = 2, title = "خطا در ارسال کد تایید", message = "کد تایید شما ارسال نشد" };
                 }
-                return new { status = 1, title = "کد تایید", message = "کد تایید شما ارسال شد" };
+                return new { status = 1,phone = user1.cellphone , title = "کد تایید", message = "کد تایید شما ارسال شد" };
             }
             user = new User
             {

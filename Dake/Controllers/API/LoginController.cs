@@ -67,9 +67,10 @@ namespace Dake.Controllers.API
                 return Convert.ToInt32(provinceId);
         }
         [HttpPost("LogOut")]
-        public IActionResult LogOut(int userId)
+        public IActionResult LogOut()
         {
-            var user = _context.Users.Find(userId);
+            string Token = HttpContext.Request?.Headers["Token"];
+            var user = _context.Users.FirstOrDefault(p=>p.token == Token);
             user.token = null;
             _context.Users.Update(user);
             _context.SaveChanges();

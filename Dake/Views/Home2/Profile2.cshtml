@@ -6,19 +6,36 @@
         <div class="myads__tabs tabs">
             <ul>
 
-                <li data-tab="tab_1" class="active tablinks" onclick="openCity(event, 'MyNotice')" id="mynoticetab">آگهی های من</li>
+                <li data-tab="tab_1" class="active tablinks" onclick="openCity(event, 'MyNotice')" id="mynoticetab">آگهی
+                    های من</li>
                 <li data-tab="tab_2" class="tablinks" onclick="openCity(event, 'MyFavorite')">لیست علاقه مندی ها</li>
+                <li data-tab="tab_3" class="tablinks" onclick="openCity(event, 'MyBanner')">آگهی های بنری</li>
             </ul>
             <p class="text text-success">@TempData["PursheResult"]</p>
             <p class="text text-success">@TempData["ErrorPursheResult"]</p>
 
 
-            
-            <div class="tab-content active" data-tabtarget="tab_1" id="MyNotice">
+
+            <div class="tab-content active tbbb" data-tabtarget="tab_1" id="MyNotice">
 
             </div>
-            <div class="tab-content" data-tabtarget="tab_2" id="MyFavorite">
+            <div class="tab-content tbbb" data-tabtarget="tab_2" id="MyFavorite">
 
+            </div>
+            <div class="tbbb" style="display: none;" data-tabtarget="tab_3" id="MyBanner">
+                <div style="border: 1.2px solid #83c030;margin: 10px;" class="card text-center">
+                    <div style="color: #83c030;font-size: 20px;" class="card-header">
+                        <button style="position: absolute;right: 20px;border: 0px solid;color: red;outline: none;background: none;">حذف بنر</button>
+                        بنری یک
+                        
+                    </div>
+                    <div class="card-body">
+                        <img style="width: 55%;height: 300px;border-radius: 5px;" src="https://www.seiu1000.org/sites/main/files/main-images/camera_lense_0.jpeg" alt="">
+                    </div>
+                    <div class="card-footer text-muted">
+                        <a href="https://Masood-tmp.ir">https://Masood-tmp.ir</a>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -30,11 +47,11 @@
 
 
 @section scripts
-    {
+{
     <script>
         function openCity(evt, cityName) {
             var i, tabcontent, tablinks;
-            tabcontent = document.getElementsByClassName("tab-content");
+            tabcontent = document.getElementsByClassName("tbbb");
             for (i = 0; i < tabcontent.length; i++) {
                 tabcontent[i].style.display = "none";
             }
@@ -51,7 +68,7 @@
             $.ajax({
                 url: "/Home2/GetMyNotice",
                 method: "POST",
-                data: { page: 1},
+                data: { page: 1 },
                 success: function (data) {
                     $("#MyNotice").append(data);
 
@@ -76,18 +93,34 @@
 
                 }
             })
-           
+
+            $.ajax({
+                url: "/Home2/ss",
+                method: "POST",
+                data: { page: 1 },
+                success: function (data) {
+                    $("#MyBanner").append(data);
+
+
+                },
+                error: function () {
+
+                }
+            })
+
         });
         var pageNo = 2;
         var pageNo2 = 2;
+        var pageNo3 = 2;
         var isPaged = true;
         var isPaged2 = true;
+        var isPaged3 = true;
         $(window).scroll(function () {
-            
+
             if ($(window).scrollTop() ==
                 $(document).height() - $(window).height()) {
                 if (isPaged || isPaged2) {
-                    if ($("#MyFavorite:visible").length == 0) {
+                    if ($("#MyFavorite:visible && #MyBanner:visible").length == 0) {
                         $.ajax({
                             url: "/Home2/GetMyNotice",
                             method: "POST",
@@ -104,7 +137,7 @@
                             }
                         })
                     }
-                    else {
+                    else if ("#MyNotice:visible && #MyBanner:visible") {
                         $.ajax({
                             url: "/Home2/GetMyFavorite",
                             method: "POST",
@@ -121,10 +154,27 @@
                             }
                         })
                     }
+                    else {
+                        $.ajax({
+                            url: "/Home2/GetMyFavorite",
+                            method: "POST",
+                            data: { page: pageNo3 },
+                            success: function (data) {
+                                $("#MyBanner").append(data);
+                                pageNo3++;
+                                if ($.trim(data) == "") {
+                                    isPaged3 = false;
+                                }
+                            },
+                            error: function () {
+
+                            }
+                        })
+                    }
                 }
             }
         });
 
-        
+
     </script>
 }

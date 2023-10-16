@@ -256,9 +256,7 @@ namespace Dake.Controllers
                 }
             }
             
-
-
-            firstHomeViewModel.Banner = _context.Banner.Include(p => p.BannerImage).ToList();
+            firstHomeViewModel.Banner = _context.Banner.Where(p=>p.adminConfirmStatus == EnumStatus.Accept).Include(p => p.BannerImage).ToList();
 
             firstHomeViewModel.Categories = _context.Categorys.ToList();
 
