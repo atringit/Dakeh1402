@@ -531,6 +531,20 @@ namespace Dake.Controllers.API
             }
             return false;
         }
+        [HttpGet("GetAllBanner")]
+        public IActionResult GetAllBanner()
+        {
+            var banners = _context.Banner.Where(p => p.adminConfirmStatus == EnumStatus.Accept).Include(p=>p.BannerImage).OrderByDescending(u => u.createDate);
+           
+            if(banners == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return Ok(banners);
+            }
+        }
         private string getCategoryImage(int catId)
         {
             var categoryItem = _context.Categorys.FirstOrDefault(s => s.id == catId);
