@@ -1087,6 +1087,32 @@ namespace Dake.Controllers
             }
 
         }
+        public IActionResult GetMyBanner(int page)
+        {
+            var user1 = _context.Users.FirstOrDefault(x => x.cellphone == User.Identity.Name && x.deleted == null);
+            User user = new User();
+            if (user1 != null)
+            {
+                user = user1;
+            }
+            else
+            {
+                user = _context.Users.FirstOrDefault(x => x.cellphone + x.adminRole == User.Identity.Name && x.deleted == null);
+            }
+            List<Banner> result = _context.Banner.Where(x => x.userId == user.id).Include(p=>p.BannerImage).ToList();
+            
+            int skip = (page - 1) * 8;
+            if (user != null)
+            {
+                return PartialView("_MyBannner", result);
+            }
+            else
+            {
+                return RedirectToAction(nameof(Logout));
+
+            }
+
+        }
         [HttpPost]
         public IActionResult AddToFavorite(int id)
         {
@@ -1504,6 +1530,44 @@ namespace Dake.Controllers
             {
                 return Content("اکنون سیستم قادر به پاسخ گویی نمی باشد");
 
+            }
+        }
+        
+        public IActionResult removeBanner(int Id)
+        {
+            var user1 = _context.Users.FirstOrDefault(x => x.cellphone == User.Identity.Name && x.deleted == null);
+            User user = new User();
+            if (user1 != null)
+            {
+                user = user1;
+            }
+            else
+            {
+                user = _context.Users.FirstOrDefault(x => x.cellphone + x.adminRole == User.Identity.Name && x.deleted == null);
+            }
+            var banner = _context.Banner.FirstOrDefault(p=>p.Id == Id);
+            if(banner.userId == user.id)
+            {
+               
+                var factor = _context.Factors.FirstOrDefault(p => p.bannerId == banner.Id);
+                var factoritem = _context.FactorItems.FirstOrDefault(p => p.FactorId == factor.id);
+                if(factoritem != null)
+                {
+                    _context.FactorItems.Remove(factoritem);
+                    _context.SaveChanges();
+                }
+                if(factor != null)
+                {
+                    _context.Factors.Remove(factor);
+                    _context.SaveChanges();
+                }
+                _context.Banner.Remove(banner);
+                _context.SaveChanges();
+                return Json("Success");
+            }
+            else
+            {
+                return RedirectToAction(nameof(Logout));
             }
         }
 

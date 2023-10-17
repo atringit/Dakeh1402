@@ -54,7 +54,9 @@ namespace Dake.Controllers
         [HttpPost]
         public async Task AddOrUpdate(Banner dto, IList<IFormFile> files)
         {
+            
             await _repository.AddOrUpdate(dto, files);
+           
         }
 
          [HttpPost]
@@ -81,6 +83,11 @@ namespace Dake.Controllers
            
             try
             {
+                if (files == null || banner.Link == null || banner.title == null)
+                {
+                    return BadRequest("پر کردن تمامی فیلد ها و ثبت تصویر اجباری است");
+                }
+                
                 var user = _context.Users.FirstOrDefault(x => x.cellphone == User.Identity.Name && x.deleted == null);
                 if (user == null)
                 {
@@ -152,7 +159,7 @@ namespace Dake.Controllers
             {
                 return Content(ex.Message);
             }
-            return RedirectToAction("CreateBanner");
+            return Ok();
         }
 
 

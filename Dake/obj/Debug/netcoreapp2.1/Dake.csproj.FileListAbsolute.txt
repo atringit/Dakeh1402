@@ -269,6 +269,7 @@ C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Debug\netcoreapp
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Debug\netcoreapp2.1\Razor\Views\Home2\Rule.cshtml.g.cs
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Debug\netcoreapp2.1\Razor\Views\Home2\Stir.cshtml.g.cs
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Debug\netcoreapp2.1\Razor\Views\Home2\Verify.cshtml.g.cs
+C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Debug\netcoreapp2.1\Razor\Views\Home2\_MyBannner.cshtml.g.cs
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Debug\netcoreapp2.1\Razor\Views\Home2\_MyFavoriteNotice.cshtml.g.cs
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Debug\netcoreapp2.1\Razor\Views\Home2\_MyNotice.cshtml.g.cs
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Debug\netcoreapp2.1\Razor\Views\Home2\_Notice.cshtml.g.cs

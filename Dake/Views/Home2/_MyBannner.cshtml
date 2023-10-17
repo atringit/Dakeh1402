@@ -1,0 +1,36 @@
+﻿@model List<Dake.Models.Banner>
+
+<div class="photos">
+    <div class="row" data-space="20">
+        @foreach (var item in Model)
+        {
+            
+                <div style="border: 1.2px solid #83c030;margin: 10px;width:100%" class="card text-center">
+                    <div style="color: #83c030;font-size: 20px;" class="card-header">
+                        <button onclick="deletebanner(@item.Id)" style="position: absolute;right: 20px;border: 0px solid;color: red;outline: none;background: none;">حذف بنر</button>
+                    @if(item.Link != null)
+                    {
+                        <a href="@item.Link">@item.Link</a>
+                    }
+                    else
+                    {
+                        <a>بدون لینک</a>
+                    }
+                    @if(item.adminConfirmStatus == EnumStatus.Accept)
+                    {
+                        <p style="position: absolute;left: 20px;top:10px;color: green;">تایید شده</p>
+                    }
+                    else
+                    {
+                        <p style="position: absolute;left: 20px;top:10px;color: red;">تایید نشده</p>
+                    }
+                    
+                    </div>
+                    <div class="card-body">
+                    <img style="width: 95%;height: 180px;border-radius: 5px;" src="@item.BannerImage.FirstOrDefault()?.FileLocation" alt="">
+                    </div>
+                    
+            </div>
+        }
+    </div>
+</div>

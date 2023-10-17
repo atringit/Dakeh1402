@@ -20,8 +20,9 @@
                         <tr>
                             <th>#</th>
                             <th>عکس</th>
-                            <th>نام</th>
+                            <th>نام و نام خانوادگی</th>
                             <th>لینک</th>
+                            <th>شماره تلفن</th>
                             <th>وضعیت</th>
                             <th>#</th>
                         </tr>
@@ -39,6 +40,7 @@
                                     <td><img height="100" width="100" src="@item?.BannerImage?.FirstOrDefault()?.FileLocation" /></td>
                                     <td>@item.title</td>
                                     <td>@item.Link</td>
+                                    <td>@item.user.cellphone</td>
                                     <td>
                                          @if (item.adminConfirmStatus == Dake.Models.EnumStatus.Accept)
                                 {

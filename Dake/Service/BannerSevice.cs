@@ -32,6 +32,7 @@ namespace Dake.Service
                 IList<Banner> banners = await _context.Banner
 
                  .Include(p => p.BannerImage)
+                 .Include(p => p.user)
                  .OrderByDescending(p => p.Id)
                  .ToListAsync();
                 return new BannerGetData

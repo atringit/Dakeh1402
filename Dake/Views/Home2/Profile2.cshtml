@@ -22,20 +22,7 @@
             <div class="tab-content tbbb" data-tabtarget="tab_2" id="MyFavorite">
 
             </div>
-            <div class="tbbb" style="display: none;" data-tabtarget="tab_3" id="MyBanner">
-                <div style="border: 1.2px solid #83c030;margin: 10px;" class="card text-center">
-                    <div style="color: #83c030;font-size: 20px;" class="card-header">
-                        <button style="position: absolute;right: 20px;border: 0px solid;color: red;outline: none;background: none;">حذف بنر</button>
-                        بنری یک
-                        
-                    </div>
-                    <div class="card-body">
-                        <img style="width: 55%;height: 300px;border-radius: 5px;" src="https://www.seiu1000.org/sites/main/files/main-images/camera_lense_0.jpeg" alt="">
-                    </div>
-                    <div class="card-footer text-muted">
-                        <a href="https://Masood-tmp.ir">https://Masood-tmp.ir</a>
-                    </div>
-                </div>
+            <div class="tbbb" style="display: none;margin: 10px;" data-tabtarget="tab_3" id="MyBanner">
             </div>
         </div>
 
@@ -48,6 +35,21 @@
 
 @section scripts
 {
+    <script>
+        function deletebanner(a) {
+            $.ajax({
+                url: `/Home2/removeBanner/${a}`,
+                method: "GET",
+                
+                success: function (data) {
+                    window.location.reload()
+                },
+                error: function () {
+
+                }
+            })
+        }
+    </script>
     <script>
         function openCity(evt, cityName) {
             var i, tabcontent, tablinks;
@@ -95,7 +97,7 @@
             })
 
             $.ajax({
-                url: "/Home2/ss",
+                url: "/Home2/GetMyBanner",
                 method: "POST",
                 data: { page: 1 },
                 success: function (data) {
@@ -156,7 +158,7 @@
                     }
                     else {
                         $.ajax({
-                            url: "/Home2/GetMyFavorite",
+                            url: "/Home2/GetMyBanner",
                             method: "POST",
                             data: { page: pageNo3 },
                             success: function (data) {
