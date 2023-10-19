@@ -4,6 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="enamad" content="490266" />
     <title>@ViewData["Title"] - سامانه دکه</title>
     <link href="~/Home2/css/bootstrap.min.css" rel="stylesheet" />
     <link rel="shortcut icon" href="~/assets/img/dakeh-wh512.jpg" type="image/x-icon">
@@ -15,7 +16,23 @@
     <link href="~/assets/css/magnify.css" rel="stylesheet" />
 
     @*<link href="~/Magnifie/mag2/magnifier.css" rel="stylesheet" />*@
+    <style>
+       
+    footer {
+        margin-left: 87%;
+  background-color: #f2f2f2;
+  padding: 10px;
+  text-align: center;
+  position: fixed    ;
+  left: 0;
+  bottom: 0;
+  width: 13%;
+  z-index: 9999;
+  border-radius: 5px;
+}
 
+
+    </style>
 </head>
 
 <body>
@@ -123,9 +140,11 @@
                                         type="text">
                                     <button onclick="GenerateLink()" class="btn btn-color">ساخت لینک دعوت</button>
                                 </li>
-                                <li><li>موجودی شما : <input id="inviteprice" disabled
+                                <li>
+                                <li>موجودی شما : <input id="inviteprice" disabled
                                         style="width: 45%;height: 30px;margin-left: 39% ;outline: none;border-radius: 5px;border: 0px solid black;border-bottom: 1px solid;box-shadow: 1px 1px 1px #cdcdcdcd;"
-                                        type="text"></li></li>
+                                        type="text"></li>
+                                </li>
                                 <li><i class="dk-logout"></i><a href="~/Home2/Logout" title="">خروج از حساب</a></li>
                             </ul>
                             <script>
@@ -248,22 +267,24 @@
             </ul>
         </nav>
     </div>
+        <div class="container body-content">
 
-    <div class="container body-content">
         @RenderBody()
 
 
     </div>
+    <footer>
+        <div class="container">
+            <div class="row">
 
-    <style>
-        footer {
-            /*position: absolute;*/
-            height: 100px;
-            /*bottom: 0;*/
-            width: 100%;
-            padding: 20px;
-        }
-    </style>
+                    <a class="enmd" referrerpolicy='origin' target='_blank' href='https://trustseal.enamad.ir/?id=402690&Code=KqLdSU7X1Jrq97kpthTsT4b6QcMjfC99'><img referrerpolicy='origin' src='https://trustseal.enamad.ir/logo.aspx?id=402690&Code=KqLdSU7X1Jrq97kpthTsT4b6QcMjfC99' alt='' style='cursor:pointer' Code='KqLdSU7X1Jrq97kpthTsT4b6QcMjfC99'></a>
+
+                
+            </div>
+        </div>
+    </footer>
+
+    
 
     @* <footer style="position:fixed; bottom:0; right:0">
     <a target="_blank" href="https://trustseal.enamad.ir/?id=154839&amp;Code=KiOESL253vfa2IKEoxCY"><img
@@ -291,6 +312,7 @@
     <script src="~/assets/js/jquery.magnify.js"></script>
     <script src="~/assets/js/scripts.js"></script>
 
+
     <script>
 
         $(document).ready(function () {
@@ -300,7 +322,7 @@
                     type: 'Get',
                     success: function (response) {
                         if (response) {
-                            var res = "تومان"+response
+                            var res = "تومان" + response
                             document.getElementById("inviteprice").value = res
                             console.log(res)
                         }
