@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "BO9F2xdWTYSHc/8S+5x+eiSfGmModAC+pWqkhtKnjQkf8+EqQb4yyWy9QHxAwvkUDJOH+gpoNOB3W6Jf8EXCIQ==",
+  "dgSpecHash": "BD9YhrG0G9ojyfDndUkh4yDuOu8D574l0KWVOe699Bos1BsmPA9vRCrZ08BksWrgmp7G3oivI6DReYGlM4nfmw==",
   "success": true,
   "projectFilePath": "C:\\Users\\Masood Talebi\\source\\repos\\atringit\\Dakeh1402\\Dake\\Dake.csproj",
   "expectedPackageFiles": [
@@ -130,6 +130,7 @@
     "C:\\Users\\Masood Talebi\\.nuget\\packages\\microsoft.entityframeworkcore.sqlserver\\2.1.2\\microsoft.entityframeworkcore.sqlserver.2.1.2.nupkg.sha512",
     "C:\\Users\\Masood Talebi\\.nuget\\packages\\microsoft.entityframeworkcore.tools\\2.1.1\\microsoft.entityframeworkcore.tools.2.1.1.nupkg.sha512",
     "C:\\Users\\Masood Talebi\\.nuget\\packages\\microsoft.entityframeworkcore.tools.dotnet\\2.0.3\\microsoft.entityframeworkcore.tools.dotnet.2.0.3.nupkg.sha512",
+    "C:\\Users\\Masood Talebi\\.nuget\\packages\\microsoft.extensions.apidescription.client\\7.0.2\\microsoft.extensions.apidescription.client.7.0.2.nupkg.sha512",
     "C:\\Users\\Masood Talebi\\.nuget\\packages\\microsoft.extensions.caching.abstractions\\2.1.1\\microsoft.extensions.caching.abstractions.2.1.1.nupkg.sha512",
     "C:\\Users\\Masood Talebi\\.nuget\\packages\\microsoft.extensions.caching.memory\\2.1.1\\microsoft.extensions.caching.memory.2.1.1.nupkg.sha512",
     "C:\\Users\\Masood Talebi\\.nuget\\packages\\microsoft.extensions.caching.sqlserver\\2.1.1\\microsoft.extensions.caching.sqlserver.2.1.1.nupkg.sha512",
@@ -203,8 +204,10 @@
     "C:\\Users\\Masood Talebi\\.nuget\\packages\\microsoft.win32.registry\\4.7.0\\microsoft.win32.registry.4.7.0.nupkg.sha512",
     "C:\\Users\\Masood Talebi\\.nuget\\packages\\microsoft.win32.systemevents\\4.5.0\\microsoft.win32.systemevents.4.5.0.nupkg.sha512",
     "C:\\Users\\Masood Talebi\\.nuget\\packages\\netstandard.library\\2.0.3\\netstandard.library.2.0.3.nupkg.sha512",
-    "C:\\Users\\Masood Talebi\\.nuget\\packages\\newtonsoft.json\\12.0.3\\newtonsoft.json.12.0.3.nupkg.sha512",
+    "C:\\Users\\Masood Talebi\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512",
     "C:\\Users\\Masood Talebi\\.nuget\\packages\\newtonsoft.json.bson\\1.0.1\\newtonsoft.json.bson.1.0.1.nupkg.sha512",
+    "C:\\Users\\Masood Talebi\\.nuget\\packages\\nswag.apidescription.client\\13.18.2\\nswag.apidescription.client.13.18.2.nupkg.sha512",
+    "C:\\Users\\Masood Talebi\\.nuget\\packages\\nswag.msbuild\\13.18.2\\nswag.msbuild.13.18.2.nupkg.sha512",
     "C:\\Users\\Masood Talebi\\.nuget\\packages\\nuget.frameworks\\4.7.0\\nuget.frameworks.4.7.0.nupkg.sha512",
     "C:\\Users\\Masood Talebi\\.nuget\\packages\\pagedlist.core\\1.17.4\\pagedlist.core.1.17.4.nupkg.sha512",
     "C:\\Users\\Masood Talebi\\.nuget\\packages\\pagedlist.core.mvc\\1.0.0\\pagedlist.core.mvc.1.0.0.nupkg.sha512",
@@ -331,7 +334,9 @@
     "C:\\Users\\Masood Talebi\\.nuget\\packages\\system.xml.xdocument\\4.3.0\\system.xml.xdocument.4.3.0.nupkg.sha512",
     "C:\\Users\\Masood Talebi\\.nuget\\packages\\system.xml.xmldocument\\4.3.0\\system.xml.xmldocument.4.3.0.nupkg.sha512",
     "C:\\Users\\Masood Talebi\\.nuget\\packages\\system.xml.xpath\\4.3.0\\system.xml.xpath.4.3.0.nupkg.sha512",
-    "C:\\Users\\Masood Talebi\\.nuget\\packages\\system.xml.xpath.xdocument\\4.3.0\\system.xml.xpath.xdocument.4.3.0.nupkg.sha512"
+    "C:\\Users\\Masood Talebi\\.nuget\\packages\\system.xml.xpath.xdocument\\4.3.0\\system.xml.xpath.xdocument.4.3.0.nupkg.sha512",
+    "C:\\Users\\Masood Talebi\\.nuget\\packages\\zarinpal\\2.0.5\\zarinpal.2.0.5.nupkg.sha512",
+    "C:\\Users\\Masood Talebi\\.nuget\\packages\\zarinpalsandbox\\2.0.4\\zarinpalsandbox.2.0.4.nupkg.sha512"
   ],
   "logs": []
 }

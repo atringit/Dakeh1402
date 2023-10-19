@@ -372,7 +372,7 @@ namespace Dake.Controllers
             var test = _context.StaticPrices;
             Progress = 0;
             PaymentRequest _paymentRequest = new PaymentRequest();
-            long discountprice = 0;
+            int discountprice = 0;
             bool havediscount = false;
             int _code = 0;
             try
@@ -437,7 +437,7 @@ namespace Dake.Controllers
                     }
                     else
                     {
-                        discountprice = _IDiscountCode.GetDiscountPrice(_code);
+                        discountprice = (int)_IDiscountCode.GetDiscountPrice(_code);
                         havediscount = true;
                     }
                 }
@@ -633,7 +633,7 @@ namespace Dake.Controllers
                     }
                 }
                 Factor factor = new Factor();
-                factor.state = State.IsPay;
+                factor.state = State.NotPay;
                 factor.userId = user.id;
                 factor.createDatePersian = PersianCalendarDate.PersianCalendarResult(DateTime.Now);
                 factor.noticeId = notice.id;
@@ -655,18 +655,31 @@ namespace Dake.Controllers
                         _context.Add(request);
                         _context.SaveChanges();
 
-                        var res = PaymentHelper.SendRequest(request.Id, havediscount ? totalp - discountprice : totalp, "http://dakeh.net/Purshe/VerifyRequest");
+                        //var res = PaymentHelper.SendRequest(request.Id, havediscount ? totalp - discountprice : totalp, "http://dakeh.net/Purshe/VerifyRequest");
+                        int total = havediscount ? totalp - discountprice : totalp;
+                       
+                        var pyment = new ZarinpalSandbox.Payment( total);
+                        var res = pyment.PaymentRequest($"پرداخت فاکتور شمارهی {factor.id}", "https://localhost:5001/Payments/Index/" + factor.id, null , user.cellphone);
                         if (res != null && res.Result != null)
-                        {
-                            if (res.Result.ResCode == "0")
+                        {   
+                            if (res.Result.Status == 100)
                             {
-                                if (havediscount)
-                                {
-                                    _IDiscountCode.AddUserToDiscountCode(user.id, _code);
-                                }
-                                Response.Redirect(string.Format("{0}/Purchase/Index?token={1}", PaymentHelper.PurchasePage, res.Result.Token));
+                                return Redirect("https://sandbox.zarinpal.com/pg/StartPay/" + res.Result.Authority);
+                                //var n = _context.Notices.FirstOrDefault(p => p.id == notice.id);
+                                //n.isPaid = true;
+                                //_context.Notices.Update(n);
+                                //_context.SaveChanges();
+                                //if (havediscount)
+                                //{
+                                //    _IDiscountCode.AddUserToDiscountCode(user.id, _code);
+                                //}
+                                //Response.Redirect(string.Format("{0}/Purchase/Index?token={1}", PaymentHelper.PurchasePage, res.Result.Token));
                             }
-                            ViewBag.Message = res.Result.Description;
+                            else
+                            {
+                                ViewBag.Message = "امکان اتصال به درگاه بانکی وجود ندارد";
+                            }
+                            
                             return View("Profile2"); ;
                         }
                     }
