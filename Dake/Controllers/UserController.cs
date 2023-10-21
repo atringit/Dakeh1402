@@ -407,5 +407,18 @@ namespace Dake.Controllers
             public string OldPassword { get; set; }
             public string NewPassword { get; set; }
         }
+        [HttpPost("SetUserPrice/{id}/{price}")]
+        public IActionResult SetUserPrice(int id,int price)
+        {
+            var user = _context.Users.Find(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            user.Invite_Price = price;
+            _context.Users.Update(user);
+            _context.SaveChanges();
+            return Ok();
+        }
     }
 }

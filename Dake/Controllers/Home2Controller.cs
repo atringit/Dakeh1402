@@ -678,12 +678,12 @@ namespace Dake.Controllers
                         int totall = havediscount ? totalp - discountprice : totalp;
                         
                         var pyment = new Zarinpal.Payment("ceb42ad1-9eb4-47ec-acec-4b45c9135122", total);
-                        var res = pyment.PaymentRequest($"پرداخت فاکتور شمارهی {factor.id}", "https://localhost:5001/Payments/Index/" + factor.id, null , user.cellphone);
+                        var res = pyment.PaymentRequest($"پرداخت فاکتور شمارهی {factor.id}", "https://dakeh.net/Payments/Index/" + factor.id, null , user.cellphone);
                         if (res != null && res.Result != null)
                         {   
                             if (res.Result.Status == 100)
                             {
-                                return Redirect("https://sandbox.zarinpal.com/pg/StartPay/" + res.Result.Authority);
+                                return Redirect("https://zarinpal.com/pg/StartPay/" + res.Result.Authority);
                                 //var n = _context.Notices.FirstOrDefault(p => p.id == notice.id);
                                 //n.isPaid = true;
                                 //_context.Notices.Update(n);

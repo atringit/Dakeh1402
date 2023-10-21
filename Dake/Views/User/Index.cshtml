@@ -64,6 +64,7 @@
 							<th>استان</th>
 							@*<th>نمایش</th>*@
 							<th>امکانات</th>
+							<th>کیف پول</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -74,13 +75,13 @@
 								@{
 									if (item.province == null)
 									{
-										<td class="text-danger">بدون منطقه</td>
+												<td class="text-danger">بدون منطقه</td>
 
 									}
 
 									else
 									{
-										<td>@item.province.city.name</td>
+												<td>@item.province.city.name</td>
 									}
 								}
 								<td>
@@ -99,6 +100,7 @@
 											<a onclick="Blocked(@item.id)" class="btn btn-danger ">افزودن به لیست سیاه</a>
 
 										}
+									
 									@*<button class="btn btn-default" onclick="AssignButtonClicked(this)" data-assigned-id="@item.id" data-toggle="modal" data-target="#smsmodal">ارسال پیامک</button>*@
 
 
@@ -111,6 +113,10 @@
 											<a onclick="Active(@item.id)" class="btn btn-default">فعال کردن</a>
 
 										}*@
+								</td>
+								<td>
+									<input id="Invite_Price_@item.id" value="@item.Invite_Price" type="text">
+									<button onclick="SetInvite_Pric(@item.id)">ثبت</button>
 								</td>
 							</tr>
 						}
@@ -169,8 +175,32 @@
 
     {
 	<script>
-		
-		
+		function SetInvite_Pric(id) {
+			const price = document.getElementById("Invite_Price_" + id).value
+			$.ajax({
+				url: "/SetUserPrice/" + id + "/" + price,
+				method: "POST",
+					success: function (data) {
+						if (data == "Done") {
+
+							swal({
+								title: '!  موفقیت آمیز',
+								text: "با موفقیت تغییر اعمال شد",
+								type: 'success',
+								buttonsStyling: false,
+								confirmButtonClass: 'btn btn-sm btn-light',
+								background: 'rgba(0, 0, 0, 0.96)',
+								timer: 1500
+							})
+							location.reload();
+						}
+
+					},
+			error: function () {
+				alert("Ajax call failed");
+			}
+			});
+		}
 		function Active(event) {
 
 			$.ajax({

@@ -317,15 +317,28 @@ C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcorea
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\assets\scss\_fonts.scss
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\assets\scss\_media.scss
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\assets\scss\_mixins.scss
+C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\Banner\0129292.png
+C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\Banner\0367e56.png
+C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\Banner\1214921.png
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\Banner\140e2df.jpg
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\Banner\19744e2.png
+C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\Banner\1ce6820.png
+C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\Banner\3389a77.png
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\Banner\396a216.png
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\Banner\3e3dde2.png
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\Banner\4c82914.png
+C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\Banner\76336a8.png
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\Banner\7679e13.jpg
+C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\Banner\78c47bc.png
+C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\Banner\897513b.png
+C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\Banner\9559d3d.png
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\Banner\9dbe3ac.png
+C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\Banner\abe0a61.png
+C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\Banner\b861d35.png
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\Banner\download (1).webp
+C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\Banner\eab4bf7.png
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\Banner\f3ab15e.png
+C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\Banner\fa233d1.png
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\css\PersianDatePicker.min.css
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\css\site.css
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\css\site.min.css
@@ -698,6 +711,7 @@ C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcorea
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\Scripts\Common.js
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\appsettings.Development.json
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\appsettings.json
+C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\libman.json
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\Dake.dll
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\Dake.runtimeconfig.json
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\Dake.pdb
@@ -820,6 +834,8 @@ C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcorea
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\System.Text.Encoding.CodePages.dll
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\System.Text.Encodings.Web.dll
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\System.Text.Json.dll
+C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\Zarinpal.dll
+C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\ZarinpalSandbox.dll
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\runtimes\unix\lib\netcoreapp2.1\Microsoft.Data.SqlClient.dll
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\runtimes\win\lib\netcoreapp2.1\Microsoft.Data.SqlClient.dll
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\runtimes\win-arm\native\Microsoft.Data.SqlClient.SNI.dll
