@@ -325,3 +325,4 @@ C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Debug\netcoreapp
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Debug\netcoreapp2.1\Dake.csproj.CopyComplete
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\bin\Debug\netcoreapp2.1\libman.json
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Debug\netcoreapp2.1\Razor\Views\Payments\Index.cshtml.g.cs
+C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Debug\netcoreapp2.1\Razor\Views\Payments\Banner.cshtml.g.cs

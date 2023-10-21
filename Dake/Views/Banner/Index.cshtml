@@ -22,6 +22,7 @@
                             <th>عکس</th>
                             <th>نام و نام خانوادگی</th>
                             <th>لینک</th>
+                            <th>وضعیت پرداخت</th>
                             <th>شماره تلفن</th>
                             <th>وضعیت</th>
                             <th>#</th>
@@ -40,6 +41,14 @@
                                     <td><img height="100" width="100" src="@item?.BannerImage?.FirstOrDefault()?.FileLocation" /></td>
                                     <td>@item.title</td>
                                     <td>@item.Link</td>
+                                    <td>
+                                        @if (item.isPaid == true)
+                                        {
+                                            <span style="color:green">پرداخت شده</span>
+                                        }else{
+                                            <span style="color:red">پرداخت نشده</span>
+                                        }
+                                    </td>
                                     <td>@item.user.cellphone</td>
                                     <td>
                                          @if (item.adminConfirmStatus == Dake.Models.EnumStatus.Accept)

@@ -91,10 +91,12 @@ namespace Dake.Service
             {
                 if (dto.Id > 0)
                 {
+                    dto.isPaid = false;
                     _context.Banner.Update(dto);
                 }
                 else
                 {
+                    dto.isPaid = false;
                     await _context.Banner.AddAsync(dto);
                 }
 

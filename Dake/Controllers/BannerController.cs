@@ -4,6 +4,7 @@ using Dake.Service;
 using Dake.Service.Common;
 using Dake.Service.Interface;
 using Dake.Utility;
+using DocumentFormat.OpenXml.Drawing;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -102,23 +103,42 @@ namespace Dake.Controllers
 
                 if (bres.IsSuccess)
                 {
-
+                    int total = 10000;
+                    if (user.Invite_Price != 0)
+                    {
+                        if (user.Invite_Price > total)
+                        {
+                            int in_price = user.Invite_Price - total;
+                            total = 0;
+                            user.Invite_Price = in_price;
+                            _context.Users.Update(user);
+                            _context.SaveChanges();
+                        }
+                        else
+                        {
+                            total = total - user.Invite_Price;
+                            user.Invite_Price = 0;
+                            _context.Users.Update(user);
+                            _context.SaveChanges();
+                        }
+                    }
 
                     var bannerId = long.Parse(bres.Data.ToString());
 
                     Factor factor = new Factor();
-                    factor.state = State.IsPay;
+                    factor.state = State.NotPay;
                     factor.userId = banner.user.id;
                     factor.createDatePersian = PersianCalendarDate.PersianCalendarResult(DateTime.Now);
                     factor.factorKind = FactorKind.Add;
                     factor.bannerId = bannerId;
-              
+                    factor.totalPrice = total;
+                    
                     //factor.totalPrice = havediscount ? category.registerPrice - discountprice : category.registerPrice;
                     _context.Factors.Add(factor);
                     //Payment
                     await _context.SaveChangesAsync();
 
-                    if (factor.totalPrice >= 10000)
+                    if (factor.totalPrice >= 0)
                     {
                         try
                         {
@@ -127,25 +147,36 @@ namespace Dake.Controllers
                             request.NoticeId = bannerId;
                             request.UserId = user.id;
                             request.pursheType = pursheType.RegisterNotice;
-                            
+
                             _context.Add(request);
                             _context.SaveChanges();
 
-                            var res = PaymentHelper.SendRequest(request.Id, 0, "http://dakeh.net/Purshe/VerifyRequest");
+
+                            
+
+                            var pyment = new Zarinpal.Payment("ceb42ad1-9eb4-47ec-acec-4b45c9135122", total);
+                            var res = pyment.PaymentRequest($"پرداخت فاکتور شمارهی {factor.id}", "https://localhost:5001/Payments/Banner/" + factor.id, null, user.cellphone);
                             if (res != null && res.Result != null)
                             {
-                                if (res.Result.ResCode == "0")
+                                if (res.Result.Status == 100)
                                 {
-                                    bool havediscount = false;
-                                    if (havediscount)
-                                    {
-                                        int _code = 0;
-                                        _IDiscountCode.AddUserToDiscountCode(user.id, _code);
-                                    }
-                                    Response.Redirect(string.Format("{0}/Purchase/Index?token={1}", PaymentHelper.PurchasePage, res.Result.Token));
+                                    var redi ="https://sandbox.zarinpal.com/pg/StartPay/" + res.Result.Authority;
+
+                                    //var n = _context.Notices.FirstOrDefault(p => p.id == notice.id);
+                                    //n.isPaid = true;
+                                    //_context.Notices.Update(n);
+                                    //_context.SaveChanges();
+                                    //if (havediscount)
+                                    //{
+                                    //    _IDiscountCode.AddUserToDiscountCode(user.id, _code);
+                                    //}
+                                    //Response.Redirect(string.Format("{0}/Purchase/Index?token={1}", PaymentHelper.PurchasePage, res.Result.Token));
+                                    return Ok(redi);
                                 }
-                                ViewBag.Message = res.Result.Description;
-                                return View("CreateBanner"); ;
+                                else
+                                {
+                                    ViewBag.Message = "امکان اتصال به درگاه بانکی وجود ندارد";
+                                }
                             }
                         }
                         catch (Exception)
@@ -154,12 +185,13 @@ namespace Dake.Controllers
                         }
                     }
                 }
+                return Ok();
             }
             catch (Exception ex)
             {
                 return Content(ex.Message);
             }
-            return Ok();
+            
         }
 
 

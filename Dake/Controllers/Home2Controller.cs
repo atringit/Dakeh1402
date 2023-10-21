@@ -632,13 +632,32 @@ namespace Dake.Controllers
                         totalp = (int)item.registerPrice;
                     }
                 }
+                int total = 10000;
+                if (user.Invite_Price != 0)
+                {
+                    if (user.Invite_Price > total)
+                    {
+                        int in_price = user.Invite_Price - total;
+                        total = 0;
+                        user.Invite_Price = in_price;
+                        _context.Users.Update(user);
+                        _context.SaveChanges();
+                    }
+                    else
+                    {
+                        total = total - user.Invite_Price;
+                        user.Invite_Price = 0;
+                        _context.Users.Update(user);
+                        _context.SaveChanges();
+                    }
+                }
                 Factor factor = new Factor();
                 factor.state = State.NotPay;
                 factor.userId = user.id;
                 factor.createDatePersian = PersianCalendarDate.PersianCalendarResult(DateTime.Now);
                 factor.noticeId = notice.id;
                 factor.factorKind = FactorKind.Add;
-                factor.totalPrice = havediscount ? totalp - discountprice : totalp;
+                factor.totalPrice = total;
                 _context.Factors.Add(factor);
                 //Payment
                 await _context.SaveChangesAsync();
@@ -656,9 +675,9 @@ namespace Dake.Controllers
                         _context.SaveChanges();
 
                         //var res = PaymentHelper.SendRequest(request.Id, havediscount ? totalp - discountprice : totalp, "http://dakeh.net/Purshe/VerifyRequest");
-                        int total = havediscount ? totalp - discountprice : totalp;
-                       
-                        var pyment = new ZarinpalSandbox.Payment( total);
+                        int totall = havediscount ? totalp - discountprice : totalp;
+                        
+                        var pyment = new Zarinpal.Payment("ceb42ad1-9eb4-47ec-acec-4b45c9135122", total);
                         var res = pyment.PaymentRequest($"پرداخت فاکتور شمارهی {factor.id}", "https://localhost:5001/Payments/Index/" + factor.id, null , user.cellphone);
                         if (res != null && res.Result != null)
                         {   

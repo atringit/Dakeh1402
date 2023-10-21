@@ -19,7 +19,7 @@ namespace Dake.Controllers
                 string Authority = HttpContext.Request.Query["Authority"].ToString();
                 var factor = _context.Factors.Find(id);
                 int total = (int)factor.totalPrice;
-                var pay = new ZarinpalSandbox.Payment(total);
+                var pay = new Zarinpal.Payment("ceb42ad1-9eb4-47ec-acec-4b45c9135122", total);
                 var res = pay.Verification(Authority).Result;
                 if(res.Status == 100)
                 {
@@ -27,6 +27,31 @@ namespace Dake.Controllers
                     var notice = _context.Notices.Find(factor.noticeId);
                     notice.isPaid = true;
                     _context.Notices.Update(notice);
+                    _context.SaveChanges();
+                    _context.Factors.Update(factor);
+                    _context.SaveChanges();
+                    ViewBag.code = res.RefId;
+                    return View();
+                }
+            }
+            return NotFound();
+        }
+        public IActionResult Banner(int id)
+        {
+            if (HttpContext.Request.Query["Status"] != "" && HttpContext.Request.Query["Status"].ToString().ToLower() == "ok"
+                && HttpContext.Request.Query["Authority"] != "")
+            {
+                string Authority = HttpContext.Request.Query["Authority"].ToString();
+                var factor = _context.Factors.Find(id);
+                int total = (int)factor.totalPrice;
+                var pay = new Zarinpal.Payment("ceb42ad1-9eb4-47ec-acec-4b45c9135122", total);
+                var res = pay.Verification(Authority).Result;
+                if (res.Status == 100)
+                {
+                    factor.state = State.IsPay;
+                    var banner = _context.Banner.Find(factor.bannerId);
+                    banner.isPaid = true;
+                    _context.Banner.Update(banner);
                     _context.SaveChanges();
                     _context.Factors.Update(factor);
                     _context.SaveChanges();
