@@ -167,6 +167,7 @@ namespace Dake.Controllers
             //resultEspacial = _context.Notices.Where(x => x.isSpecial).OrderByDescending(x => x.expireDateIsespacial);
             if (catId == null)
                 notices = notices.ToList();
+
             else
             {
                 List<int> cats = new List<int>();
@@ -276,7 +277,7 @@ namespace Dake.Controllers
             }
             foreach(var item in firstHomeViewModel.notices)
             {
-                if (item.image == "")
+                if (item.image == "" && item.movie == null)
                 {
                     item.image = "/images/empyty.png";
                 }
