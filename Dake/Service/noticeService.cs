@@ -3,6 +3,7 @@ using Dake.Models;
 using Dake.Service.Interface;
 using Dake.Utility;
 using Dake.ViewModel;
+using DocumentFormat.OpenXml.Office.CustomUI;
 using Microsoft.EntityFrameworkCore;
 using PagedList.Core;
 using System;
@@ -140,6 +141,7 @@ namespace Dake.Service
                 x.title,
                 x.description,
                 x.image,
+                x.movie,
                 x.category.name,
                 x.categoryId,
                 x.isEmergency,
