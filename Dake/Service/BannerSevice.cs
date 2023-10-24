@@ -124,9 +124,21 @@ namespace Dake.Service
         {
             Banner banner = await _context.Banner.SingleOrDefaultAsync(p => p.Id == id);
             await DeleteBannerImages(banner.Id);
-
+            var factor = await _context.Factors.FirstOrDefaultAsync(p=>p.bannerId == banner.Id);
+            
+			if (factor != null)
+            {
+				_context.Factors.Remove(factor);
+				await _context.SaveChangesAsync();
+				var facitem = _context.FactorItems.FirstOrDefault(p => p.FactorId == factor.id);
+				if (facitem != null)
+				{
+					_context.FactorItems.Remove(facitem);
+					await _context.SaveChangesAsync();
+				}
+			}
             _context.Banner.Remove(banner);
-            await _context.SaveChangesAsync();
+            var res = await _context.SaveChangesAsync();
         }
 
 
@@ -219,10 +231,11 @@ namespace Dake.Service
 
             foreach (var bannerImage in bannerImages)
             {
-                var filePath = Path.Combine(_environment.WebRootPath, "Banner/", bannerImage.Name);
-                if (File.Exists(filePath))
+                var filepach = _environment.WebRootPath + bannerImage.FileLocation;
+                
+                if (File.Exists(filepach))
                 {
-                    File.Delete(filePath);
+                    File.Delete(filepach);
                 }
                 _context.BannerImage.Remove(bannerImage);
                 await _context.SaveChangesAsync();
