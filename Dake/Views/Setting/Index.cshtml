@@ -125,6 +125,14 @@
 										<br>
 									<button class="btn btn-default" onclick="Freevideocompressorapk()">ثبت</button>
 									</div>
+									<br>
+									<br>
+								<label class="control-label">اپلیکیشن ادیت و ساخت بنر اندروید</label>
+									<div style="border: 2px solid #cdcdcd;border-radius: 5px;padding: 10px;">
+								<input id="appbannerapk" name="File" type="file">
+									<br>
+								<button class="btn btn-default" onclick="appbanner()">ثبت</button>
+									</div>
 
 								</div>
 							</div>
@@ -205,6 +213,29 @@ function Freevideocompressorapk() {
     }
   });
 }
+		function appbanner() {
+			var fileInput = document.getElementById('appbannerapk');
+			var file = fileInput.files[0];
+
+			var formData = new FormData();
+			formData.append('file', file);
+
+			$.ajax({
+				url: '/AppManager/AddAppBanner',
+				type: 'POST',
+				data: formData,
+				processData: false,
+				contentType: false,
+				success: function (response) {
+					console.log(response);
+					alert("با موفقیت انجام شد")
+				},
+				error: function (xhr, status, error) {
+					console.log(error);
+					alert("مشکلی در ثبت پیش امد")
+				}
+			});
+		}
 	</script>
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     

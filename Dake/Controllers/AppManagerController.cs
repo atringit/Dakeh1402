@@ -103,6 +103,36 @@ namespace Dake.Controllers
 
             }
         }
+        [HttpPost]
+		public IActionResult AddAppBanner([FromForm] IFormFile File)
+		{
+			if (File == null)
+			{
+				return NotFound();
+			}
+			else
+			{
+				var namefile = "BannerApp" + System.IO.Path.GetExtension(File.FileName).ToLower();
+				string e = System.IO.Path.GetExtension(namefile);
 
-    }
+				if (e == ".apk")
+				{
+					//var filepach = $"Apps/DakehApp";
+					string filePath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Apps", "Banner", namefile);
+
+					using (var stream = new FileStream(filePath, FileMode.Create))
+					{
+						File.CopyToAsync(stream);
+					}
+					return Ok();
+				}
+				else
+				{
+					return BadRequest();
+				}
+
+			}
+		}
+
+	}
 }

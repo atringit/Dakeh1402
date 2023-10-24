@@ -2345,6 +2345,7 @@
     <Folder Include="wwwroot\AdminContent\AdminLogin\" />
     <Folder Include="wwwroot\Apps\DakehApp\" />
     <Folder Include="wwwroot\Apps\Freevideocompressor\" />
+    <Folder Include="wwwroot\Apps\Banner\" />
     <Folder Include="wwwroot\images\Advisor\" />
     <Folder Include="wwwroot\images\Category\" />
     <Folder Include="wwwroot\images\Information\" />
