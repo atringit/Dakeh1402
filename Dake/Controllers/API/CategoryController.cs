@@ -84,6 +84,17 @@ namespace Dake.Controllers.API
 
 
         }
+        [HttpGet("GetParentCategory/{id}")]
+        public IActionResult GetParentCategory(int id)
+        {
+            var cat = _context.Categorys.Where(p => p.parentCategoryId == id);
+            if (cat == null)
+            {
+                return NotFound();
+            }
+            return Ok(cat);
+            
+        }
 
         
        
