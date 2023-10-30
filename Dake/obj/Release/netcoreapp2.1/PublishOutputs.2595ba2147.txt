@@ -253,6 +253,7 @@ C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcorea
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\Applications\dakeh.apk
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\Applications\Freevideocompressor-[dakeh.net].zip
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\Applications\VideoCompressorFastCompressVideoPhoto_v1.2.02_DakehNET.apk
+C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\Apps\Banner\BannerApp.apk
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\Apps\DakehApp\dakeh.apk
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\Apps\Freevideocompressor\app1.apk
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\Apps\Freevideocompressor\Freevideocompressor-[dakeh.net].zip
