@@ -400,6 +400,8 @@ namespace Dake.Migrations
 
                     b.Property<DateTime>("date");
 
+                    b.Property<bool>("isrep");
+
                     b.Property<int?>("receiverid");
 
                     b.Property<int>("rreceiverId");
@@ -697,7 +699,7 @@ namespace Dake.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Invite_Link")
-                        .HasMaxLength(55);
+                        .HasMaxLength(100);
 
                     b.Property<int>("Invite_Price");
 

@@ -191,6 +191,12 @@
                             <a href="/ReportNotice/Index"><i class="fa fa-fw fa-fax"></i> گزارش خرابی</a>
                         </li>
                      }
+                    @if (User.Identity.Name.Substring(11).Contains("B4"))
+                    {
+                        <li>
+                            <a href="/ReportMessage/Index"><i class="fa fa-fw fa-fax"></i> گزارش تخلف</a>
+                        </li>
+                    }
 
 
                     <li>

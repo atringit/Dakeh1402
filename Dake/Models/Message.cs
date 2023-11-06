@@ -11,7 +11,8 @@ namespace Dake.Models
 		public DateTime date { get; set;  }
 		public int rreceiverId { get; set;  }
 		public int ssenderId { get; set;  }
-		public MessageType MessageType { get; set; }
+        public string isrep { get; set; }
+        public MessageType MessageType { get; set; }
 
 		public int ItemId { get; set; }
 

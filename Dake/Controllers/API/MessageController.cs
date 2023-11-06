@@ -18,6 +18,7 @@ using FirebaseAdmin.Messaging;
 using FirebaseAdmin;
 using Google.Apis.Auth.OAuth2;
 using Microsoft.Extensions.Hosting;
+using Microsoft.EntityFrameworkCore;
 
 namespace Dake.Controllers.API
 {
@@ -35,7 +36,7 @@ namespace Dake.Controllers.API
             _context = context;
             _pushNotificationService = pushNotificationService;
         }
-
+        
         [HttpPost("AddMessage")]
         public async Task<IActionResult> AddMessage([FromBody] AddMessageDto dto)
         {
@@ -368,6 +369,23 @@ namespace Dake.Controllers.API
 
 
             return result;
+        }
+        [HttpPost("RepMessgae/{id}")]
+        public async Task<IActionResult> RepMessgae(int id)
+        {
+            string Token
+                = HttpContext.Request?.Headers["Token"];
+            var user = _context.Users.Where(p => p.token == Token).FirstOrDefault();
+            IQueryable<Models.Message> m = _context.Messages;
+            var message = m.FirstOrDefault(p=> p.id == id);
+            if (message.rreceiverId != user.id)
+            {
+                return BadRequest();
+            }
+            message.isrep = "YES";
+            _context.Messages.Update(message);
+            await _context.SaveChangesAsync();
+            return Ok("گذارش ثبت شد");
         }
     }
 
