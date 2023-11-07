@@ -163,6 +163,63 @@ namespace Dake.Service
             }).ToList();
             return new { data = res, resEspacial, totalCount = result.Count() };
         }
+        public object GetNoticesWeb(int page = 1, int pagesize = 10)
+        {
+            
+            List<Notice> result = new List<Notice>();
+            List<Notice> result2 = new List<Notice>();
+            List<Notice> resultEspacial = new List<Notice>();
+
+            
+                result = _context.Notices.Include(s => s.category).Where(x => x.expireDate >= DateTime.Now && x.adminConfirmStatus == EnumStatus.Accept && x.deletedAt == null).OrderByDescending(u => u.createDate).ToList();
+
+                resultEspacial = _context.Notices.Where(x => x.expireDate >= DateTime.Now && x.adminConfirmStatus == EnumStatus.Accept && x.isSpecial && x.expireDateIsespacial >= DateTime.Now && x.deletedAt == null).OrderByDescending(x => x.expireDateIsespacial).ToList();
+
+            foreach (var item in result)
+            {
+                if (string.IsNullOrEmpty(item.image) == false && item.image.Contains("/images/Category/"))
+                {
+                    GetNoticeCategoryImage getNoticeCategoryImage = new GetNoticeCategoryImage(_context);
+                    item.image = getNoticeCategoryImage.getCategoryImage(item.categoryId);
+                }
+            }
+            foreach (var item in resultEspacial)
+            {
+                if (string.IsNullOrEmpty(item.image) == false && item.image.Contains("/images/Category/"))
+                {
+                    GetNoticeCategoryImage getNoticeCategoryImage = new GetNoticeCategoryImage(_context);
+                    item.image = getNoticeCategoryImage.getCategoryImage(item.categoryId);
+                }
+            }
+            // int skip = (page - 1) * pagesize;
+            var res = result.Skip((page - 1) * pagesize).Take(pagesize).Select(x => new
+            {
+                x.id,
+                x.title,
+                x.description,
+                x.image,
+                x.movie,
+                x.category.name,
+                x.categoryId,
+                x.isEmergency,
+                x.price,
+                x.lastPrice
+            }).ToList();
+
+            var resEspacial = resultEspacial.Skip((page - 1) * pagesize).Take(pagesize).Select(x => new
+            {
+                x.id,
+                x.title,
+                x.description,
+                x.image,
+                x.category.name,
+                x.movie,
+                x.isSpecial,
+                x.price,
+                x.lastPrice
+            }).ToList();
+            return new { data = res, resEspacial, totalCount = result.Count() };
+        }
 
         public object GetAllEspacialNotices(string Token, long noticeId, string scroll)
         {

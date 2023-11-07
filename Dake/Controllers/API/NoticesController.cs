@@ -44,6 +44,20 @@ namespace Dake.Controllers.API
             _notice = notice;
             _DiscountCode = discountCode;
         }
+        [HttpGet("GetNoticesWeb/{page}/{pagesize}")]
+        public async Task<object> GetNoticesWeb([FromRoute] int page, [FromRoute] int pagesize)
+        {
+            var notices = _context.Notices.Where(p => p.isEmergency && p.ExpireDateEmergency < DateTime.Now && p.deletedAt == null).ToList();
+            foreach (var notice in notices)
+            {
+                notice.isEmergency = false;
+                await _context.SaveChangesAsync();
+            }
+            var data = _notice.GetNoticesWeb(page, pagesize);
+            //var _data = _context.Notices.Skip(page).Take(pagesize).ToList();
+
+            return data;
+        }
         [HttpGet("{page}/{pagesize}")]
         public async Task<object> GetNotices([FromRoute] int page, [FromRoute] int pagesize)
         {
@@ -98,7 +112,171 @@ namespace Dake.Controllers.API
             return new { status = 1, title = "تمدید آگهی", message = "تمدید آگهی با موفقیت انجام شد." };
 
         }
+        [HttpGet("GetNoticeWeb/{id}")]
+        public async Task<object> GetNoticeWeb([FromRoute] int id)
+        {
+            var notices = _context.Notices.Where(p => p.isEmergency && p.ExpireDateEmergency < DateTime.Now && p.deletedAt == null).ToList();
+            foreach (var notice in notices)
+            {
+                notice.isEmergency = false;
+                await _context.SaveChangesAsync();
+            }
 
+            //public object GetNotice([FromRoute] long id)
+            //{
+            var settings = _context.Settings.FirstOrDefault();
+
+            NoticeViewModelHelper noticeViewModels = new NoticeViewModelHelper();
+
+            string Token = HttpContext.Request?.Headers["Token"];
+            var user = _context.Users.Where(p => p.token == Token).FirstOrDefault();
+            int uid = 0;
+            if (user != null)
+                uid = user.id;
+            var Notice = _context.Notices.Where(n => n.id == id && n.deletedAt == null).FirstOrDefault();
+            if (Notice.userId != uid && uid != 0)
+            {
+                if (!_context.VisitNoticeUsers.Any(x => x.noticeId == id && x.userId == uid))
+                {
+                    _context.VisitNoticeUsers.Add(new VisitNoticeUser { noticeId = id, userId = uid });
+                    Notice.countView = Notice.countView + 1;
+                    var VisitNotice = _context.VisitNotices.LastOrDefault(x => x.noticeId == id);
+
+                    if (VisitNotice == null)
+                    {
+                        //Notice.countView = Notice.countView + 1;
+                        _context.VisitNotices.Add(new VisitNotice { countView = 1, date = DateTime.Now, noticeId = id });
+                    }
+                    else
+                    {
+                        if (DateTime.Compare(VisitNotice.date.Date, DateTime.Now.Date) == 0)
+                            VisitNotice.countView++;
+                        else
+                            _context.VisitNotices.Add(new VisitNotice { countView = 1, date = DateTime.Now, noticeId = id });
+                    }
+                }
+
+            }
+            _context.SaveChanges();
+            if (Notice == null)
+            {
+                return NotFound();
+            }
+            var images = _context.NoticeImages.Where(p => p.noticeId == id).Select(p => new { p.image }).ToList();
+            bool IsFavorit = false;
+            var userFavorite = _context.UserFavorites.FirstOrDefault(x => x.userId == uid && x.noticeId == id);
+
+            if (userFavorite != null)
+                IsFavorit = true;
+
+
+
+
+            var noticeitem = _context.Notices.Select(p => new
+            {
+                p.id,
+                p.link,
+                p.countView,
+                IsFavorit,
+                areaName = p.area.name,
+                provinceName = p.province.name,
+                cityName = p.city.name,
+                p.code,
+                createDate = DateToUnix(p.createDate),
+                p.description,
+                categoryName = p.category.name,
+                user = p.user.cellphone,
+                userId = p.user.id,
+                p.title,
+                p.price,
+                p.movie,
+                p.image,
+                p.isSpecial,
+                p.lastPrice,
+                dailyVisit = DailyVisit(p.id),
+                p.categoryId,
+                p.areaId,
+                p.cityId,
+                p.provinceId,
+                p.isEmergency,
+                p.expireDate,
+                p.expireDateIsespacial,
+                p.ExpireDateEmergency
+            }).FirstOrDefault(x => x.id == id);
+
+
+
+            if (noticeitem != null)
+            {
+                var PriceItem = GetParent(noticeitem.categoryId);
+                noticeViewModels.id = noticeitem.id;
+                noticeViewModels.link = noticeitem.link;
+                noticeViewModels.IsFavorit = noticeitem.IsFavorit;
+                noticeViewModels.countView = noticeitem.countView;
+                noticeViewModels.areaName = noticeitem.areaName;
+                noticeViewModels.provinceName = noticeitem.provinceName;
+                noticeViewModels.cityName = noticeitem.cityName;
+                noticeViewModels.code = noticeitem.code;
+                noticeViewModels.createDate = noticeitem.createDate;
+                noticeViewModels.description = noticeitem.description;
+                noticeViewModels.categoryName = noticeitem.categoryName;
+                noticeViewModels.user = noticeitem.user;
+                noticeViewModels.title = noticeitem.title;
+                noticeViewModels.price = noticeitem.price;
+                noticeViewModels.movie = noticeitem.movie;
+
+                noticeViewModels.isEmergency = noticeitem.isEmergency;
+
+
+                if (string.IsNullOrEmpty(noticeitem.image) == false && noticeitem.image.Contains("/images/Category/"))
+                {
+                    noticeViewModels.image = getCategoryImage(noticeitem.categoryId);
+                }
+                else
+                {
+                    noticeViewModels.image = noticeitem.image;
+                }
+                noticeViewModels.isSpecial = noticeitem.isSpecial;
+                noticeViewModels.lastPrice = noticeitem.lastPrice;
+                noticeViewModels.dailyVisit = noticeitem.dailyVisit;
+                noticeViewModels.categoryId = noticeitem.categoryId;
+                noticeViewModels.areaId = noticeitem.areaId;
+                noticeViewModels.cityId = noticeitem.cityId;
+                noticeViewModels.provinceId = noticeitem.provinceId;
+                noticeViewModels.espacialPrice = PriceItem.espacialPrice;
+                noticeViewModels.espacialPriceCode = PriceItem.espacialPriceCode;
+                noticeViewModels.emergencyPrice = PriceItem.emergencyPrice;
+                noticeViewModels.emergencyPriceCode = PriceItem.emergencyPriceCode;
+                noticeViewModels.expirePrice = PriceItem.expirePrice;
+                noticeViewModels.expirePriceCode = PriceItem.expirePriceCode;
+                noticeViewModels.ladderPrice = PriceItem.ladderPrice;
+                noticeViewModels.ladderPriceCode = PriceItem.ladderPriceCode;
+                noticeViewModels.registerPrice = PriceItem.registerPrice;
+                noticeViewModels.registerPriceCode = PriceItem.registerPriceCode;
+                noticeViewModels.userId = noticeitem.userId;
+
+                noticeViewModels.LeftDayToExpire = PersianCalendarDate.LeftDayToExpire(noticeitem.expireDate);
+                noticeViewModels.LeftDayToExpireEmergency = PersianCalendarDate.LeftDayToExpire(noticeitem.ExpireDateEmergency);
+                noticeViewModels.LeftDayToExpireSpecial = PersianCalendarDate.LeftDayToExpire(noticeitem.expireDateIsespacial);
+
+            }
+            if (settings != null && settings.showPriceForCars == false)
+            {
+                if (IsDrivingPrice(noticeitem.categoryId))
+                {
+                    noticeViewModels.price = 0;
+                    noticeViewModels.lastPrice = 0;
+                }
+            }
+            if(user != null)
+            {
+                if (user.IsBlocked)
+                {
+                    noticeViewModels.user = "حساب شما مسدود است و قادر به دیدن شماره تماس اگهی گذار نیستید.";
+                }
+            }
+            return new { Notice = noticeViewModels, images };
+        }
         [HttpGet("{id}")]
         public async Task<object> GetNotice([FromRoute] int id)
         {

@@ -12,7 +12,7 @@ namespace Dake.Service.Interface
     public interface INotice
     {
         PagedList<Notice> GetNotices(string currentUser, int? filtercategory,int pageId = 1, string filterTitle = "");
-
+        object GetNoticesWeb(int page = 1, int pagesize = 10);
         object GetNotices(int page = 1);
         //object GetNoticesByCatAndType(NoticeSearch NoticeSearch);
         object GetLastNotices(int page = 1);
