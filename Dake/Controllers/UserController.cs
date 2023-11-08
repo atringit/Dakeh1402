@@ -260,7 +260,7 @@ namespace Dake.Controllers
                 return NotFound();
             }
 
-            var user = _context.Users.Where(p=>p.isCodeConfirmed == true || p.isCodeConfirmed == false).FirstOrDefault(p=>p.id == id);
+            var user = _context.Users.Include(s => s.province.city).IgnoreQueryFilters().Where(x => x.role.RoleNameEn == "Member" && x.deleted == null).FirstOrDefault(p=>p.id == id);
             if (user == null)
             {
                 return NotFound();
@@ -273,7 +273,7 @@ namespace Dake.Controllers
         {
             try
             {
-                var user = _context.Users.FirstOrDefault(x => x.id == id);
+                var user = _context.Users.Include(s => s.province.city).IgnoreQueryFilters().Where(x => x.role.RoleNameEn == "Member" && x.deleted == null).FirstOrDefault(p => p.id == id);
                 user.deleted = "delete";
                 _context.Users.Update(user);
                 _context.SaveChanges();
@@ -410,7 +410,7 @@ namespace Dake.Controllers
         [HttpPost("SetUserPrice/{id}/{price}")]
         public IActionResult SetUserPrice(int id,int price)
         {
-            var user = _context.Users.Find(id);
+            var user = _context.Users.Include(s => s.province.city).IgnoreQueryFilters().Where(x => x.role.RoleNameEn == "Member" && x.deleted == null).FirstOrDefault(p => p.id == id);
             if (user == null)
             {
                 return NotFound();
