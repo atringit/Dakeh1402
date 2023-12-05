@@ -36,9 +36,15 @@ namespace Dake.Controllers.API
             _IDiscountCode = discountCode;
             _repository = repository;
         }
-   
-            
-
+        [HttpPost("VeiwBanner")]
+        public async Task<IActionResult> VeiwBanner([FromForm]int id)
+        {
+            var banner = await _context.Banner.FirstOrDefaultAsync(p => p.Id == id);
+            banner.countView = banner.countView + 1;
+            _context.Banner.Update(banner);
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
 
         [HttpPost("{id}")]
         public object ExtendedNotice([FromRoute]long id)
@@ -217,10 +223,14 @@ namespace Dake.Controllers.API
 
             try
             {
-                string Token = HttpContext.Request?.Headers["Token"];
+				var banners = _context.Banner.Where(p => p.expireDate >= DateTime.Now && p.adminConfirmStatus == EnumStatus.Accept).Include(p => p.BannerImage).ToList();
+				if (banners.Count >= 10)
+				{
+					return BadRequest("فعلا ظرفیت تکمیل است");
+				}
+				string Token = HttpContext.Request?.Headers["Token"];
                 var user = _context.Users.FirstOrDefault(x => x.token == Token);
                  banner.user = user;
-                
                 var bres = _repository.AddBanner(banner, files).Result;
 
                 if (bres.IsSuccess)
@@ -534,7 +544,7 @@ namespace Dake.Controllers.API
         [HttpGet("GetAllBanner")]
         public IActionResult GetAllBanner()
         {
-            var banners = _context.Banner.Where(p => p.adminConfirmStatus == EnumStatus.Accept).Include(p=>p.BannerImage).OrderByDescending(u => u.createDate);
+            var banners = _context.Banner.Where(p => p.expireDate >= DateTime.Now && p.adminConfirmStatus == EnumStatus.Accept).Include(p=>p.BannerImage).OrderByDescending(u => u.createDate);
            
             if(banners == null)
             {

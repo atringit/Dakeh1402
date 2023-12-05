@@ -20,6 +20,10 @@
                     {
                         <p style="position: absolute;left: 20px;top:10px;color: green;">تایید شده</p>
                     }
+                    else if(item.adminConfirmStatus == EnumStatus.Pending)
+                    {
+                        <p style="position: absolute;left: 20px;top:10px;color: yellow;">در انتظار تایید</p>
+                    }
                     else
                     {
                         <p style="position: absolute;left: 20px;top:10px;color: red;">تایید نشده</p>
@@ -28,6 +32,7 @@
                     </div>
                     <div class="card-body">
                     <img style="width: 95%;height: 180px;border-radius: 5px;" src="@item.BannerImage.FirstOrDefault()?.FileLocation" alt="">
+                    <h4>تعداد بازدید : @item.countView</h4>
                     </div>
                     
             </div>

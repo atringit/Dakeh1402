@@ -67,7 +67,8 @@
                             if (ii == 0)
                             {
                                 <div class="carousel-item active">
-                                    <a href="@banner.Link" target="_blank"><img class="d-block w-100"
+                                    <a onclick="ViewBanner(@banner.Id)" href="@banner.Link" target="_blank">
+                                        <img class="d-block w-100"
                                             style="height: 225px;margin: auto;border-radius: 5px;"
                                             src="https://dakeh.net/@banner?.BannerImage?.FirstOrDefault()?.FileLocation"
                                             alt="First slide"></a>
@@ -226,3 +227,16 @@
         </div>
     </div>
 }
+        <script>
+        function ViewBanner(Id) {
+            $.ajax({
+            url: "/VeiwBanner",
+                method: "POST",
+                data: { id: Id },
+                success: function (data) {
+                },
+                error: function () {
+                }
+            });
+            }
+        </script>

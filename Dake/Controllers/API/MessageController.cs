@@ -19,6 +19,7 @@ using FirebaseAdmin;
 using Google.Apis.Auth.OAuth2;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
+using DocumentFormat.OpenXml.Office2010.Excel;
 
 namespace Dake.Controllers.API
 {
@@ -41,9 +42,10 @@ namespace Dake.Controllers.API
         public async Task<IActionResult> AddMessage([FromBody] AddMessageDto dto)
         {
             
-            var user = _context.Users.FirstOrDefault(u => u.cellphone == dto.phone && u.deleted == null);
-            var receiver = _context.Users.FirstOrDefault(u => u.cellphone == dto.receiverPhone && u.deleted == null);
-
+            var user = _context.Users.Include(s => s.province.city).IgnoreQueryFilters().Where(x => x.role.RoleNameEn == "Member" && x.deleted == null).FirstOrDefault(p => p.cellphone == dto.phone);
+            var receiver = _context.Users.Include(s => s.province.city).IgnoreQueryFilters().Where(x => x.role.RoleNameEn == "Member" && x.deleted == null).FirstOrDefault(p => p.cellphone == dto.receiverPhone);
+            if(user == null || receiver == null)
+                return NotFound("کاربر در سامانه وجود ندارد");
             Models.Message message = new Models.Message()
             {
                 text = dto.text,
@@ -87,7 +89,9 @@ namespace Dake.Controllers.API
                             Credential = GoogleCredential.FromFile("./../Dake/wwwroot/FireBase/key.json"),
                         });
                     }
-                    var userr = _context.Users.FirstOrDefault(p => p.id == notice.userId);
+                    var userr = _context.Users.Include(s => s.province.city).IgnoreQueryFilters().Where(x => x.role.RoleNameEn == "Member" && x.deleted == null).FirstOrDefault(p => p.id == notice.userId);
+                    if (userr == null)
+                        return NotFound("کاربر در سامانه وجود ندارد");
                     var messagee = new FirebaseAdmin.Messaging.Message()
                     {
                         Notification = new Notification

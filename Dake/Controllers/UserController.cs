@@ -23,6 +23,8 @@ using Dake.Service.Common;
 using Jumbula.WebSite.Utilities.Captcha;
 using DocumentFormat.OpenXml.Bibliography;
 using System.Data;
+using DocumentFormat.OpenXml.Office2010.Excel;
+using Microsoft.AspNetCore.Hosting;
 
 namespace Dake.Controllers
 {
@@ -271,8 +273,23 @@ namespace Dake.Controllers
         [HttpPost]
         public IActionResult Delete(int id)
         {
+
             try
             {
+                using (var transaction = _context.Database.BeginTransaction())
+                {
+                    IQueryable<Notice> noticeitems = _context.Notices.Where(s => s.userId == id);
+                    foreach (var noticeitem in noticeitems)
+                    {
+                        noticeitem.adminConfirmStatus = EnumStatus.NotAccept;
+                        _context.Notices.Update(noticeitem);
+                        
+                    }
+                    _context.SaveChanges();
+                    transaction.Commit();
+                }
+                    
+
                 var user = _context.Users.Include(s => s.province.city).IgnoreQueryFilters().Where(x => x.role.RoleNameEn == "Member" && x.deleted == null).FirstOrDefault(p => p.id == id);
                 user.deleted = "delete";
                 _context.Users.Update(user);

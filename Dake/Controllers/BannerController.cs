@@ -8,6 +8,7 @@ using DocumentFormat.OpenXml.Drawing;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -84,7 +85,14 @@ namespace Dake.Controllers
            
             try
             {
-                if (files == null || banner.Link == null || banner.title == null)
+                var banners = _context.Banner.Where(p => p.expireDate >= DateTime.Now && p.adminConfirmStatus == EnumStatus.Accept).Include(p => p.BannerImage).ToList();
+                if (banners.Count >= 10)
+                {
+					return BadRequest("فعلا ظرفیت تکمیل است");
+				}
+				var setting = _context.Settings.FirstOrDefault();
+                banner.expireDate = DateTime.Now.AddDays(Convert.ToInt64(setting.countExpireDate));
+				if (files == null || banner.Link == null || banner.title == null)
                 {
                     return BadRequest("پر کردن تمامی فیلد ها و ثبت تصویر اجباری است");
                 }

@@ -89,7 +89,9 @@ namespace Dake.Service
             long id = 0;
             try
             {
-                if (dto.Id > 0)
+                var setting = _context.Settings.FirstOrDefault();
+                dto.expireDate = DateTime.Now.AddDays(Convert.ToInt64(setting.countExpireDate));
+				if (dto.Id > 0)
                 {
                     dto.isPaid = false;
                     _context.Banner.Update(dto);

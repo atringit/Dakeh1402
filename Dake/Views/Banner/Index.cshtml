@@ -25,6 +25,7 @@
                             <th>وضعیت پرداخت</th>
                             <th>شماره تلفن</th>
                             <th>وضعیت</th>
+                            <th>بازدید</th>
                             <th>#</th>
                         </tr>
                     </thead>
@@ -63,6 +64,9 @@
                                 {
                                     <span style="color:yellow">در انتظار تایید</span>
                                 }
+                                    </td>
+                                    <td>
+                                        @item.countView
                                     </td>
                                     <td>
                                         <button class="btn btn-primary fa fa-edit"
@@ -206,9 +210,8 @@
             $("#ModalDeleteConfirm").modal('hide');
             $("#showLoading").show();
             $.ajax({
-                url: "/Banner/DeleteBanner",
-                data: { id: id },
-                type: "Delete",
+                url: "/Banner2/RemoveBanner/"+id,
+                type: "POST",
                 success: function (data) {
                     Reset();
                     setTimeout(() => {
