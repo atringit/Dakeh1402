@@ -74,7 +74,7 @@ using Dake.Models;
             EndContext();
             BeginContext(303, 65, false);
 #line 11 "C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\Views\Information\Edit.cshtml"
-           Write(Html.ValidationSummary(false, "", new { @class = "text-danger" }));
+Write(Html.ValidationSummary(false, "", new { @class = "text-danger" }));
 
 #line default
 #line hidden
@@ -83,12 +83,12 @@ using Dake.Models;
             WriteLiteral("\r\n\t\t\t\t<div >\r\n\t\t\t\t\t");
             EndContext();
             BeginContext(387, 2348, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "10f3e90a1f9ba573b4a4541e7c2ce5e584923fcf73288adfa071d9037170180c6483", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "10f3e90a1f9ba573b4a4541e7c2ce5e584923fcf73288adfa071d9037170180c6472", async() => {
                 BeginContext(455, 39, true);
                 WriteLiteral("\r\n\t\t\t\t\t\t<div class=\"box-body\">\r\n\t\t\t\t\t\t\t");
                 EndContext();
                 BeginContext(494, 66, false);
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("div", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "10f3e90a1f9ba573b4a4541e7c2ce5e584923fcf73288adfa071d9037170180c6943", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("div", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "10f3e90a1f9ba573b4a4541e7c2ce5e584923fcf73288adfa071d9037170180c6932", async() => {
                 }
                 );
                 __Microsoft_AspNetCore_Mvc_TagHelpers_ValidationSummaryTagHelper = CreateTagHelper<global::Microsoft.AspNetCore.Mvc.TagHelpers.ValidationSummaryTagHelper>();
@@ -139,7 +139,7 @@ WriteAttributeValue("", 778, Model.title, 778, 12, false);
                 EndContext();
                 BeginContext(1084, 17, false);
 #line 26 "C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\Views\Information\Edit.cshtml"
-                                                                                                                                                     Write(Model.description);
+                                                                                                                          Write(Model.description);
 
 #line default
 #line hidden
@@ -173,7 +173,7 @@ WriteAttributeValue("", 778, Model.title, 778, 12, false);
 ");
                 EndContext();
 #line 51 "C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\Views\Information\Edit.cshtml"
-                                         foreach (var item in Model.InformationMedias)
+           foreach (var item in Model.InformationMedias)
 										{
 
 #line default
@@ -210,7 +210,7 @@ WriteAttributeValue("", 2405, item.Id, 2405, 8, false);
                 WriteLiteral("\t\t\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t\t<div class=\"col-md-6\">\r\n\t\t\t\t\t\t\t\t<div class=\"form-group\">\r\n\t\t\t\t\t\t\t\t\t<input type=\"submit\" value=\"تایید\" class=\"btn btn-default\" />\r\n\t\t\t\t\t\t\t\t\t");
                 EndContext();
                 BeginContext(2626, 55, false);
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "10f3e90a1f9ba573b4a4541e7c2ce5e584923fcf73288adfa071d9037170180c13674", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "10f3e90a1f9ba573b4a4541e7c2ce5e584923fcf73288adfa071d9037170180c13606", async() => {
                     BeginContext(2671, 6, true);
                     WriteLiteral("بازگشت");
                     EndContext();

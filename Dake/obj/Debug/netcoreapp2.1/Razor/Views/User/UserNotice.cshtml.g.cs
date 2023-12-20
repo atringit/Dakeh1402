@@ -57,7 +57,7 @@ using Dake.Models;
             EndContext();
             BeginContext(171, 16, false);
 #line 6 "C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\Views\User\UserNotice.cshtml"
-                                          Write(ViewBag.UserName);
+                              Write(ViewBag.UserName);
 
 #line default
 #line hidden
@@ -90,7 +90,7 @@ using Dake.Models;
 ");
             EndContext();
 #line 30 "C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\Views\User\UserNotice.cshtml"
-                         if(Model!=null){
+       if(Model!=null){
 							int row = 1;
 							foreach (var item in Model)
 							{
@@ -102,7 +102,7 @@ using Dake.Models;
             EndContext();
             BeginContext(947, 3, false);
 #line 35 "C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\Views\User\UserNotice.cshtml"
-                                   Write(row);
+        Write(row);
 
 #line default
 #line hidden
@@ -112,7 +112,7 @@ using Dake.Models;
             EndContext();
             BeginContext(971, 10, false);
 #line 36 "C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\Views\User\UserNotice.cshtml"
-                                   Write(item.title);
+        Write(item.title);
 
 #line default
 #line hidden
@@ -122,7 +122,7 @@ using Dake.Models;
             EndContext();
             BeginContext(1002, 18, false);
 #line 37 "C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\Views\User\UserNotice.cshtml"
-                                   Write(item.category.name);
+        Write(item.category.name);
 
 #line default
 #line hidden
@@ -132,7 +132,7 @@ using Dake.Models;
             EndContext();
             BeginContext(1041, 14, false);
 #line 38 "C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\Views\User\UserNotice.cshtml"
-                                   Write(item.city.name);
+        Write(item.city.name);
 
 #line default
 #line hidden
@@ -142,7 +142,7 @@ using Dake.Models;
             EndContext();
             BeginContext(1076, 9, false);
 #line 39 "C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\Views\User\UserNotice.cshtml"
-                                   Write(item.code);
+        Write(item.code);
 
 #line default
 #line hidden
@@ -152,7 +152,7 @@ using Dake.Models;
             EndContext();
             BeginContext(1106, 14, false);
 #line 40 "C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\Views\User\UserNotice.cshtml"
-                                   Write(item.countView);
+        Write(item.countView);
 
 #line default
 #line hidden
@@ -162,7 +162,7 @@ using Dake.Models;
             EndContext();
             BeginContext(1141, 16, false);
 #line 41 "C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\Views\User\UserNotice.cshtml"
-                                   Write(item.description);
+        Write(item.description);
 
 #line default
 #line hidden
@@ -172,7 +172,7 @@ using Dake.Models;
             EndContext();
             BeginContext(1178, 10, false);
 #line 42 "C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\Views\User\UserNotice.cshtml"
-                                   Write(item.price);
+        Write(item.price);
 
 #line default
 #line hidden
@@ -181,7 +181,7 @@ using Dake.Models;
             WriteLiteral("</td>\r\n\t\t\t\t\t\t\t\t\t<td>");
             EndContext();
             BeginContext(1208, 71, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "4230164af0ea3d42ecef801456f7ad366cd8e90a9a9b1bbddb11448547b307c88461", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "4230164af0ea3d42ecef801456f7ad366cd8e90a9a9b1bbddb11448547b307c88215", async() => {
                 BeginContext(1269, 6, true);
                 WriteLiteral("مشاهده");
                 EndContext();
@@ -211,7 +211,7 @@ AddHtmlAttributeValue("", 1234, item.id, 1234, 8, false);
             EndContext();
             BeginContext(1300, 71, false);
 #line 44 "C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\Views\User\UserNotice.cshtml"
-                                   Write(Dake.Utility.PersianCalendarDate.PersianCalendarResult(item.createDate));
+        Write(Dake.Utility.PersianCalendarDate.PersianCalendarResult(item.createDate));
 
 #line default
 #line hidden
@@ -221,7 +221,7 @@ AddHtmlAttributeValue("", 1234, item.id, 1234, 8, false);
             EndContext();
             BeginContext(1392, 71, false);
 #line 45 "C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\Views\User\UserNotice.cshtml"
-                                   Write(Dake.Utility.PersianCalendarDate.PersianCalendarResult(item.expireDate));
+        Write(Dake.Utility.PersianCalendarDate.PersianCalendarResult(item.expireDate));
 
 #line default
 #line hidden

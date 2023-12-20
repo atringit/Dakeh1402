@@ -79,7 +79,7 @@ using Dake.Models;
 ");
             EndContext();
 #line 24 "C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\Views\Information\Index.cshtml"
-                         foreach (var item in Model)
+       foreach (var item in Model)
 						{
 
 #line default
@@ -191,7 +191,7 @@ WriteAttributeValue("", 1454, item.id, 1454, 8, false);
             WriteLiteral("\t\t\t\t\t\t\t<li>\r\n\t\t\t\t\t\t\t\t");
             EndContext();
             BeginContext(2141, 71, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("pager", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.SelfClosing, "5a003b09c38068007605c3172fff66db0a533842a154f7913261504089290e579325", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("pager", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.SelfClosing, "5a003b09c38068007605c3172fff66db0a533842a154f7913261504089290e579307", async() => {
             }
             );
             __PagedList_Core_Mvc_PagerTagHelper = CreateTagHelper<global::PagedList.Core.Mvc.PagerTagHelper>();
@@ -222,7 +222,7 @@ __PagedList_Core_Mvc_PagerTagHelper.List = Model;
                 WriteLiteral("\r\n");
                 EndContext();
 #line 76 "C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\Views\Information\Index.cshtml"
-      await Html.RenderPartialAsync("_ValidationScriptsPartial");
+   await Html.RenderPartialAsync("_ValidationScriptsPartial");
 
 #line default
 #line hidden

@@ -203,7 +203,7 @@ WriteAttributeValue(" ", 557, ViewBag.CityName, 558, 17, false);
             WriteLiteral("\r\n");
             EndContext();
 #line 37 "C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\Views\Home2\Index.cshtml"
-                             foreach (var item in (IEnumerable<Category>)ViewData["category2"])
+        foreach (var item in (IEnumerable<Category>)ViewData["category2"])
 							{
 
 #line default
@@ -212,10 +212,10 @@ WriteAttributeValue(" ", 557, ViewBag.CityName, 558, 17, false);
             WriteLiteral("\t\t\t\t\t\t\t\t");
             EndContext();
             BeginContext(1647, 44, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "35c55bbd46763422668a0d1cc15406d5372b769bdba9f3df3371f2cd350eabcc12083", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "35c55bbd46763422668a0d1cc15406d5372b769bdba9f3df3371f2cd350eabcc12062", async() => {
                 BeginContext(1673, 9, false);
 #line 39 "C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\Views\Home2\Index.cshtml"
-                                                    Write(item.name);
+                            Write(item.name);
 
 #line default
 #line hidden
@@ -226,7 +226,7 @@ WriteAttributeValue(" ", 557, ViewBag.CityName, 558, 17, false);
             __tagHelperExecutionContext.Add(__Microsoft_AspNetCore_Mvc_TagHelpers_OptionTagHelper);
             BeginWriteTagHelperAttribute();
 #line 39 "C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\Views\Home2\Index.cshtml"
-                                   WriteLiteral(item.id);
+           WriteLiteral(item.id);
 
 #line default
 #line hidden
@@ -253,7 +253,7 @@ WriteAttributeValue(" ", 557, ViewBag.CityName, 558, 17, false);
             WriteLiteral("\t\t\t\t\t\t</select>\r\n\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"col-md-3\">\r\n\t\t\t\t\t<div class=\"form-group\" id=\"subcatcontent\">\r\n\t\t\t\t\t\t<select class=\"form-control selectpicker\" title=\"دسته بندی را انتخاب کنید\" id=\"categoryId3\" name=\"categoryId3\">\r\n\t\t\t\t\t\t\t");
             EndContext();
             BeginContext(1951, 40, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "35c55bbd46763422668a0d1cc15406d5372b769bdba9f3df3371f2cd350eabcc14624", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "35c55bbd46763422668a0d1cc15406d5372b769bdba9f3df3371f2cd350eabcc14555", async() => {
                 BeginContext(1968, 14, true);
                 WriteLiteral("انتخاب زیردسته");
                 EndContext();

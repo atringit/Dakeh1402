@@ -113,7 +113,7 @@ using Dake.Models;
             EndContext();
             BeginContext(1176, 7, false);
 #line 29 "C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\Views\ReportNotice\Index.cshtml"
-                                                                                                 Write(item.id);
+                                                                   Write(item.id);
 
 #line default
 #line hidden
@@ -133,7 +133,7 @@ WriteAttributeValue("", 1261, item.noticeId, 1261, 14, false);
             WriteLiteral(" class=\"btn btn-default\">مشاهده اگهی</a>\r\n\t\t\t\t\t\t\t\t\t\t");
             EndContext();
             BeginContext(1328, 89, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "d85e5163b2b9fc0983641945d9b3aef0a3704be63ba42bff0046fed0ac7fe3088439", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "d85e5163b2b9fc0983641945d9b3aef0a3704be63ba42bff0046fed0ac7fe3088409", async() => {
                 BeginContext(1401, 12, true);
                 WriteLiteral("مشاهده چت ها");
                 EndContext();
@@ -149,7 +149,7 @@ WriteAttributeValue("", 1261, item.noticeId, 1261, 14, false);
             }
             BeginWriteTagHelperAttribute();
 #line 31 "C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\Views\ReportNotice\Index.cshtml"
-                                                                   WriteLiteral(item.id);
+                                     WriteLiteral(item.id);
 
 #line default
 #line hidden
@@ -190,7 +190,7 @@ WriteAttributeValue("", 1261, item.noticeId, 1261, 14, false);
                                     ");
             EndContext();
             BeginContext(2079, 72, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("pager", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.SelfClosing, "d85e5163b2b9fc0983641945d9b3aef0a3704be63ba42bff0046fed0ac7fe30811845", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("pager", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.SelfClosing, "d85e5163b2b9fc0983641945d9b3aef0a3704be63ba42bff0046fed0ac7fe30811785", async() => {
             }
             );
             __PagedList_Core_Mvc_PagerTagHelper = CreateTagHelper<global::PagedList.Core.Mvc.PagerTagHelper>();
@@ -243,7 +243,7 @@ __PagedList_Core_Mvc_PagerTagHelper.List = Model;
             WriteLiteral(" />\r\n                    <div class=\"modal-body\">\r\n                        ");
             EndContext();
             BeginContext(3022, 66, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("div", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "d85e5163b2b9fc0983641945d9b3aef0a3704be63ba42bff0046fed0ac7fe30814737", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("div", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "d85e5163b2b9fc0983641945d9b3aef0a3704be63ba42bff0046fed0ac7fe30814677", async() => {
             }
             );
             __Microsoft_AspNetCore_Mvc_TagHelpers_ValidationSummaryTagHelper = CreateTagHelper<global::Microsoft.AspNetCore.Mvc.TagHelpers.ValidationSummaryTagHelper>();

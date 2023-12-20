@@ -363,7 +363,7 @@ WriteAttributeValue("", 3319, Html.DisplayFor(model => model.image), 3319, 38, f
             WriteLiteral(" />\r\n\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t</div>\r\n");
             EndContext();
 #line 95 "C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\Views\Notice\Details.cshtml"
-                         foreach (var item in ViewBag.allImage)
+       foreach (var item in ViewBag.allImage)
 						{
 
 #line default
@@ -400,7 +400,7 @@ WriteAttributeValue("", 3874, Html.DisplayFor(model => model.movie), 3874, 38, f
             WriteLiteral(" type=\"video/mp4\">\r\n\t\t\t\t\t\t\t\t</video>\r\n\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t<div class=\"col-md-6\">\r\n\t\t\t\t\t\t\t<div class=\"form-group\">\r\n\t\t\t\t\t\t\t\t<label class=\"control-label\">وضعیت آگهی</label>\r\n");
             EndContext();
 #line 116 "C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\Views\Notice\Details.cshtml"
-                                 if (Model.adminConfirmStatus == EnumStatus.Accept)
+         if (Model.adminConfirmStatus == EnumStatus.Accept)
 								{
 
 #line default
@@ -414,7 +414,7 @@ WriteAttributeValue("", 3874, Html.DisplayFor(model => model.movie), 3874, 38, f
 #line default
 #line hidden
 #line 120 "C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\Views\Notice\Details.cshtml"
-                                 if (Model.adminConfirmStatus == EnumStatus.Pending)
+         if (Model.adminConfirmStatus == EnumStatus.Pending)
 								{
 
 #line default
@@ -428,7 +428,7 @@ WriteAttributeValue("", 3874, Html.DisplayFor(model => model.movie), 3874, 38, f
 #line default
 #line hidden
 #line 124 "C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\Views\Notice\Details.cshtml"
-                                 if (Model.adminConfirmStatus == EnumStatus.NotAccept)
+         if (Model.adminConfirmStatus == EnumStatus.NotAccept)
 								{
 
 #line default
@@ -457,7 +457,7 @@ WriteAttributeValue("", 4708, Model.id, 4708, 9, false);
             WriteLiteral(" class=\"btn btn-default\">رد/تایید کردن</a>\r\n\t\t\t\t\t\t\t\t");
             EndContext();
             BeginContext(4771, 80, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "106f1bb7aa71fdba63aa9ee5797d845f080a709fc5ba0b4971b3aa44a71090b233337", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "106f1bb7aa71fdba63aa9ee5797d845f080a709fc5ba0b4971b3aa44a71090b233247", async() => {
                 BeginContext(4843, 4, true);
                 WriteLiteral("چارت");
                 EndContext();
@@ -473,7 +473,7 @@ WriteAttributeValue("", 4708, Model.id, 4708, 9, false);
             }
             BeginWriteTagHelperAttribute();
 #line 133 "C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\Views\Notice\Details.cshtml"
-                                                         WriteLiteral(Model.id);
+                                 WriteLiteral(Model.id);
 
 #line default
 #line hidden
@@ -493,7 +493,7 @@ WriteAttributeValue("", 4708, Model.id, 4708, 9, false);
             WriteLiteral("\r\n\t\t\t\t\t\t\t\t");
             EndContext();
             BeginContext(4861, 55, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "106f1bb7aa71fdba63aa9ee5797d845f080a709fc5ba0b4971b3aa44a71090b235816", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "106f1bb7aa71fdba63aa9ee5797d845f080a709fc5ba0b4971b3aa44a71090b235702", async() => {
                 BeginContext(4906, 6, true);
                 WriteLiteral("بازگشت");
                 EndContext();
@@ -535,7 +535,7 @@ WriteAttributeValue("", 4708, Model.id, 4708, 9, false);
 				");
             EndContext();
             BeginContext(5348, 2548, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "106f1bb7aa71fdba63aa9ee5797d845f080a709fc5ba0b4971b3aa44a71090b237751", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "106f1bb7aa71fdba63aa9ee5797d845f080a709fc5ba0b4971b3aa44a71090b237637", async() => {
                 BeginContext(5373, 45, true);
                 WriteLiteral("\r\n\t\t\t\t\t<input type=\"hidden\" id=\"id\" name=\"id\"");
                 EndContext();
@@ -545,7 +545,7 @@ WriteAttributeValue("", 4708, Model.id, 4708, 9, false);
                 WriteLiteral(" />\r\n\t\t\t\t\t<div class=\"modal-body\">\r\n\t\t\t\t\t\t");
                 EndContext();
                 BeginContext(5469, 66, false);
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("div", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "106f1bb7aa71fdba63aa9ee5797d845f080a709fc5ba0b4971b3aa44a71090b238505", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("div", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "106f1bb7aa71fdba63aa9ee5797d845f080a709fc5ba0b4971b3aa44a71090b238391", async() => {
                 }
                 );
                 __Microsoft_AspNetCore_Mvc_TagHelpers_ValidationSummaryTagHelper = CreateTagHelper<global::Microsoft.AspNetCore.Mvc.TagHelpers.ValidationSummaryTagHelper>();
@@ -569,7 +569,7 @@ __Microsoft_AspNetCore_Mvc_TagHelpers_ValidationSummaryTagHelper.ValidationSumma
                 WriteLiteral("\r\n\t\t\t\t\t\t<input id=\"titleNotice\" class=\"form-control\" name=\"titleNotice\" disabled />\r\n\t\t\t\t\t\t<div class=\"form-group\">\r\n\t\t\t\t\t\t\t<label>وضعیت</label>\r\n\t\t\t\t\t\t\t<select class=\"form-control\" id=\"adminConfirmStatus\" name=\"adminConfirmStatus\">\r\n");
                 EndContext();
 #line 161 "C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\Views\Notice\Details.cshtml"
-                                 foreach (var item in Enum.GetValues(typeof(Dake.Models.EnumStatus)))
+         foreach (var item in Enum.GetValues(typeof(Dake.Models.EnumStatus)))
 								{
 									if (item.Equals(Dake.Models.EnumStatus.Pending))
 									{
@@ -580,7 +580,7 @@ __Microsoft_AspNetCore_Mvc_TagHelpers_ValidationSummaryTagHelper.ValidationSumma
                 WriteLiteral("\t\t\t\t\t\t\t\t\t\t");
                 EndContext();
                 BeginContext(5940, 53, false);
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "106f1bb7aa71fdba63aa9ee5797d845f080a709fc5ba0b4971b3aa44a71090b241056", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "106f1bb7aa71fdba63aa9ee5797d845f080a709fc5ba0b4971b3aa44a71090b240918", async() => {
                     BeginContext(5967, 17, true);
                     WriteLiteral(" در انتظار تایید ");
                     EndContext();
@@ -615,7 +615,7 @@ __Microsoft_AspNetCore_Mvc_TagHelpers_ValidationSummaryTagHelper.ValidationSumma
                 WriteLiteral("\t\t\t\t\t\t\t\t\t\t");
                 EndContext();
                 BeginContext(6087, 47, false);
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "106f1bb7aa71fdba63aa9ee5797d845f080a709fc5ba0b4971b3aa44a71090b243227", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "106f1bb7aa71fdba63aa9ee5797d845f080a709fc5ba0b4971b3aa44a71090b243089", async() => {
                     BeginContext(6114, 11, true);
                     WriteLiteral(" تایید شده ");
                     EndContext();
@@ -650,7 +650,7 @@ __Microsoft_AspNetCore_Mvc_TagHelpers_ValidationSummaryTagHelper.ValidationSumma
                 WriteLiteral("\t\t\t\t\t\t\t\t\t\t");
                 EndContext();
                 BeginContext(6231, 48, false);
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "106f1bb7aa71fdba63aa9ee5797d845f080a709fc5ba0b4971b3aa44a71090b245395", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "106f1bb7aa71fdba63aa9ee5797d845f080a709fc5ba0b4971b3aa44a71090b245257", async() => {
                     BeginContext(6258, 12, true);
                     WriteLiteral(" تایید نشده ");
                     EndContext();
@@ -690,7 +690,7 @@ __Microsoft_AspNetCore_Mvc_TagHelpers_ValidationSummaryTagHelper.ValidationSumma
 								");
                 EndContext();
                 BeginContext(6574, 67, false);
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "106f1bb7aa71fdba63aa9ee5797d845f080a709fc5ba0b4971b3aa44a71090b247766", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "106f1bb7aa71fdba63aa9ee5797d845f080a709fc5ba0b4971b3aa44a71090b247628", async() => {
                     BeginContext(6601, 31, true);
                     WriteLiteral("دسته بندی آگهی شما اشتباه است. ");
                     EndContext();
@@ -715,7 +715,7 @@ __Microsoft_AspNetCore_Mvc_TagHelpers_ValidationSummaryTagHelper.ValidationSumma
                 WriteLiteral("\r\n\t\t\t\t\t\t\t\t");
                 EndContext();
                 BeginContext(6651, 108, false);
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "106f1bb7aa71fdba63aa9ee5797d845f080a709fc5ba0b4971b3aa44a71090b249622", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "106f1bb7aa71fdba63aa9ee5797d845f080a709fc5ba0b4971b3aa44a71090b249484", async() => {
                     BeginContext(6678, 72, true);
                     WriteLiteral("فیلم آگهی شما دارای جهت نامناسب یا کیفیت پایین یا محتوای ضد اخلاقی است. ");
                     EndContext();
@@ -740,7 +740,7 @@ __Microsoft_AspNetCore_Mvc_TagHelpers_ValidationSummaryTagHelper.ValidationSumma
                 WriteLiteral("\r\n\t\t\t\t\t\t\t\t");
                 EndContext();
                 BeginContext(6769, 102, false);
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "106f1bb7aa71fdba63aa9ee5797d845f080a709fc5ba0b4971b3aa44a71090b251519", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "106f1bb7aa71fdba63aa9ee5797d845f080a709fc5ba0b4971b3aa44a71090b251381", async() => {
                     BeginContext(6796, 66, true);
                     WriteLiteral("متن نوشته شده را مجدد بررسی و جمله بندی ها و کلمات را اصلاح کنید. ");
                     EndContext();
@@ -765,7 +765,7 @@ __Microsoft_AspNetCore_Mvc_TagHelpers_ValidationSummaryTagHelper.ValidationSumma
                 WriteLiteral("\r\n\t\t\t\t\t\t\t\t");
                 EndContext();
                 BeginContext(6881, 96, false);
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "106f1bb7aa71fdba63aa9ee5797d845f080a709fc5ba0b4971b3aa44a71090b253409", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "106f1bb7aa71fdba63aa9ee5797d845f080a709fc5ba0b4971b3aa44a71090b253271", async() => {
                     BeginContext(6908, 60, true);
                     WriteLiteral("تصاویر آگهی شما مناسب نیست(مراجعه به قوانین و مقررات سایت). ");
                     EndContext();
@@ -790,7 +790,7 @@ __Microsoft_AspNetCore_Mvc_TagHelpers_ValidationSummaryTagHelper.ValidationSumma
                 WriteLiteral("\r\n\t\t\t\t\t\t\t\t");
                 EndContext();
                 BeginContext(6987, 95, false);
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "106f1bb7aa71fdba63aa9ee5797d845f080a709fc5ba0b4971b3aa44a71090b255295", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "106f1bb7aa71fdba63aa9ee5797d845f080a709fc5ba0b4971b3aa44a71090b255157", async() => {
                     BeginContext(7014, 59, true);
                     WriteLiteral("لینک درج شده دارای محتوای خلاف قوانین فضای مجازی کشور است. ");
                     EndContext();

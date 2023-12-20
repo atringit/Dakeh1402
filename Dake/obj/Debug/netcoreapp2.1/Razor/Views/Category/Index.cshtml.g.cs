@@ -116,7 +116,7 @@ using Dake.Models;
             EndContext();
             BeginContext(1233, 16, false);
 #line 27 "C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\Views\Category\Index.cshtml"
-                                                                                    Write(TempData["Done"]);
+                                                                     Write(TempData["Done"]);
 
 #line default
 #line hidden
@@ -179,7 +179,7 @@ WriteAttributeValue("", 2119, item.id, 2119, 8, false);
             WriteLiteral(" class=\"btn btn-default\">زیر دسته</a>\r\n                                    ");
             EndContext();
             BeginContext(2203, 78, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "95225f5ea8c9d51ac09384d6766c334555d28af98639ecb5255f8f818a5ae71b12533", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "95225f5ea8c9d51ac09384d6766c334555d28af98639ecb5255f8f818a5ae71b12518", async() => {
                 BeginContext(2274, 3, true);
                 WriteLiteral("حذف");
                 EndContext();
@@ -237,7 +237,7 @@ WriteAttributeValue("", 2119, item.id, 2119, 8, false);
                                 ");
             EndContext();
             BeginContext(2934, 68, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("pager", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.SelfClosing, "95225f5ea8c9d51ac09384d6766c334555d28af98639ecb5255f8f818a5ae71b15900", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("pager", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.SelfClosing, "95225f5ea8c9d51ac09384d6766c334555d28af98639ecb5255f8f818a5ae71b15885", async() => {
             }
             );
             __PagedList_Core_Mvc_PagerTagHelper = CreateTagHelper<global::PagedList.Core.Mvc.PagerTagHelper>();
@@ -284,7 +284,7 @@ __PagedList_Core_Mvc_PagerTagHelper.List = Model;
             ");
             EndContext();
             BeginContext(3624, 7263, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "95225f5ea8c9d51ac09384d6766c334555d28af98639ecb5255f8f818a5ae71b18324", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "95225f5ea8c9d51ac09384d6766c334555d28af98639ecb5255f8f818a5ae71b18309", async() => {
                 BeginContext(3678, 56, true);
                 WriteLiteral("\r\n                <input type=\"hidden\" id=\"id\" name=\"id\"");
                 EndContext();
@@ -294,7 +294,7 @@ __PagedList_Core_Mvc_PagerTagHelper.List = Model;
                 WriteLiteral(" />\r\n                <div class=\"modal-body\">\r\n                    ");
                 EndContext();
                 BeginContext(3810, 66, false);
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("div", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "95225f5ea8c9d51ac09384d6766c334555d28af98639ecb5255f8f818a5ae71b19098", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("div", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "95225f5ea8c9d51ac09384d6766c334555d28af98639ecb5255f8f818a5ae71b19083", async() => {
                 }
                 );
                 __Microsoft_AspNetCore_Mvc_TagHelpers_ValidationSummaryTagHelper = CreateTagHelper<global::Microsoft.AspNetCore.Mvc.TagHelpers.ValidationSummaryTagHelper>();
@@ -344,7 +344,7 @@ __Microsoft_AspNetCore_Mvc_TagHelpers_ValidationSummaryTagHelper.ValidationSumma
                             ");
                 EndContext();
                 BeginContext(5211, 38, false);
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "95225f5ea8c9d51ac09384d6766c334555d28af98639ecb5255f8f818a5ae71b22758", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "95225f5ea8c9d51ac09384d6766c334555d28af98639ecb5255f8f818a5ae71b22743", async() => {
                     BeginContext(5229, 11, true);
                     WriteLiteral("انتخاب کنید");
                     EndContext();
@@ -375,7 +375,7 @@ __Microsoft_AspNetCore_Mvc_TagHelpers_ValidationSummaryTagHelper.ValidationSumma
                 WriteLiteral("                                ");
                 EndContext();
                 BeginContext(5418, 47, false);
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "95225f5ea8c9d51ac09384d6766c334555d28af98639ecb5255f8f818a5ae71b24667", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "95225f5ea8c9d51ac09384d6766c334555d28af98639ecb5255f8f818a5ae71b24652", async() => {
                     BeginContext(5446, 10, false);
 #line 111 "C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\Views\Category\Index.cshtml"
                                                       Write(item.price);
@@ -432,7 +432,7 @@ __Microsoft_AspNetCore_Mvc_TagHelpers_ValidationSummaryTagHelper.ValidationSumma
                             ");
                 EndContext();
                 BeginContext(6329, 38, false);
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "95225f5ea8c9d51ac09384d6766c334555d28af98639ecb5255f8f818a5ae71b28127", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "95225f5ea8c9d51ac09384d6766c334555d28af98639ecb5255f8f818a5ae71b28112", async() => {
                     BeginContext(6347, 11, true);
                     WriteLiteral("انتخاب کنید");
                     EndContext();
@@ -463,7 +463,7 @@ __Microsoft_AspNetCore_Mvc_TagHelpers_ValidationSummaryTagHelper.ValidationSumma
                 WriteLiteral("                                ");
                 EndContext();
                 BeginContext(6536, 47, false);
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "95225f5ea8c9d51ac09384d6766c334555d28af98639ecb5255f8f818a5ae71b30036", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "95225f5ea8c9d51ac09384d6766c334555d28af98639ecb5255f8f818a5ae71b30021", async() => {
                     BeginContext(6564, 10, false);
 #line 128 "C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\Views\Category\Index.cshtml"
                                                       Write(item.price);
@@ -520,7 +520,7 @@ __Microsoft_AspNetCore_Mvc_TagHelpers_ValidationSummaryTagHelper.ValidationSumma
                             ");
                 EndContext();
                 BeginContext(7472, 38, false);
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "95225f5ea8c9d51ac09384d6766c334555d28af98639ecb5255f8f818a5ae71b33521", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "95225f5ea8c9d51ac09384d6766c334555d28af98639ecb5255f8f818a5ae71b33506", async() => {
                     BeginContext(7490, 11, true);
                     WriteLiteral("انتخاب کنید");
                     EndContext();
@@ -551,7 +551,7 @@ __Microsoft_AspNetCore_Mvc_TagHelpers_ValidationSummaryTagHelper.ValidationSumma
                 WriteLiteral("                                ");
                 EndContext();
                 BeginContext(7679, 47, false);
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "95225f5ea8c9d51ac09384d6766c334555d28af98639ecb5255f8f818a5ae71b35430", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "95225f5ea8c9d51ac09384d6766c334555d28af98639ecb5255f8f818a5ae71b35415", async() => {
                     BeginContext(7707, 10, false);
 #line 145 "C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\Views\Category\Index.cshtml"
                                                       Write(item.price);
@@ -608,7 +608,7 @@ __Microsoft_AspNetCore_Mvc_TagHelpers_ValidationSummaryTagHelper.ValidationSumma
                             ");
                 EndContext();
                 BeginContext(8594, 38, false);
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "95225f5ea8c9d51ac09384d6766c334555d28af98639ecb5255f8f818a5ae71b38894", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "95225f5ea8c9d51ac09384d6766c334555d28af98639ecb5255f8f818a5ae71b38879", async() => {
                     BeginContext(8612, 11, true);
                     WriteLiteral("انتخاب کنید");
                     EndContext();
@@ -639,7 +639,7 @@ __Microsoft_AspNetCore_Mvc_TagHelpers_ValidationSummaryTagHelper.ValidationSumma
                 WriteLiteral("                                ");
                 EndContext();
                 BeginContext(8801, 47, false);
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "95225f5ea8c9d51ac09384d6766c334555d28af98639ecb5255f8f818a5ae71b40803", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "95225f5ea8c9d51ac09384d6766c334555d28af98639ecb5255f8f818a5ae71b40788", async() => {
                     BeginContext(8829, 10, false);
 #line 162 "C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\Views\Category\Index.cshtml"
                                                       Write(item.price);
@@ -695,7 +695,7 @@ __Microsoft_AspNetCore_Mvc_TagHelpers_ValidationSummaryTagHelper.ValidationSumma
                             ");
                 EndContext();
                 BeginContext(9751, 38, false);
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "95225f5ea8c9d51ac09384d6766c334555d28af98639ecb5255f8f818a5ae71b44302", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "95225f5ea8c9d51ac09384d6766c334555d28af98639ecb5255f8f818a5ae71b44287", async() => {
                     BeginContext(9769, 11, true);
                     WriteLiteral("انتخاب کنید");
                     EndContext();
@@ -726,7 +726,7 @@ __Microsoft_AspNetCore_Mvc_TagHelpers_ValidationSummaryTagHelper.ValidationSumma
                 WriteLiteral("                                ");
                 EndContext();
                 BeginContext(9958, 47, false);
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "95225f5ea8c9d51ac09384d6766c334555d28af98639ecb5255f8f818a5ae71b46211", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "95225f5ea8c9d51ac09384d6766c334555d28af98639ecb5255f8f818a5ae71b46196", async() => {
                     BeginContext(9986, 10, false);
 #line 178 "C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\Views\Category\Index.cshtml"
                                                       Write(item.price);

@@ -63,7 +63,7 @@ using Dake.Models;
             EndContext();
             BeginContext(173, 11, false);
 #line 8 "C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\Views\Information\Remove.cshtml"
-                              Write(Model.title);
+                     Write(Model.title);
 
 #line default
 #line hidden
@@ -87,12 +87,12 @@ using Dake.Models;
             WriteLiteral(">\r\n\t\t\t");
             EndContext();
             BeginContext(586, 208, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "db4c222f05b9c00ee852e2038e7c98b67e8fef47b4814be515b226a8866a2c426664", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "db4c222f05b9c00ee852e2038e7c98b67e8fef47b4814be515b226a8866a2c426655", async() => {
                 BeginContext(612, 6, true);
                 WriteLiteral("\r\n\t\t\t\t");
                 EndContext();
                 BeginContext(618, 36, false);
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("input", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.SelfClosing, "db4c222f05b9c00ee852e2038e7c98b67e8fef47b4814be515b226a8866a2c427077", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("input", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.SelfClosing, "db4c222f05b9c00ee852e2038e7c98b67e8fef47b4814be515b226a8866a2c427068", async() => {
                 }
                 );
                 __Microsoft_AspNetCore_Mvc_TagHelpers_InputTagHelper = CreateTagHelper<global::Microsoft.AspNetCore.Mvc.TagHelpers.InputTagHelper>();
@@ -117,7 +117,7 @@ __Microsoft_AspNetCore_Mvc_TagHelpers_InputTagHelper.For = ModelExpressionProvid
                 WriteLiteral("\r\n\t\t\t\t<input type=\"submit\" value=\"حذف\" class=\"btn btn-default\" /> |\r\n\t\t\t\t");
                 EndContext();
                 BeginContext(727, 55, false);
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "db4c222f05b9c00ee852e2038e7c98b67e8fef47b4814be515b226a8866a2c429014", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "db4c222f05b9c00ee852e2038e7c98b67e8fef47b4814be515b226a8866a2c429005", async() => {
                     BeginContext(772, 6, true);
                     WriteLiteral("بازگشت");
                     EndContext();

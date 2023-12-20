@@ -218,3 +218,4 @@ C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\bin\Release\netcorea
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\Razor\Views\Payments\Banner.cshtml.g.cs
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\Razor\Views\Payments\Index.cshtml.g.cs
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\Razor\Views\ReportMessage\Index.cshtml.g.cs
+C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\Dake.sourcelink.json

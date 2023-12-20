@@ -112,7 +112,7 @@ using Dake.Models;
 ");
             EndContext();
 #line 33 "C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\Views\Factor\Index.cshtml"
-                         foreach (var item in Model)
+       foreach (var item in Model)
 						{
 
 #line default
@@ -122,7 +122,7 @@ using Dake.Models;
             EndContext();
             BeginContext(990, 7, false);
 #line 36 "C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\Views\Factor\Index.cshtml"
-                               Write(item.id);
+       Write(item.id);
 
 #line default
 #line hidden
@@ -132,7 +132,7 @@ using Dake.Models;
             EndContext();
             BeginContext(1017, 19, false);
 #line 37 "C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\Views\Factor\Index.cshtml"
-                               Write(item.user.cellphone);
+       Write(item.user.cellphone);
 
 #line default
 #line hidden
@@ -141,7 +141,7 @@ using Dake.Models;
             WriteLiteral("</td>\r\n");
             EndContext();
 #line 46 "C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\Views\Factor\Index.cshtml"
-                                 if (item.noticeId != null)
+         if (item.noticeId != null)
 								{
 
 #line default
@@ -151,7 +151,7 @@ using Dake.Models;
             EndContext();
             BeginContext(1260, 17, false);
 #line 48 "C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\Views\Factor\Index.cshtml"
-                                   Write(item.notice.title);
+        Write(item.notice.title);
 
 #line default
 #line hidden
@@ -171,7 +171,7 @@ using Dake.Models;
             EndContext();
             BeginContext(1334, 17, false);
 #line 52 "C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\Views\Factor\Index.cshtml"
-                                   Write(item.banner.title);
+        Write(item.banner.title);
 
 #line default
 #line hidden
@@ -189,7 +189,7 @@ using Dake.Models;
             EndContext();
             BeginContext(1382, 15, false);
 #line 54 "C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\Views\Factor\Index.cshtml"
-                               Write(item.totalPrice);
+       Write(item.totalPrice);
 
 #line default
 #line hidden
@@ -199,7 +199,7 @@ using Dake.Models;
             EndContext();
             BeginContext(1417, 22, false);
 #line 55 "C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\Views\Factor\Index.cshtml"
-                               Write(item.createDatePersian);
+       Write(item.createDatePersian);
 
 #line default
 #line hidden
@@ -208,7 +208,7 @@ using Dake.Models;
             WriteLiteral("</td>\r\n");
             EndContext();
 #line 56 "C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\Views\Factor\Index.cshtml"
-                                 if (item.bannerId == null)
+         if (item.bannerId == null)
 								{
 
 #line default
@@ -232,7 +232,7 @@ using Dake.Models;
 #line default
 #line hidden
 #line 64 "C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\Views\Factor\Index.cshtml"
-                                 if (item.bannerId == null)
+         if (item.bannerId == null)
 								{
 
 #line default
@@ -307,7 +307,7 @@ WriteAttributeValue("", 1825, item.noticeId, 1825, 14, false);
             WriteLiteral("                            <li>\r\n                                ");
             EndContext();
             BeginContext(2816, 66, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("pager", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.SelfClosing, "953784f1f04dff1c3671238278f43ac98a4eb5c248e5a45c2e28f94a8d2e376314783", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("pager", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.SelfClosing, "953784f1f04dff1c3671238278f43ac98a4eb5c248e5a45c2e28f94a8d2e376314543", async() => {
             }
             );
             __PagedList_Core_Mvc_PagerTagHelper = CreateTagHelper<global::PagedList.Core.Mvc.PagerTagHelper>();

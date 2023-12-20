@@ -6,8 +6,6 @@ C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcorea
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\AdminContent\AdminLogin\MyStyle.css
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\AdminContent\AdminLogin\popper.min.js
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\AdminContent\bower_components.zip
-C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\AdminContent\dist\.DS_Store
-C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\AdminContent\dist\css\.DS_Store
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\AdminContent\dist\css\AdminLTE.css
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\AdminContent\dist\css\adminlte.css.map
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\AdminContent\dist\css\adminlte.min.css.map
@@ -62,7 +60,6 @@ C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcorea
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\AdminContent\dist\fonts\Vazir-FD-WOL.eot
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\AdminContent\dist\fonts\Vazir-FD-WOL.ttf
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\AdminContent\dist\fonts\Vazir-FD-WOL.woff
-C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\AdminContent\dist\img\.DS_Store
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\AdminContent\dist\img\avatar.png
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\AdminContent\dist\img\avatar04.png
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\AdminContent\dist\img\avatar2.png
@@ -91,7 +88,6 @@ C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcorea
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\AdminContent\dist\img\user6-128x128.jpg
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\AdminContent\dist\img\user7-128x128.jpg
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\AdminContent\dist\img\user8-128x128.jpg
-C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\AdminContent\dist\js\.DS_Store
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\AdminContent\dist\js\adminlte.js
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\AdminContent\dist\js\adminlte.min.js
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\AdminContent\dist\js\demo.js
@@ -102,14 +98,12 @@ C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcorea
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\AdminContent\dist\js\persian-date.js
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\AdminContent\dist\js\persian-datepicker-0.4.5.min.js
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\AdminContent\dist\js\uploader_boostrap.js
-C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\AdminContent\plugins\.DS_Store
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\AdminContent\plugins\bootstrap-slider\bootstrap-slider.js
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\AdminContent\plugins\bootstrap-slider\slider.css
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\AdminContent\plugins\bootstrap-wysihtml5\bootstrap3-wysihtml5.all.js
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\AdminContent\plugins\bootstrap-wysihtml5\bootstrap3-wysihtml5.all.min.js
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\AdminContent\plugins\bootstrap-wysihtml5\bootstrap3-wysihtml5.css
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\AdminContent\plugins\bootstrap-wysihtml5\bootstrap3-wysihtml5.min.css
-C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\AdminContent\plugins\iCheck\.DS_Store
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\AdminContent\plugins\iCheck\all.css
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\AdminContent\plugins\iCheck\flat\aero.css
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\AdminContent\plugins\iCheck\flat\aero.png
@@ -225,7 +219,6 @@ C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcorea
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\AdminContent\plugins\iCheck\square\yellow.png
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\AdminContent\plugins\iCheck\square\yellow@2x.png
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\AdminContent\plugins\iCheck\square\_all.css
-C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\AdminContent\plugins\input-mask\.DS_Store
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\AdminContent\plugins\input-mask\jquery.inputmask.date.extensions.js
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\AdminContent\plugins\input-mask\jquery.inputmask.extensions.js
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\AdminContent\plugins\input-mask\jquery.inputmask.js
@@ -332,8 +325,11 @@ C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcorea
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\Banner\7679e13.jpg
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\Banner\78c47bc.png
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\Banner\897513b.png
+C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\Banner\8bdf40d.png
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\Banner\9559d3d.png
+C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\Banner\9bc7ecf.png
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\Banner\9dbe3ac.png
+C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\Banner\a2ff9ee.png
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\Banner\abe0a61.png
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\Banner\b861d35.png
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\Banner\download (1).webp
@@ -582,6 +578,7 @@ C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcorea
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\images\Category\5c246823c97e43aa9716e99b54436a45.jpg
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\images\Category\637d3112ab2c4df1911511ba708f2373.jpg
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\images\Category\65b9d0fed69a4ef6bd6f3c8e64127522.jpg
+C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\images\Category\70cf5afe5eac4d6bac099fcb821b9095.jpg
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\images\Category\7b63c3700d224c2cbea3d4e2634ba2e8.jpg
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\images\Category\8179b072d8a94271885f6e231059d78e.jpg
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\images\Category\86c7878b4f074593902b53d959650699.jpg
@@ -597,6 +594,7 @@ C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcorea
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\images\Category\d25fac097f82476f80d97ff9e44b1f07.jpg
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\images\Category\dae894b0369f4d5c9b78b48f3bbe5b18.jpg
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\images\Category\dc98668787c747f3962bfbb37c121802.jpg
+C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\images\Category\dd7ce55a39bc49f2a0bdf71e1e513737.webp
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\images\Category\e87c65ba34e741e5afcced10068ce95d.jpg
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\images\Category\ebc02d6c08384dc696ab50dd3442ca78.jpg
 C:\Users\Masood Talebi\source\repos\atringit\Dakeh1402\Dake\obj\Release\netcoreapp2.1\PubTmp\Out\wwwroot\images\Category\ebc071bee581479c9922ffc3fa7b3d2a.jpg

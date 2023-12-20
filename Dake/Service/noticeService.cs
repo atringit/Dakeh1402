@@ -134,8 +134,85 @@ namespace Dake.Service
                     item.image = getNoticeCategoryImage.getCategoryImage(item.categoryId);
                 }
             }
-            // int skip = (page - 1) * pagesize;
-            var res = result.Skip((page - 1) * pagesize).Take(pagesize).Select(x => new
+			foreach (var item in result)
+			{
+				if (item.image == "" && item.movie == null)
+				{
+					if (item.category.image == null)
+					{
+						var cat1 = _context.Categorys.FirstOrDefault(p => p.id == item.category.parentCategoryId);
+						if (cat1.image == null)
+						{
+							if (cat1.parentCategoryId != null)
+							{
+								var cat2 = _context.Categorys.FirstOrDefault(p => p.id == cat1.parentCategoryId);
+								if (cat2.image == null)
+								{
+									if (cat2.parentCategoryId != null)
+									{
+										var cat3 = _context.Categorys.FirstOrDefault(p => p.id == cat2.parentCategoryId);
+										if (cat3.image == null)
+										{
+											if (cat3.parentCategoryId != null)
+											{
+												var cat4 = _context.Categorys.FirstOrDefault(p => p.id == cat3.parentCategoryId);
+												if (cat4.image == null)
+												{
+													if (cat4.parentCategoryId != null)
+													{
+														var cat5 = _context.Categorys.FirstOrDefault(p => p.id == cat4.parentCategoryId);
+														if (cat5.image == null)
+														{
+															if (cat5.parentCategoryId != null)
+															{
+																var cat6 = _context.Categorys.FirstOrDefault(p => p.id == cat5.parentCategoryId);
+																item.image = cat6.image;
+															}
+														}
+														else
+														{
+															item.image = cat5.image;
+														}
+													}
+												}
+												else
+												{
+													item.image = cat4.image;
+												}
+
+											}
+										}
+										else
+										{
+											item.image = cat3.image;
+										}
+
+									}
+								}
+								else
+								{
+									item.image = cat2.image;
+								}
+
+							}
+						}
+						else
+						{
+							item.image = cat1.image;
+						}
+					}
+					else
+					{
+						item.image = item.category.image;
+					}
+					if (item.image == null)
+					{
+						item.image = "/images/empyty.png";
+					}
+				}
+			}
+			// int skip = (page - 1) * pagesize;
+			var res = result.Skip((page - 1) * pagesize).Take(pagesize).Select(x => new
             {
                 x.id,
                 x.title,
@@ -161,6 +238,7 @@ namespace Dake.Service
                 x.price,
                 x.lastPrice
             }).ToList();
+
             return new { data = res, resEspacial, totalCount = result.Count() };
         }
         public object GetNoticesWeb(int page = 1, int pagesize = 10)
