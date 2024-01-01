@@ -43,7 +43,13 @@
 									<span asp-validation-for="countExpireDateBanner" class="text-danger"></span>
 								</div>
 							</div>
-
+							<div class="col-md-6">
+								<div class="form-group">
+									<label asp-for="countToSpecialNotice" class="control-label"></label>
+									<input asp-for="countToSpecialNotice" class="form-control" />
+									<span asp-validation-for="countToSpecialNotice" class="text-danger"></span>
+								</div>
+							</div>
 							<div class="col-md-6">
 								<div class="form-group">
 									<label asp-for="showPriceForCars" class="control-label"></label>
@@ -80,6 +86,7 @@
 									@*<span asp-validation-for="showPriceForCars" class="text-danger"></span>*@
 								</div>
 							</div>
+							
 
 							<div class="col-md-12">
 								<div class="form-group">
@@ -91,6 +98,7 @@
 									<span asp-validation-for="wrongWord" class="text-danger"></span>
 								</div>
 							</div>
+							
 							<div class="col-md-6">
 								<div class="form-group">
 									<input type="submit" value="ثبت" class="btn btn-default" />

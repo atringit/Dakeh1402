@@ -17,7 +17,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyProductAttribute("Dake")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.3.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.3+5783c21a2173ca8cb6c2406cc3457899bf16ab78")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.3+06b4544271b233fa40e731a33d78a91299daa429")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Dake.Views")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.3.0")]
 

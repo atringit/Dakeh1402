@@ -322,7 +322,12 @@ namespace Dake.Controllers.API
                 }
 
             }
-            _context.SaveChanges();
+			if (Notice.countView >= settings.countToSpecialNotice && Notice.isSpecial == false)
+			{
+				Notice.isSpecial = true;
+				Notice.expireDateIsespacial = DateTime.Now.AddDays(Convert.ToInt64(settings.countExpireDateIsespacial));
+			}
+			_context.SaveChanges();
             if (Notice == null)
             {
                 return NotFound();

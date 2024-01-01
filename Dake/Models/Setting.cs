@@ -28,6 +28,8 @@ namespace Dake.Models
         public bool showPriceForCars { get; set;  }
         [Display(Name = "نمایش بنر ها")]
         public int? countExpireDateBanner { get; set; }
+		[Display(Name = "ویژه شدن خودکار اگهی")]
+		public int? countToSpecialNotice { get; set; }
         /// <summary>
         /// برای مواقعی که ادمینی برای تایید آگهی ها وجود ندارد، 
         /// </summary>

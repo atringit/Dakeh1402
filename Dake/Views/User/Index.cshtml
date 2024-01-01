@@ -61,6 +61,7 @@
 						<tr>
 
 							<th>شماره همراه</th>
+							<td>تاریخ عضویت</td>
 							<th>استان</th>
 							@*<th>نمایش</th>*@
 							<th>امکانات</th>
@@ -72,6 +73,14 @@
 						{
 							<tr>
 								<td>@item.cellphone</td>
+								@{
+									System.Globalization.PersianCalendar persianCalendar = new System.Globalization.PersianCalendar();
+
+									string date = persianCalendar.GetHour(item.oTPDate) + ":" + persianCalendar.GetMinute(item.oTPDate) + "  "+ persianCalendar.GetYear(item.oTPDate) + "/" + persianCalendar.GetMonth(item.oTPDate) + "/" +
+									persianCalendar.GetDayOfMonth(item.oTPDate);
+									
+								}
+								<td>@date</td>
 								@{
 									if (item.province == null)
 									{

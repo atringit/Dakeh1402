@@ -65,12 +65,18 @@ namespace Dake.Controllers
                             else
                                 _context.VisitNotices.Add(new VisitNotice { countView = 1, date = DateTime.Now, noticeId = id });
                         }
+                        
                     }
 
                 }
             }
+			if (Notice.countView >= settings.countToSpecialNotice && Notice.isSpecial == false)
+			{
+				Notice.isSpecial = true;
+				Notice.expireDateIsespacial = DateTime.Now.AddDays(Convert.ToInt64(settings.countExpireDateIsespacial));
+			}
 
-            _context.SaveChanges();
+			_context.SaveChanges();
 
             int cat = detailNoticeViewModel.notice.categoryId;
             for (int i = 0; i < 4; i++)
