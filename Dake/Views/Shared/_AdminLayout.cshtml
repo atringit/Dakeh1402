@@ -131,11 +131,6 @@
                             {
                                  <li><a href="/Database/Index"><i class="fa fa-fw fa-align-left"></i> بک آپ دیتابیس</a></li>
                             }
-                            @if (User.Identity.Name.Substring(11).Contains("D2"))
-                            {
-                                 <li><a href="/Banner/Index"><i class="fa fa-fw fa-align-left"></i> مدیریت بنرها</a></li>
-                            }
-
                             @if (User.Identity.Name.Substring(11).Contains("B1"))
                             {
                                 <li><a href="/Category/Index"><i class="fa fa-fw fa-align-left"></i> دسته بندی</a></li>}
@@ -166,18 +161,33 @@
                         </ul>
 
                     </li>
+                    @if (User.Identity.Name.Substring(11).Contains("A2"))
+                    {
+                        <li class="treeview">
+                            <a href="#">
+                                <i class="fa fa-fw fa-cubes"></i> <span>آگهی ها</span>
+                                <span class="pull-left-container">
+                                    <i class="fa fa-angle-right pull-left"></i>
+                                </span>
+                            </a>
+                            <ul class="treeview-menu">
+                                <li>
+
+                                    <a href="/Notice/Index"><i class="fa fa-fw fa-align-left"></i> مدیریت آگهی ها</a>
+                                </li>
+                                @if (User.Identity.Name.Substring(11).Contains("D2"))
+                                {
+                                    <li><a href="/Banner/Index"><i class="fa fa-fw fa-align-left"></i> مدیریت بنرها</a></li>
+                                }
+                            </ul>
+
+                        </li>
+                    }
                     @if (User.Identity.Name.Substring(11).Contains("A3"))
                     {
                             <li>
                                 <a href="/Information/Index"><i class="fa fa-fw fa-file-text-o"></i> اطلاعیه ها</a>
                             </li>
-                    }
-                    @if (User.Identity.Name.Substring(11).Contains("A2"))
-                    {
-                        <li>
-
-                            <a href="/Notice/Index"><i class="fa fa-fw fa-cubes"></i> آگهی ها</a>
-                        </li>
                     }
                     @if (User.Identity.Name.Substring(11).Contains("A1"))
                     {
