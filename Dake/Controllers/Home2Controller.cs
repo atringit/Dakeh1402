@@ -440,6 +440,24 @@ namespace Dake.Controllers
         [HttpPost]
         public async Task<IActionResult> AddNotice(AddNotice addNotice, List<IFormFile> image)
         {
+            if (!ModelState.IsValid)
+            {
+                var user = _context.Users.FirstOrDefault(x => x.cellphone == User.Identity.Name && x.deleted == null);
+                if (user == null)
+                {
+                    var user2 = _context.Users.FirstOrDefault(x => x.cellphone + x.adminRole == User.Identity.Name && x.deleted == null);
+                    ViewData["Discounts"] = _IDiscountCode.GetDiscountCodeForUser(user2.id);
+                }
+                else
+                {
+                    ViewData["Discounts"] = _IDiscountCode.GetDiscountCodeForUser(user.id);
+                }
+
+                ViewData["Cities"] = _context.Cities.OrderBy(u => u.id).ToList();
+                ViewData["Categorie"] = _context.Categorys.Where(x => x.parentCategoryId == null).OrderBy(u => u.id).ToList();
+
+                return View(nameof(Profile), addNotice);
+            }
             var test = _context.StaticPrices;
             Progress = 0;
             PaymentRequest _paymentRequest = new PaymentRequest();
@@ -511,24 +529,6 @@ namespace Dake.Controllers
                         discountprice = (int)_IDiscountCode.GetDiscountPrice(_code);
                         havediscount = true;
                     }
-                }
-
-                bool checkWrongWords() 
-                {
-                    if(setting.wrongWord.Contains(addNotice.title) || setting.wrongWord.Contains(addNotice.description))
-                    {
-                        return false;
-                    }
-                    else
-                    {
-                        return true;
-                    }
-                }
-
-                if(checkWrongWords() == false)
-                {
-                    TempData["DiscountErrorMessage"] = "لطفا در توضیحات و عنوان از کلمات مناسب استفاده نمایید. ";
-                    return RedirectToAction(nameof(Profile));
                 }
 
                 var notice = new Notice();

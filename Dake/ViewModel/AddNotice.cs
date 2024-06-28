@@ -1,4 +1,5 @@
-﻿using Dake.Models;
+﻿using Dake.Attributes.ValidationAttributes;
+using Dake.Models;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
@@ -20,6 +21,7 @@ namespace Dake.ViewModel
         [Display(Name = "عنوان آگهی")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         [MaxLength(200, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد .")]
+        [NoBannedWords(ErrorMessage = "لطفا از کلمات مناسب در {0} استفاده نمایید")]
         public string title { get; set; }
 
          [Display(Name = "قیمت")]
@@ -32,6 +34,7 @@ namespace Dake.ViewModel
 
         [Display(Name = "توضیحات")]
         [MaxLength(1000, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد .")]
+        [NoBannedWords(ErrorMessage = "لطفا از کلمات مناسب در {0} استفاده نمایید")]
         public string description { get; set; }
 
          [Display(Name = "مشخصات کلی")]
@@ -73,6 +76,7 @@ namespace Dake.ViewModel
         public List<NoticeImage> NoticeImages { get; set; }
         public List<IFormFile> image { get; set; }
 
+        [Display(Name = "کد تخفیف")]
         public string discountcode { get; set; }
     }
 }
