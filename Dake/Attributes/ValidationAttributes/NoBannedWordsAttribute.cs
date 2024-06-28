@@ -16,11 +16,13 @@ namespace Dake.Attributes.ValidationAttributes
 
             var setting = context.Settings.FirstOrDefault();
 
+            var wrongWordList = setting.wrongWord.Split('-');
+
             var input = value as string;
 
             var words = input.Split(' ');
 
-            var response = words.All(word => !setting.wrongWord.Contains(word))
+            var response = words.All(word => !wrongWordList.Contains(word))
                 ? ValidationResult.Success
                 : new ValidationResult(FormatErrorMessage(validationContext.DisplayName));
 
