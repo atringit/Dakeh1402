@@ -1498,7 +1498,7 @@ namespace Dake.Controllers
         {
             var user = _context.Users.FirstOrDefault(x => x.cellphone == User.Identity.Name && x.deleted == null);
             var provinces = _context.Provinces.OrderBy(x => x.name);
-            string proContent = "<select class='title form-control selectpicker valid' data-size='5' data-val='true'  id='provinceId2' name='provinceId2' ><option value=''>انتخاب شهرستان</option>";
+            string proContent = "<select class='title form-control selectpicker valid' data-size='5' data-val='true'  id='provinceId2' name='provinceId2' ><option value=''>همه شهرستان‌ها</option>";
             foreach (var item in provinces)
             {
                 if (user != null)
