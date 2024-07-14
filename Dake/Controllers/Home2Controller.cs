@@ -166,8 +166,9 @@ namespace Dake.Controllers
             }
             //resultEspacial = _context.Notices.Where(x => x.isSpecial).OrderByDescending(x => x.expireDateIsespacial);
             if (catId == null)
+            {
                 notices = notices.ToList();
-
+            }
             else
             {
                 List<int> cats = new List<int>();
@@ -228,30 +229,30 @@ namespace Dake.Controllers
                 }
                 firstHomeViewModel.subCat = sub;
             }
-            if (!String.IsNullOrEmpty(title))
+            
+            if (!string.IsNullOrEmpty(title))
             {
-                notices = notices.Where(x => x.title.ToLower().Contains(title.ToLower()));
+                notices = notices.Where(x => x.title.Contains(title, StringComparison.OrdinalIgnoreCase));
 
             }
             ViewData["firstEspcial"] = _context.Categorys.Where(x => x.parentCategoryId == null).ToList();
             firstHomeViewModel.notices = _cityId == 0 ? notices.ToList() : notices.Where(s => s.cityId == _cityId).ToList();
             foreach (var item in firstHomeViewModel.notices)
             {
-                if (string.IsNullOrEmpty(item.image) == false && item.image.Contains("/images/Category/"))
+                if (!string.IsNullOrEmpty(item.image) && item.image.Contains("/images/Category/"))
                 {
                     item.image = string.Empty;
                 }
             }
 
 
-            firstHomeViewModel.espacialNotices = _cityId == 0 ?
-           resultEspacial.ToList()
-           : resultEspacial
-           .Where(s => s.cityId == _cityId)
-           .ToList();
+            firstHomeViewModel.espacialNotices = _cityId == 0
+                ? resultEspacial.ToList()
+                : resultEspacial.Where(s => s.cityId == _cityId).ToList();
+
             foreach (var item in firstHomeViewModel.espacialNotices)
             {
-                if (string.IsNullOrEmpty(item.image) == false && item.image.Contains("/images/Category/"))
+                if (!string.IsNullOrEmpty(item.image) && item.image.Contains("/images/Category/"))
                 {
                     item.image = string.Empty;
                 }
@@ -263,21 +264,19 @@ namespace Dake.Controllers
 
 
             firstHomeViewModel.NoticeImage = _context.NoticeImages.ToList();
-            foreach(var item in firstHomeViewModel.notices)
-            {       
-                var settings =_context.Settings.FirstOrDefault();
-                if (settings != null && settings.showPriceForCars == false)
+
+            var settings = _context.Settings.FirstOrDefault();
+            foreach (var item in firstHomeViewModel.notices)
+            {
+                if (settings?.showPriceForCars == false && IsDrivingPrice(item.categoryId))
                 {
-                    if (IsDrivingPrice(item.categoryId))
-                    {
-                        item.price = 0;
-                        item.lastPrice = 0;
-                    }
+                    item.price = 0;
+                    item.lastPrice = 0;
                 }
             }
             foreach(var item in firstHomeViewModel.notices)
             {
-                if (item.image == "" && item.movie == null)
+                if (item.image?.Length == 0 && item.movie == null)
                 {
                     if(item.category.image == null)
                     {
@@ -1137,13 +1136,13 @@ namespace Dake.Controllers
                 user = _context.Users.FirstOrDefault(x => x.cellphone + x.adminRole == User.Identity.Name && x.deleted == null);
             }
             IQueryable<Notice> result = _context.Notices.Where(x => x.userId == user.id && x.deletedAt == null);
-            foreach (var item in result)
-            {
-                if (item.image == "")
-                {
-                    item.image = "/images/empyty.png";
-                }
-            }
+            //foreach (var item in result)
+            //{
+            //    if (item.image == "")
+            //    {
+            //        item.image = "/images/empyty.png";
+            //    }
+            //}
             int skip = (page - 1) * 8;
 
             if (user != null)

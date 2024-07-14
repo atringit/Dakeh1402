@@ -6,7 +6,23 @@
         {
             <div class="col-md-3 col-sm-6 col-6">
                 <figure class="photos__item">
-                    <a href="/Notice2/Index?id=@item.id" title=""><img src="@item.image" alt="@item.title" title="@item.title"></a>
+                    <a href="/Notice2/Index?id=@item.id" title="">
+                        @if (string.IsNullOrEmpty(item.image))
+                        {
+                            if (string.IsNullOrEmpty(item.movie))
+                            {
+                                <img src="/images/empyty.png" alt="@item.title" title="@item.title">
+                            }
+                            else
+                            {
+                                <video src="@item.movie" alt="@item.title" title="@item.title"></video>
+                            }
+                        }
+                        else
+                        {
+                            <img src="@item.image" alt="@item.title" title="@item.title">
+                        }
+                    </a>
                     @if (item.isSpecial && item.expireDateIsespacial >= DateTime.Now)
                     {
                         <figcaption>آگهی ویژه</figcaption>
