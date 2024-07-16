@@ -1,0 +1,33 @@
+﻿.notice-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+.grid-item {
+    /* Basic styling */
+}
+
+.special {
+    grid-row: span 2;
+    grid-column: span 2;
+}
+
+    .special.right {
+        grid-column: 1 / span 2;
+    }
+
+    .special.left {
+        grid-column: 3 / span 2;
+    }
+
+/* Media query for mobile view */
+@media (max-width: 768px) {
+    .notice-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .special {
+        grid-column: 1 / span 3;
+    }
+}

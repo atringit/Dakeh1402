@@ -11,6 +11,7 @@ namespace Dake.ViewModel
         public List<Notice> notices { get; set; }
         public List<NoticeImage> NoticeImage { get; set; }
         public List<Notice> espacialNotices { get; set; }
+        public List<NoticeLayoutItem> AllNotice { get; set; }
         public List<Category> Categories { get; set; }
         public List<Banner> Banner { get; set; }
         public string subCat { get; set; }

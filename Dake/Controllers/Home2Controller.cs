@@ -352,6 +352,11 @@ namespace Dake.Controllers
                 }
             }
 
+            var items = firstHomeViewModel.notices;
+            items.AddRange(firstHomeViewModel.espacialNotices);
+
+            firstHomeViewModel.AllNotice = GenerateLayout(items);
+
             return PartialView("_Notice", firstHomeViewModel);
         }
         public IActionResult Profile()
@@ -1910,6 +1915,64 @@ namespace Dake.Controllers
             {
                 return Json(new { success = false, responseText = "Faild To Get  Data" });
             }
+        }
+
+        private List<NoticeLayoutItem> GenerateLayout(List<Notice> items)
+        {
+            var specialNotices = items.Where(w => w.isSpecial).ToList();
+            var regularNotices = items.Where(w => !w.isSpecial).ToList();
+
+            var layout = new List<NoticeLayoutItem>();
+            int specialIndex = 0;
+            int regularIndex = 0;
+            
+            for (int unitCount = 0; specialIndex < specialNotices.Count || regularIndex < regularNotices.Count; unitCount++)
+            {
+                if (unitCount % 2 == 0 && specialIndex < specialNotices.Count)
+                {
+                    if (unitCount % 4 == 0)
+                    {
+                        layout.Add(new NoticeLayoutItem { Notice = specialNotices[specialIndex++], IsSpecial = true, IsRight = true });
+
+                        for (int i = 0; i < 4; i++)
+                        {
+                            layout.Add(regularIndex < regularNotices.Count
+                                ? new NoticeLayoutItem { Notice = regularNotices[regularIndex++], IsSpecial = false }
+                                : new NoticeLayoutItem { IsEmpty = true });
+                        }
+                    }
+                    else
+                    {
+                        for (int i = 0; i < 2; i++)
+                        {
+                            layout.Add(regularIndex < regularNotices.Count
+                                ? new NoticeLayoutItem { Notice = regularNotices[regularIndex++], IsSpecial = false }
+                                : new NoticeLayoutItem { IsEmpty = true });
+                        }
+
+                        layout.Add(new NoticeLayoutItem { Notice = specialNotices[specialIndex++], IsSpecial = true, IsRight = false });
+
+                        for (int i = 0; i < 2; i++)
+                        {
+                            layout.Add(regularIndex < regularNotices.Count
+                                ? new NoticeLayoutItem { Notice = regularNotices[regularIndex++], IsSpecial = false }
+                                : new NoticeLayoutItem { IsEmpty = true });
+                        }
+                    }
+                    
+                }
+                else
+                {
+                    for (int i = 0; i < 8; i++)
+                    {
+                        layout.Add(regularIndex < regularNotices.Count
+                            ? new NoticeLayoutItem { Notice = regularNotices[regularIndex++], IsSpecial = false }
+                            : new NoticeLayoutItem { IsEmpty = true });
+                    }
+                }
+            }
+
+            return layout;
         }
     }
 }
