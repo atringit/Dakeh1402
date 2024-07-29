@@ -9,7 +9,9 @@ on:
   pull_request:
     branches: [ "main" ]
   workflow_dispatch:
-
+  
+permissions:
+  contents: write
 jobs:
   build:
 
@@ -34,7 +36,7 @@ jobs:
         git add -f published-app
         git commit -m "Add published app files" -a
     - name: Push changes
-      uses: ad-m/github-push-action@master
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        branch: ${{ github.ref }}
+      run: |
+        git push
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
