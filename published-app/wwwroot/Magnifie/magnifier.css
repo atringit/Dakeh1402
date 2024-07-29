@@ -1,0 +1,26 @@
+
+.img-magnifier-container {
+    position:relative;
+}
+
+.img-magnifier-glass {
+    position: absolute;
+    border: 1px solid #000;
+    border-radius: 50%;
+    cursor: none;
+    /*Set the size of the magnifier glass:*/
+    width: 100px;
+    height: 100px;
+}
+
+body .img-magnifier-glass {
+    display: none;
+}
+/*
+body .product-main-image.img-magnifier-container img:hover + .img-magnifier-glass {
+    display: block;
+}
+body .product-main-image.img-magnifier-container img:hover {
+    cursor: none;
+}
+*/
