@@ -137,8 +137,7 @@
                                             {
                                                 <img src="@notice?.image" title="@notice?.title" alt="@notice?.title">
                                             }
-                                            @if ((string.IsNullOrEmpty(notice?.image) || notice?.image == "none") &&
-                                           !(string.IsNullOrEmpty(notice?.movie) || notice?.movie == "undefined"))
+                                            else if (!string.IsNullOrEmpty(notice?.movie) || notice?.movie == "undefined")
                                             {
                                                 <video src="@notice?.movie" alt="@notice?.title" title="@notice?.title"></video>
                                             }
@@ -190,10 +189,9 @@
                                             {
                                                 <img src="@notice.image" alt="@notice.title" title="@notice.title">
                                             }
-                                            @if ((string.IsNullOrEmpty(notice.image) || notice.image == "none") &&
-                                           !(string.IsNullOrEmpty(notice.movie) || notice.movie == "undefined"))
+                                            else if (!string.IsNullOrEmpty(notice.movie) || notice.movie == "undefined")
                                             {
-                                                <video width="200px" src="@notice.movie" alt="@notice.title" title="@notice.title"></video>
+                                                <video width="200" src="@notice.movie" alt="@notice.title" title="@notice.title"></video>
                                             }
                                             else
                                             {

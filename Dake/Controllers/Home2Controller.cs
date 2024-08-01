@@ -239,9 +239,25 @@ namespace Dake.Controllers
             firstHomeViewModel.notices = _cityId == 0 ? notices.ToList() : notices.Where(s => s.cityId == _cityId).ToList();
             foreach (var item in firstHomeViewModel.notices)
             {
-                if (!string.IsNullOrEmpty(item.image) && item.image.Contains("/images/Category/"))
+                if (!string.IsNullOrEmpty(item.image))
                 {
-                    item.image = string.Empty;
+                    if (item.image.Contains("/images/Category/"))
+                    {
+                        item.image = string.Empty;
+                    }
+                    else
+                    {
+                        var imagePath = GetFilePath(item.image);
+
+                        item.image = System.IO.File.Exists(imagePath) ? item.image : string.Empty;
+                    }
+                }
+
+                if (!string.IsNullOrEmpty(item.movie))
+                {
+                    var moviePath = GetFilePath(item.movie);
+
+                    item.movie = System.IO.File.Exists(moviePath) ? item.movie : string.Empty;
                 }
             }
 
@@ -252,9 +268,25 @@ namespace Dake.Controllers
 
             foreach (var item in firstHomeViewModel.espacialNotices)
             {
-                if (!string.IsNullOrEmpty(item.image) && item.image.Contains("/images/Category/"))
+                if (!string.IsNullOrEmpty(item.image))
                 {
-                    item.image = string.Empty;
+                    if (item.image.Contains("/images/Category/"))
+                    {
+                        item.image = string.Empty;
+                    }
+                    else
+                    {
+                        var imagePath = GetFilePath(item.image);
+
+                        item.image = System.IO.File.Exists(imagePath) ? item.image : string.Empty;
+                    }
+                }
+
+                if (!string.IsNullOrEmpty(item.movie))
+                {
+                    var moviePath = GetFilePath(item.movie);
+
+                    item.movie = System.IO.File.Exists(moviePath) ? item.movie : string.Empty;
                 }
             }
             
@@ -276,14 +308,14 @@ namespace Dake.Controllers
             }
             foreach(var item in firstHomeViewModel.notices)
             {
-                if (item.image?.Length == 0 && item.movie == null)
+                if (string.IsNullOrEmpty(item.image) && string.IsNullOrEmpty(item.movie))
                 {
-                    if(item.category.image == null)
+                    if (item.category.image == null)
                     {
                         var cat1 =_context.Categorys.FirstOrDefault(p=>p.id == item.category.parentCategoryId);
                         if (cat1.image == null)
                         {
-                            if(cat1.parentCategoryId != null)
+                            if (cat1.parentCategoryId != null)
                             {
                                 var cat2 = _context.Categorys.FirstOrDefault(p => p.id == cat1.parentCategoryId);
                                 if(cat2.image == null)
@@ -305,47 +337,56 @@ namespace Dake.Controllers
 														{
 															if (cat5.parentCategoryId != null)
 															{
-																var cat6 = _context.Categorys.FirstOrDefault(p => p.id == cat5.parentCategoryId);																
-															    item.image = cat6.image;
-															}
+																var cat6 = _context.Categorys.FirstOrDefault(p => p.id == cat5.parentCategoryId);
+
+                                                                var categoryImagePath = GetFilePath(cat6.image);
+                                                                item.image = System.IO.File.Exists(categoryImagePath) ? cat6.image : string.Empty;
+                                                            }
 														}
 														else
 														{
-															item.image = cat5.image;
-														}
+                                                            var categoryImagePath = GetFilePath(cat5.image);
+                                                            item.image = System.IO.File.Exists(categoryImagePath) ? cat5.image : string.Empty;
+                                                        }
 													}
 												}
 												else
 												{
-													item.image = cat4.image;
-												}
+                                                    var categoryImagePath = GetFilePath(cat4.image);
+                                                    item.image = System.IO.File.Exists(categoryImagePath) ? cat4.image : string.Empty;
+                                                }
 
 											}
 										}
 										else
 										{
-											item.image = cat3.image;
-										}
+                                            var categoryImagePath = GetFilePath(cat3.image);
+                                            item.image = System.IO.File.Exists(categoryImagePath) ? cat3.image : string.Empty;
+                                        }
 
 									}
 								}
                                 else
                                 {
-									item.image = cat2.image;
-								}
+                                    var categoryImagePath = GetFilePath(cat2.image);
+                                    item.image = System.IO.File.Exists(categoryImagePath) ? cat2.image : string.Empty;
+                                }
 
 							}
                         }
                         else
                         {
-							item.image = cat1.image;
+                            var categoryImagePath = GetFilePath(cat1.image);
+                            item.image = System.IO.File.Exists(categoryImagePath) ? cat1.image : string.Empty;
 						}
                     }
                     else
                     {
-                        item.image = item.category.image;
+                        var categoryImagePath = GetFilePath(item.category.image);
+                        item.image = System.IO.File.Exists(categoryImagePath) ? item.category.image : string.Empty;
                     }
-                    if(item.image == null)
+
+                    if (string.IsNullOrEmpty(item.image))
                     {
                         item.image = "/images/empyty.png";
                     }
@@ -1973,6 +2014,13 @@ namespace Dake.Controllers
             }
 
             return layout;
+        }
+
+        private string GetFilePath(string relativePath)
+        {
+            var filepath = System.IO.Path.Combine(environment.WebRootPath, relativePath.TrimStart('/'));
+
+            return filepath;
         }
     }
 }
