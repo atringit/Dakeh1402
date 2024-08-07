@@ -333,3 +333,4 @@ C:/Users/Masood Talebi/source/repos/atringit/Dakeh1402/Dake/obj/Release/netcorea
 /home/runner/work/Dakeh1402/Dakeh1402/Dake/obj/Release/netcoreapp2.1/Dake.pdb
 /home/runner/work/Dakeh1402/Dakeh1402/Dake/obj/Release/netcoreapp2.1/Dake.genruntimeconfig.cache
 /home/runner/work/Dakeh1402/Dakeh1402/Dake/obj/Release/netcoreapp2.1/Dake.csproj.Up2Date
+/home/runner/work/Dakeh1402/Dakeh1402/Dake/obj/Release/netcoreapp2.1/Razor/Views/Payments/Purshe.cshtml.g.cs
