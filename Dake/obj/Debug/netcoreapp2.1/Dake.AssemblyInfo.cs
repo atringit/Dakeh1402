@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Dake")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.3.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.3+639a04132953057ac75baf608abbdab336d86d6b")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.3+b0a9b0b40c89948800382b3bd963f9331b91d138")]
 [assembly: System.Reflection.AssemblyProductAttribute("Dake")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Dake")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.3.0")]
