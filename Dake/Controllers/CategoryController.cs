@@ -48,54 +48,58 @@ namespace Dake.Controllers
         {
             ModelState.Remove("id");
             ModelState.Remove("image");
-            if (ModelState.IsValid)
+
+            if (!ModelState.IsValid)
             {
-                if (Category.id == 0)
+                return BadRequest(ModelState);
+            }
+
+            if (Category.id == 0)
+            {
+                if (Category.imageUrl != null)
+                {
+
+                    string imagePath = "";
+                    Category.image = Guid.NewGuid().ToString().Replace("-", "") + Path.GetExtension(Category.imageUrl.FileName);
+                    imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/Category", Category.image);
+                    using (var stream = new FileStream(imagePath, FileMode.Create))
+                    {
+                        Category.imageUrl.CopyTo(stream);
+                    }
+                    Category.image = "/images/Category/" + Category.image;
+
+                }
+                if (string.IsNullOrEmpty(Category.staticespacialPriceId))
+                {
+                    Category.staticespacialPriceId = "0";
+                }
+                if (string.IsNullOrEmpty(Category.staticexpirePriceId))
+                {
+                    Category.staticexpirePriceId = "0";
+                }
+                if (string.IsNullOrEmpty(Category.staticemergencyPriceId))
+                {
+                    Category.staticemergencyPriceId = "0";
+                }
+
+                if (string.IsNullOrEmpty(Category.staticladerPriceId))
+                {
+                    Category.staticladerPriceId = "0";
+                }
+                if (string.IsNullOrEmpty(Category.staticregisterPriceId))
+                {
+                    Category.staticregisterPriceId = "0";
+                }
+
+                _context.Add(Category);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                try
                 {
                     if (Category.imageUrl != null)
-                    {
-                       
-                        string imagePath = "";
-                        Category.image = Guid.NewGuid().ToString().Replace("-", "") + Path.GetExtension(Category.imageUrl.FileName);
-                        imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/Category", Category.image);
-                        using (var stream = new FileStream(imagePath, FileMode.Create))
-                        {
-                            Category.imageUrl.CopyTo(stream);
-                        }
-                        Category.image = "/images/Category/" + Category.image;
-
-                    }
-					if (string.IsNullOrEmpty(Category.staticespacialPriceId))
-					{
-                        Category.staticespacialPriceId = "0";
-					}
-                    if (string.IsNullOrEmpty(Category.staticexpirePriceId))
-                    {
-                        Category.staticexpirePriceId = "0";
-                    }
-                    if (string.IsNullOrEmpty(Category.staticemergencyPriceId))
-                    {
-                        Category.staticemergencyPriceId = "0";
-                    }
-
-                    if (string.IsNullOrEmpty(Category.staticladerPriceId))
-                    {
-                        Category.staticladerPriceId = "0";
-                    }
-                    if (string.IsNullOrEmpty(Category.staticregisterPriceId))
-                    {
-                        Category.staticregisterPriceId = "0";
-                    }
-
-                    _context.Add(Category);
-                    await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
-                }
-                else
-                {
-                    try
-                    {
-                         if (Category.imageUrl != null)
                     {
                         string deletePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/Category/", Category.image);
                         if (System.IO.File.Exists(deletePath))
@@ -112,43 +116,43 @@ namespace Dake.Controllers
                         Category.image = "/images/Category/" + Category.image;
 
                     }
-                        if (string.IsNullOrEmpty(Category.staticespacialPriceId))
-                        {
-                            Category.staticespacialPriceId = "0";
-                        }
-                        
-                        if (string.IsNullOrEmpty(Category.staticexpirePriceId))
-                        {
-                            Category.staticexpirePriceId = "0";
-                        }
-                        if (string.IsNullOrEmpty(Category.staticemergencyPriceId))
-                        {
-                            Category.staticemergencyPriceId = "0";
-                        }
-                        if (string.IsNullOrEmpty(Category.staticladerPriceId))
-                        {
-                            Category.staticladerPriceId = "0";
-                        }
-                        if (string.IsNullOrEmpty(Category.staticregisterPriceId))
-                        {
-                            Category.staticregisterPriceId = "0";
-                        }
-                        _context.Update(Category);
-                        await _context.SaveChangesAsync();
-                    }
-                    catch (DbUpdateConcurrencyException)
+                    if (string.IsNullOrEmpty(Category.staticespacialPriceId))
                     {
-                        if (!CategoryExists(Category.id))
-                        {
-                            return Json("Error");
-                        }
-                        else
-                        {
-                            throw;
-                        }
+                        Category.staticespacialPriceId = "0";
+                    }
+
+                    if (string.IsNullOrEmpty(Category.staticexpirePriceId))
+                    {
+                        Category.staticexpirePriceId = "0";
+                    }
+                    if (string.IsNullOrEmpty(Category.staticemergencyPriceId))
+                    {
+                        Category.staticemergencyPriceId = "0";
+                    }
+                    if (string.IsNullOrEmpty(Category.staticladerPriceId))
+                    {
+                        Category.staticladerPriceId = "0";
+                    }
+                    if (string.IsNullOrEmpty(Category.staticregisterPriceId))
+                    {
+                        Category.staticregisterPriceId = "0";
+                    }
+                    _context.Update(Category);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!CategoryExists(Category.id))
+                    {
+                        return Json("Error");
+                    }
+                    else
+                    {
+                        throw;
                     }
                 }
             }
+
             return Json("Done");
 
         }

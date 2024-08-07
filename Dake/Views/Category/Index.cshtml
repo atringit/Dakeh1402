@@ -97,12 +97,12 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="control-label">قیمت ثبت برای دسته بندی</label>
+                        <label class="control-label">قیمت ثبت برای دسته بندی (تومان)</label>
                         <input class="form-control" type="text" data-val="true" data-val-required="لطفا قیمت ثبت دسته بندی را وارد کنید" id="registerPrice" name="registerPrice" value="">
                         <span class="text-danger field-validation-valid" data-valmsg-for="registerPrice" data-valmsg-replace="true"></span>
                     </div>
                     <div class="form-group">
-                        <label class="control-label">قیمت  یرای ثبت دسته بندی در اپلیکیشن</label>
+                        <label class="control-label">قیمت  یرای ثبت دسته بندی در اپلیکیشن (تومان)</label>
                         <select class="form-control"  id="staticregisterPriceId" name="staticregisterPriceId">
                             <option value="0">انتخاب کنید</option>
 
@@ -114,12 +114,12 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="control-label">قیمت نردبان برای دسته بندی</label>
+                        <label class="control-label">قیمت نردبان برای دسته بندی (تومان)</label>
                         <input class="form-control" type="text" data-val="true" data-val-required="لطفا قیمت نردبان دسته بندی را وارد کنید" id="laderPrice" name="laderPrice" value="">
                         <span class="text-danger field-validation-valid" data-valmsg-for="laderPrice" data-valmsg-replace="true"></span>
                     </div>
                     <div class="form-group">
-                        <label class="control-label">قیمت نردبان برای دسته بندی در اپلیکشن</label>
+                        <label class="control-label">قیمت نردبان برای دسته بندی در اپلیکشن (تومان)</label>
                         <select class="form-control " id="staticladerPriceId" name="staticladerPriceId">
                             <option value="0">انتخاب کنید</option>
 
@@ -131,12 +131,12 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="control-label">قیمت اضظراری برای دسته بندی</label>
+                        <label class="control-label">قیمت اضظراری برای دسته بندی (تومان)</label>
                         <input class="form-control" type="text" data-val="true" data-val-required="لطفا قیمت اضظراری دسته بندی را وارد کنید" id="emergencyPrice" name="emergencyPrice" value="">
                         <span class="text-danger field-validation-valid" data-valmsg-for="emergencyPrice" data-valmsg-replace="true"></span>
                     </div>
                     <div class="form-group">
-                        <label class="control-label">قیمت اضطراری برای دسته بندی در اپلیکیشن</label>
+                        <label class="control-label">قیمت اضطراری برای دسته بندی در اپلیکیشن (تومان)</label>
                         <select class="form-control "  id="staticemergencyPriceId" name="staticemergencyPriceId">
                             <option value="0">انتخاب کنید</option>
 
@@ -148,12 +148,12 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="control-label">قیمت تمدید برای دسته بندی</label>
+                        <label class="control-label">قیمت تمدید برای دسته بندی (تومان)</label>
                         <input class="form-control" type="text" data-val="true" data-val-required="لطفا قیمت تمدید دسته بندی را وارد کنید" id="expirePrice" name="expirePrice" value="">
                         <span class="text-danger field-validation-valid" data-valmsg-for="expirePrice" data-valmsg-replace="true"></span>
                     </div>
                     <div class="form-group">
-                        <label class="control-label">قیمت تمدید برای دسته بندی در اپلیکیشن</label>
+                        <label class="control-label">قیمت تمدید برای دسته بندی در اپلیکیشن (تومان)</label>
                         <select class="form-control "  id="staticexpirePriceId" name="staticexpirePriceId">
                             <option value="0">انتخاب کنید</option>
 
@@ -164,12 +164,12 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label class="control-label">قیمت ویژه کردن آگهی برای  دسته بندی</label>
+                        <label class="control-label">قیمت ویژه کردن آگهی برای  دسته بندی (تومان)</label>
                         <input class="form-control" type="text" data-val="true" data-val-required="لطفا قیمت ویژه کردن آگهی دسته بندی را وارد کنید" id="espacialPrice" name="espacialPrice" value="">
                         <span class="text-danger field-validation-valid" data-valmsg-for="espacialPrice" data-valmsg-replace="true"></span>
                     </div>
                     <div class="form-group">
-                        <label class="control-label">قیمت ویژه کردن آگهی برای دسته بندی در اپلیکیشن</label>
+                        <label class="control-label">قیمت ویژه کردن آگهی برای دسته بندی در اپلیکیشن (تومان)</label>
                         <select class="form-control " id="staticespacialPriceId" name="staticespacialPriceId">
                             <option value="0">انتخاب کنید</option>
 
@@ -292,8 +292,25 @@
                         else
                             window.location.href = "/Category/Index?page=1";
                     },
-                    error: function () {
-                        alert("Ajax call failed");
+                    error: function (xhr, status, error) {
+                        if (xhr.status == 400) {
+                            var errors = xhr.responseJSON;
+
+                            if (errors) {
+                                $.each(errors, function (key, value) {
+                                    var span = $('span[data-valmsg-for="' + key + '"]');
+
+                                    if (span.length) {
+                                        span.html(value[0]);
+                                        span.removeClass('field-validation-valid').addClass('field-validation-error');
+                                    }
+                                });
+                            }
+                        }
+                        else {
+                            alert("Ajax call failed");
+                        }
+                        
                     }
                 })
             }
