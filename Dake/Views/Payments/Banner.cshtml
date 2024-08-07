@@ -1,9 +1,18 @@
 ﻿@{
     Layout = "_Layout";
-    ViewData["Title"] = "Online Payment";
+    ViewData["Title"] = "نتیجه پرداخت";
 }
 <h1>نتیجه پرداخت</h1>
-<div class="alert alert-success">
-    <h2>تشکر از پرداخت شمت</h2>
-    <h4>کد پیگیری شما : @ViewBag.code</h4>
-</div>
+@if (ViewBag.Status)
+{
+    <div class="alert alert-success">
+        <h2>تشکر از پرداخت شما</h2>
+        <h4>کد پیگیری شما : @ViewBag.code</h4>
+    </div>
+}
+else
+{
+    <div class="alert alert-warning">
+        <h2>پرداخت ناموفق</h2>
+    </div>
+}

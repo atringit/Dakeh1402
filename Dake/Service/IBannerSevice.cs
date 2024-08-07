@@ -15,7 +15,8 @@ namespace Dake.Service
         Task<BannerGetData> GetAllData(int page = 0, string search = "");
         Task<Banner> GetBannerById(long id);
         Task<ResultViewModels> AddBanner(Banner banner, IList<IFormFile> files);
-
+        Task<ResultViewModels> AddTempBanner(Banner banner, IList<IFormFile> files);
+        Task<ResultViewModels> ConfirmBanner(Banner banner);
 
     }
 }

@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace Dake.Service
@@ -110,7 +111,10 @@ namespace Dake.Service
                     id = dto.Id;
                 }
 
-                await AddBannerFile(dto, files);
+                if (files.Any())
+                {
+                    await AddBannerFile(dto, files);
+                }
             }
             catch (Exception ex)
             {
@@ -203,6 +207,76 @@ namespace Dake.Service
             }
 
             //result.Message = "لطفا از حساب کاربری خود خارج ، و مجددا وارد شوید";
+            result.IsSuccess = true;
+            return result;
+        }
+
+        public async Task<ResultViewModels> AddTempBanner(Banner banner, IList<IFormFile> files)
+        {
+            ResultViewModels result = new ResultViewModels();
+
+            try
+            {
+
+                var setting = await _context.Settings.FirstOrDefaultAsync();
+
+                if (banner.user == null)
+                {
+                    result.Message = "لطفا از حساب کاربری خود خارج ، و مجددا وارد شوید";
+                    result.IsSuccess = false;
+                    return result;
+
+                }
+
+                //////
+                if (banner.user.IsBlocked)
+                {
+                    result.Message = "شما در لیست سیاه قرار دارید و مجاز به ثبت آگهی نمی باشید. ";
+                    result.IsSuccess = false;
+                    return result;
+                }
+
+
+
+                bool checkWrongWords = banner.title.Contains(setting.wrongWord);
+
+                if (checkWrongWords)
+                {
+                    result.Message = "لطفا در توضیحات و عنوان از کلمات مناسب استفاده نمایید. ";
+                    result.IsSuccess = false;
+                    return result;
+                }
+
+                result.Data = await AddOrUpdate(banner, files);
+
+            }
+            catch (Exception ex)
+            {
+                result.Message = ex.Message;
+                result.IsSuccess = false;
+                return result;
+            }
+
+            //result.Message = "لطفا از حساب کاربری خود خارج ، و مجددا وارد شوید";
+            result.IsSuccess = true;
+            return result;
+        }
+
+        public async Task<ResultViewModels> ConfirmBanner(Banner banner)
+        {
+            ResultViewModels result = new ResultViewModels();
+
+            var setting = await _context.Settings.FirstOrDefaultAsync();
+
+            ////تایید خودکار آگهی //////////////////////
+            if (setting.AutoAccept)
+            {
+                banner.adminConfirmStatus = EnumStatus.Accept;
+
+                CommonService.SendSMS_Accept(banner.user.cellphone, banner.title);
+            }
+
+            result.Data = await AddOrUpdate(banner, new List<IFormFile>());
             result.IsSuccess = true;
             return result;
         }

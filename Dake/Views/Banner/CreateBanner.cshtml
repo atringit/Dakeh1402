@@ -7,7 +7,12 @@
 <section class="form">
     <div class="container">
         <div class="row">
-
+            <div class="alert alert-danger" style="direction: ltr; display:none;">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <div id="error-message"></div>
+            </div>
+        </div>
+        <div class="row">
             <div class="col-lg-6">
 
                 <div class="panel-heading clearfix">
@@ -59,7 +64,7 @@
 
 <button id="showLoading" style="display:none; position:absolute; top:50%; left:40%" class="btn btn-primary" disabled>
     <span class="spinner-border spinner-border-sm"></span>
-    Loading..
+    در حال پردازش ...
 </button>
 
 
@@ -125,6 +130,11 @@
                 success: function (data) {
                     Reset();
                     window.location.href = data;
+                },
+                error: function (xhr, status, error) {
+                    $("#showLoading").hide();
+                    $(".alert-danger").show();
+                    $('#error-message').html(xhr.responseText);
                 }
             });
         }

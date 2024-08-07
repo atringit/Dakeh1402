@@ -29,6 +29,8 @@ using System.Security.Cryptography.Xml;
 using System.Drawing;
 using DocumentFormat.OpenXml.Vml;
 using DocumentFormat.OpenXml.Office.CustomUI;
+using Dake.Service;
+using Microsoft.Extensions.Configuration;
 
 namespace Dake.Controllers
 {
@@ -39,14 +41,18 @@ namespace Dake.Controllers
         private readonly Context _context;
         private readonly IHostingEnvironment environment;
         private IDiscountCode _IDiscountCode;
+        private readonly IPaymentService  _paymentService;
+        private readonly int _minAmount;
 
         public static int Progress { get; set; }
-        public Home2Controller(Context context, IHostingEnvironment environment, IDiscountCode IdiscountCode)
+        public Home2Controller(Context context, IHostingEnvironment environment, IDiscountCode IdiscountCode, IPaymentService paymentService,
+            IConfiguration configuration)
         {
             this.environment = environment;
             _context = context;
             _IDiscountCode = IdiscountCode;
-
+            _paymentService = paymentService;
+            _minAmount = int.Parse(configuration.GetSection("MinimumAmount").Value);
         }
         public IActionResult Index()
         {
@@ -503,7 +509,7 @@ namespace Dake.Controllers
 
                 return View(nameof(Profile), addNotice);
             }
-            var test = _context.StaticPrices;
+
             Progress = 0;
             PaymentRequest _paymentRequest = new PaymentRequest();
             int discountprice = 0;
@@ -704,17 +710,6 @@ namespace Dake.Controllers
 
                 _context.Notices.Add(notice);
 
-
-                ////تایید خودکار آگهی //////////////////////
-                if (setting.AutoAccept)
-                {
-                    notice.adminConfirmStatus = EnumStatus.Accept;
-
-                    CommonService.SendSMS_Accept(user.cellphone, notice.title);
-                }
-
-
-
                 await _context.SaveChangesAsync();
 
                
@@ -727,28 +722,9 @@ namespace Dake.Controllers
                     });
                     await _context.SaveChangesAsync();
                 }
-                var totalp = 0;
-                List<Models.Category> cats = new List<Models.Category>();
-                int cat = notice.categoryId;
-                for (int i = 0; i < 10; i++)
-                {
-                    var categorys = _context.Categorys.FirstOrDefault(x => x.id == cat);
-                    if (categorys == null)
-                        break;
-                    cats.Add(categorys);
-                    if (categorys.parentCategoryId != null)
-                        cat = (int)categorys.parentCategoryId;
-                    else
-                        break;
-                }
-                foreach (var item in cats)
-                {
-                    if (item.registerPrice > 0)
-                    {
-                        totalp = (int)item.registerPrice;
-                    }
-                }
-                int total = 10000;
+                var parentCategory = GetParent(notice.categoryId);
+                var total = parentCategory.registerPrice > 0 ? (int)parentCategory.registerPrice : 0;
+
                 if (user.Invite_Price != 0)
                 {
                     if (user.Invite_Price > total)
@@ -761,12 +737,15 @@ namespace Dake.Controllers
                     }
                     else
                     {
-                        total = total - user.Invite_Price;
+                        total -= user.Invite_Price;
                         user.Invite_Price = 0;
                         _context.Users.Update(user);
                         _context.SaveChanges();
                     }
                 }
+
+                total = havediscount ? total - discountprice : total;
+
                 Factor factor = new Factor();
                 factor.state = State.NotPay;
                 factor.userId = user.id;
@@ -778,50 +757,50 @@ namespace Dake.Controllers
                 //Payment
                 await _context.SaveChangesAsync();
 
-                if (factor.totalPrice >= 10000)
+                if (total >= _minAmount)
                 {
-                    try
+                    var attempt = new PaymentRequestAttemp
                     {
-                        PaymentRequestAttemp request = new PaymentRequestAttemp();
-                        request.FactorId = factor.id;
-                        request.NoticeId = notice.id;
-                        request.UserId = user.id;
-                        request.pursheType = pursheType.RegisterNotice;
-                        _context.Add(request);
-                        _context.SaveChanges();
+                        FactorId = factor.id,
+                        NoticeId = notice.id,
+                        UserId = user.id,
+                        pursheType = pursheType.RegisterNotice,
+                    };
 
-                        //var res = PaymentHelper.SendRequest(request.Id, havediscount ? totalp - discountprice : totalp, "http://dakeh.net/Purshe/VerifyRequest");
-                        int totall = havediscount ? totalp - discountprice : totalp;
-                        
-                        var pyment = new Zarinpal.Payment("ceb42ad1-9eb4-47ec-acec-4b45c9135122", total);
-                        var res = pyment.PaymentRequest($"پرداخت فاکتور شمارهی {factor.id}", "https://dakeh.net/Payments/Index/" + factor.id, null , user.cellphone);
-                        if (res != null && res.Result != null)
-                        {   
-                            if (res.Result.Status == 100)
-                            {
-                                return Redirect("https://zarinpal.com/pg/StartPay/" + res.Result.Authority);
-                                //var n = _context.Notices.FirstOrDefault(p => p.id == notice.id);
-                                //n.isPaid = true;
-                                //_context.Notices.Update(n);
-                                //_context.SaveChanges();
-                                //if (havediscount)
-                                //{
-                                //    _IDiscountCode.AddUserToDiscountCode(user.id, _code);
-                                //}
-                                //Response.Redirect(string.Format("{0}/Purchase/Index?token={1}", PaymentHelper.PurchasePage, res.Result.Token));
-                            }
-                            else
-                            {
-                                ViewBag.Message = "امکان اتصال به درگاه بانکی وجود ندارد";
-                            }
-                            
-                            return View("Profile2"); ;
-                        }
-                    }
-                    catch (Exception)
+                    await _paymentService.AddPaymentAttempt(attempt);
+
+                    var connectGatewayRequest = new PaymentConnectModel
                     {
-                        ViewBag.Message = "امکان اتصال به درگاه بانکی وجود ندارد";
+                        FactorId = factor.id,
+                        Amount = total,
+                        ReturnUrl = $"{Request.Scheme}://{Request.Host}/Payments/Index/{factor.id}",
+                        UserMobile = user.cellphone,
+                    };
+
+
+                    var paymentResponse = await _paymentService.ConnectGateway(connectGatewayRequest);
+
+                    if (paymentResponse.Succeeded)
+                    {
+                        return Ok(paymentResponse.GatewayUrl);
                     }
+                    else
+                    {
+                        ViewBag.Message = paymentResponse.Error;
+                    }
+                }
+                else
+                {
+                    ////تایید خودکار آگهی //////////////////////
+                    if (setting.AutoAccept)
+                    {
+                        notice.adminConfirmStatus = EnumStatus.Accept;
+
+                        CommonService.SendSMS_Accept(user.cellphone, notice.title);
+                    }
+
+                    _context.Notices.Update(notice);
+                    await _context.SaveChangesAsync();
                 }
 
             }
@@ -1306,7 +1285,7 @@ namespace Dake.Controllers
             return Json("Success");
         }
         [HttpPost]
-        public IActionResult LadderNotice(long laddernoticeid)
+        public async Task<IActionResult> LadderNotice(long laddernoticeid)
         {
             try
             {
@@ -1321,7 +1300,7 @@ namespace Dake.Controllers
 
                     return View("Profile2");
                 }
-                if (category.laderPrice >= 10000)
+                if (category.laderPrice >= _minAmount)
                 {
                     factor.state = State.IsPay;
                     factor.userId = user.id;
@@ -1331,23 +1310,38 @@ namespace Dake.Controllers
                     factor.totalPrice = category.laderPrice;
                     _context.Factors.Add(factor);
                     _context.SaveChanges();
-                    PaymentRequestAttemp request = new PaymentRequestAttemp();
-                    request.FactorId = factor.id;
-                    request.NoticeId = Notice.id;
-                    request.UserId = user.id;
-                    request.pursheType = pursheType.Ladders;
-                    _context.Add(request);
-                    _context.SaveChanges();
-                    var res = PaymentHelper.SendRequest(request.Id, category.laderPrice, "http://dakeh.net/Purshe/VerifyRequest");
-                    if (res != null && res.Result != null)
+
+                    var attempt = new PaymentRequestAttemp
                     {
-                        if (res.Result.ResCode == "0")
-                        {
-                            Response.Redirect(string.Format("{0}/Purchase/Index?token={1}", PaymentHelper.PurchasePage, res.Result.Token));
-                        }
-                        ViewBag.Message = res.Result.Description;
-                        return View("Profile2");
+                        FactorId = factor.id,
+                        NoticeId = Notice.id,
+                        UserId = user.id,
+                        pursheType = pursheType.Ladders,
+                    };
+
+                    await _paymentService.AddPaymentAttempt(attempt);
+
+                    var connectGatewayRequest = new PaymentConnectModel
+                    {
+                        FactorId = factor.id,
+                        Amount = (int)category.espacialPrice,
+                        ReturnUrl = $"{Request.Scheme}://{Request.Host}/Payments/Purshe/{factor.id}",
+                        UserMobile = user.cellphone,
+                    };
+
+
+                    var paymentResponse = await _paymentService.ConnectGateway(connectGatewayRequest);
+
+                    if (paymentResponse.Succeeded)
+                    {
+                        return Ok(paymentResponse.GatewayUrl);
                     }
+                    else
+                    {
+                        TempData["ErrorPursheResult"] = paymentResponse.Error;
+                    }
+
+                    return RedirectToAction("Profile2");
                 }
                 else
                 {
@@ -1394,7 +1388,7 @@ namespace Dake.Controllers
             var setting = await _context.Settings.FirstOrDefaultAsync();
             var category = GetParent(Notice.categoryId);
             var user = await _context.Users.FindAsync(Notice.userId);
-            if (category.emergencyPrice >= 10000)
+            if (category.emergencyPrice >= _minAmount)
             {
                 factor.state = State.IsPay;
                 factor.userId = user.id;
@@ -1405,25 +1399,36 @@ namespace Dake.Controllers
                 _context.Factors.Add(factor);
                 await _context.SaveChangesAsync();
 
-                PaymentRequestAttemp request = new PaymentRequestAttemp();
-                request.FactorId = factor.id;
-                request.NoticeId = Notice.id;
-                request.UserId = user.id;
-                request.pursheType = pursheType.emergency;
-                _context.Add(request);
-                await _context.SaveChangesAsync();
-
-                var res = PaymentHelper.SendRequest(request.Id, category.emergencyPrice, "http://dakeh.net/Purshe/VerifyRequest");
-                if (res != null && res.Result != null)
+                var attempt = new PaymentRequestAttemp
                 {
-                    if (res.Result.ResCode == "0")
-                    {
-                        Response.Redirect(string.Format("{0}/Purchase/Index?token={1}", PaymentHelper.PurchasePage, res.Result.Token));
-                    }
-                    ViewBag.Message = res.Result.Description;
-                    return View("Profile2");
+                    FactorId = factor.id,
+                    NoticeId = Notice.id,
+                    UserId = user.id,
+                    pursheType = pursheType.emergency,
+                };
 
+                await _paymentService.AddPaymentAttempt(attempt);
+
+                var connectGatewayRequest = new PaymentConnectModel
+                {
+                    FactorId = factor.id,
+                    Amount = (int)category.espacialPrice,
+                    ReturnUrl = $"{Request.Scheme}://{Request.Host}/Payments/Purshe/{factor.id}",
+                    UserMobile = user.cellphone,
+                };
+
+
+                var paymentResponse = await _paymentService.ConnectGateway(connectGatewayRequest);
+
+                if (paymentResponse.Succeeded)
+                {
+                    return Ok(paymentResponse.GatewayUrl);
                 }
+                else
+                {
+                    TempData["ErrorPursheResult"] = paymentResponse.Error;
+                }
+
                 return RedirectToAction("Profile2");
             }
             else
@@ -1446,7 +1451,7 @@ namespace Dake.Controllers
         }
 
         [HttpPost]
-        public IActionResult ExtendedNotice(long Extendnoticeid)
+        public async Task<IActionResult> ExtendedNotice(long Extendnoticeid)
         {
             try
             {
@@ -1464,7 +1469,7 @@ namespace Dake.Controllers
                 var setting = _context.Settings.FirstOrDefault();
                 var category = GetParent(Notice.categoryId);
                 var user = _context.Users.Find(Notice.userId);
-                if (category.expirePrice >= 10000)
+                if (category.expirePrice >= _minAmount)
                 {
                     factor.state = State.IsPay;
                     factor.userId = user.id;
@@ -1474,24 +1479,37 @@ namespace Dake.Controllers
                     factor.totalPrice = category.expirePrice;
                     _context.Factors.Add(factor);
                     _context.SaveChanges();
-                    PaymentRequestAttemp request = new PaymentRequestAttemp();
-                    request.FactorId = factor.id;
-                    request.NoticeId = Notice.id;
-                    request.UserId = user.id;
-                    request.pursheType = pursheType.Extend;
-                    _context.Add(request);
-                    _context.SaveChanges();
-                    var res = PaymentHelper.SendRequest(request.Id, category.expirePrice, "http://dakeh.net/Purshe/VerifyRequest");
-                    if (res != null && res.Result != null)
-                    {
-                        if (res.Result.ResCode == "0")
-                        {
-                            Response.Redirect(string.Format("{0}/Purchase/Index?token={1}", PaymentHelper.PurchasePage, res.Result.Token));
-                        }
-                        ViewBag.Message = res.Result.Description;
-                        return View("Profile2");
 
+                    var attempt = new PaymentRequestAttemp
+                    {
+                        FactorId = factor.id,
+                        NoticeId = Notice.id,
+                        UserId = user.id,
+                        pursheType = pursheType.Extend,
+                    };
+
+                    await _paymentService.AddPaymentAttempt(attempt);
+
+                    var connectGatewayRequest = new PaymentConnectModel
+                    {
+                        FactorId = factor.id,
+                        Amount = (int)category.espacialPrice,
+                        ReturnUrl = $"{Request.Scheme}://{Request.Host}/Payments/Purshe/{factor.id}",
+                        UserMobile = user.cellphone,
+                    };
+
+
+                    var paymentResponse = await _paymentService.ConnectGateway(connectGatewayRequest);
+
+                    if (paymentResponse.Succeeded)
+                    {
+                        return Ok(paymentResponse.GatewayUrl);
                     }
+                    else
+                    {
+                        TempData["ErrorPursheResult"] = paymentResponse.Error;
+                    }
+
                     return RedirectToAction("Profile2");
                 }
                 else
@@ -1601,7 +1619,7 @@ namespace Dake.Controllers
         }
         
         [HttpPost]
-        public IActionResult SpecialNotice(long Specialdnoticeid)
+        public async Task<IActionResult> SpecialNotice(long Specialdnoticeid)
         {
             try
             {
@@ -1627,7 +1645,7 @@ namespace Dake.Controllers
                 var category = GetParent(Notice.categoryId);
                 var user = _context.Users.Find(Notice.userId);
 
-                if (category.espacialPrice >= 10000)
+                if (category.espacialPrice >= _minAmount)
                 {
                     factor.state = State.IsPay;
                     factor.userId = user.id;
@@ -1637,24 +1655,37 @@ namespace Dake.Controllers
                     factor.totalPrice = category.espacialPrice;
                     _context.Factors.Add(factor);
                     _context.SaveChanges();
-                    PaymentRequestAttemp request = new PaymentRequestAttemp();
-                    request.FactorId = factor.id;
-                    request.NoticeId = Notice.id;
-                    request.UserId = user.id;
-                    request.pursheType = pursheType.Special;
-                    _context.Add(request);
-                    _context.SaveChanges();
-                    var res = PaymentHelper.SendRequest(request.Id, category.espacialPrice, "http://dakeh.net/Purshe/VerifyRequest");
-                    if (res != null && res.Result != null)
-                    {
-                        if (res.Result.ResCode == "0")
-                        {
-                            Response.Redirect(string.Format("{0}/Purchase/Index?token={1}", PaymentHelper.PurchasePage, res.Result.Token));
-                        }
-                        ViewBag.Message = res.Result.Description;
-                        return View("Profile2");
 
+                    var attempt = new PaymentRequestAttemp
+                    {
+                        FactorId = factor.id,
+                        NoticeId = Notice.id,
+                        UserId = user.id,
+                        pursheType = pursheType.Special,
+                    };
+
+                    await _paymentService.AddPaymentAttempt(attempt);
+
+                    var connectGatewayRequest = new PaymentConnectModel
+                    {
+                        FactorId = factor.id,
+                        Amount = (int)category.espacialPrice,
+                        ReturnUrl = $"{Request.Scheme}://{Request.Host}/Payments/Purshe/{factor.id}",
+                        UserMobile = user.cellphone,
+                    };
+
+
+                    var paymentResponse = await _paymentService.ConnectGateway(connectGatewayRequest);
+
+                    if (paymentResponse.Succeeded)
+                    {
+                        return Ok(paymentResponse.GatewayUrl);
                     }
+                    else
+                    {
+                        TempData["ErrorPursheResult"] = paymentResponse.Error;
+                    }
+
                     return RedirectToAction("Profile2");
                 }
                 else
@@ -1669,7 +1700,7 @@ namespace Dake.Controllers
                     factor.totalPrice = category.espacialPrice;
                     _context.Factors.Add(factor);
                     _context.SaveChanges();
-                    var daysofextend = setting.countExpireDate == null ? 0 : setting.countExpireDate;
+                    var daysofextend = setting.countExpireDate ?? 0;
                     TempData["PursheResult"] = $"کاربر گرامی ، اکنون آگهی {Notice.title} جزو آگهی های ویژه است ";
                     return RedirectToAction("Profile2");
                 }

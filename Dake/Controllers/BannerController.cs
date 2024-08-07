@@ -4,7 +4,9 @@ using Dake.Service;
 using Dake.Service.Common;
 using Dake.Service.Interface;
 using Dake.Utility;
+using Dake.ViewModel;
 using DocumentFormat.OpenXml.Drawing;
+using DocumentFormat.OpenXml.Vml;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -12,6 +14,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -23,12 +26,14 @@ namespace Dake.Controllers
         private readonly IBannerSevice _repository;
         private readonly Context _context;
         private IDiscountCode _IDiscountCode;
+        private readonly IPaymentService _paymentService;
 
-        public BannerController(IBannerSevice repository,Context context, IDiscountCode IDiscountCode)
+        public BannerController(IBannerSevice repository, Context context, IDiscountCode IDiscountCode, IPaymentService paymentService)
         {
             _repository = repository;
             _context = context;
             _IDiscountCode = IDiscountCode;
+            _paymentService = paymentService;
         }
 
         [HttpGet]
@@ -107,12 +112,15 @@ namespace Dake.Controllers
                 {
                     banner.user = user;
                 }
-                var bres = _repository.AddBanner(banner, files).Result;
+                var bres = await _repository.AddTempBanner(banner, files);
 
                 if (bres.IsSuccess)
                 {
-                    int total = 10000;
-                    if (user.Invite_Price != 0)
+                    var bannerPrice = await _context.StaticPrices.Where(w => w.code == "Add_Banner").FirstOrDefaultAsync();
+
+                    int total = (int)bannerPrice.price;
+
+                    if (user != null && user.Invite_Price != 0)
                     {
                         if (user.Invite_Price > total)
                         {
@@ -148,49 +156,38 @@ namespace Dake.Controllers
 
                     if (factor.totalPrice >= 0)
                     {
-                        try
+                        var attempt = new PaymentRequestAttemp
                         {
-                            PaymentRequestAttemp request = new PaymentRequestAttemp();
-                            request.FactorId = factor.id;
-                            request.NoticeId = bannerId;
-                            request.UserId = user.id;
-                            request.pursheType = pursheType.RegisterNotice;
+                            FactorId = factor.id,
+                            NoticeId = bannerId,
+                            UserId = factor.userId,
+                            pursheType = pursheType.RegisterNotice,
+                        };
 
-                            _context.Add(request);
-                            _context.SaveChanges();
+                        await _paymentService.AddPaymentAttempt(attempt);
 
-
-                            
-
-                            var pyment = new Zarinpal.Payment("ceb42ad1-9eb4-47ec-acec-4b45c9135122", total);
-                            var res = pyment.PaymentRequest($"پرداخت فاکتور شمارهی {factor.id}", "https://dakeh.net/Payments/Banner/" + factor.id, null, user.cellphone);
-                            if (res != null && res.Result != null)
-                            {
-                                if (res.Result.Status == 100)
-                                {
-                                    var redi ="https://zarinpal.com/pg/StartPay/" + res.Result.Authority;
-
-                                    //var n = _context.Notices.FirstOrDefault(p => p.id == notice.id);
-                                    //n.isPaid = true;
-                                    //_context.Notices.Update(n);
-                                    //_context.SaveChanges();
-                                    //if (havediscount)
-                                    //{
-                                    //    _IDiscountCode.AddUserToDiscountCode(user.id, _code);
-                                    //}
-                                    //Response.Redirect(string.Format("{0}/Purchase/Index?token={1}", PaymentHelper.PurchasePage, res.Result.Token));
-                                    return Ok(redi);
-                                }
-                                else
-                                {
-                                    ViewBag.Message = "امکان اتصال به درگاه بانکی وجود ندارد";
-                                }
-                            }
-                        }
-                        catch (Exception)
+                        var connectGatewayRequest = new PaymentConnectModel
                         {
-                            ViewBag.Message = "امکان اتصال به درگاه بانکی وجود ندارد";
+                            FactorId = factor.id,
+                            Amount = total,
+                            ReturnUrl = $"{Request.Scheme}://{Request.Host}/Payments/Banner/{factor.id}",
+                            UserMobile = user?.cellphone ?? banner.user.cellphone,
+                        };
+                        
+                        var paymentResponse = await _paymentService.ConnectGateway(connectGatewayRequest);
+
+                        if (paymentResponse.Succeeded)
+                        {
+                            return Ok(paymentResponse.GatewayUrl);
                         }
+                        else
+                        {
+                            return BadRequest(error: paymentResponse.Error);
+                        }
+                    }
+                    else
+                    {
+                        await _repository.ConfirmBanner(banner);
                     }
                 }
                 return Ok();

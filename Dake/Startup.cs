@@ -86,6 +86,7 @@ namespace Dake
             services.AddTransient<IPushNotificationService, PushNotificationService>();
 
             services.AddScoped<IBannerSevice, BannerSevice>();
+            services.AddScoped<IPaymentService, PaymentService>();
             #endregion
 
             services.AddCors(opt => opt.AddPolicy(name: "AllowOrigin",
