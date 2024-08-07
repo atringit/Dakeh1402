@@ -119,6 +119,7 @@ namespace Dake.Controllers
                 status.Equals("ok", StringComparison.OrdinalIgnoreCase)
                 && !string.IsNullOrEmpty(authority))
             {
+                ViewBag.Status = true;
                 var paymentAttempt = await _context.PaymentRequestAttemps.Where(w => w.FactorId == id).FirstOrDefaultAsync();
                 if (paymentAttempt != null)
                 {
@@ -178,7 +179,8 @@ namespace Dake.Controllers
                 }
             }
 
-            return NotFound();
+            ViewBag.Status = false;
+            return View();
         }
     }
 }

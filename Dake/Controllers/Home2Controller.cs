@@ -1324,7 +1324,7 @@ namespace Dake.Controllers
                     var connectGatewayRequest = new PaymentConnectModel
                     {
                         FactorId = factor.id,
-                        Amount = (int)category.espacialPrice,
+                        Amount = (int)category.laderPrice,
                         ReturnUrl = $"{Request.Scheme}://{Request.Host}/Payments/Purshe/{factor.id}",
                         UserMobile = user.cellphone,
                     };
@@ -1334,7 +1334,7 @@ namespace Dake.Controllers
 
                     if (paymentResponse.Succeeded)
                     {
-                        return Ok(paymentResponse.GatewayUrl);
+                        return Redirect(paymentResponse.GatewayUrl);
                     }
                     else
                     {
@@ -1412,7 +1412,7 @@ namespace Dake.Controllers
                 var connectGatewayRequest = new PaymentConnectModel
                 {
                     FactorId = factor.id,
-                    Amount = (int)category.espacialPrice,
+                    Amount = (int)category.emergencyPrice,
                     ReturnUrl = $"{Request.Scheme}://{Request.Host}/Payments/Purshe/{factor.id}",
                     UserMobile = user.cellphone,
                 };
@@ -1493,7 +1493,7 @@ namespace Dake.Controllers
                     var connectGatewayRequest = new PaymentConnectModel
                     {
                         FactorId = factor.id,
-                        Amount = (int)category.espacialPrice,
+                        Amount = (int)category.expirePrice,
                         ReturnUrl = $"{Request.Scheme}://{Request.Host}/Payments/Purshe/{factor.id}",
                         UserMobile = user.cellphone,
                     };
