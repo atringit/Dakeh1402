@@ -782,7 +782,7 @@ namespace Dake.Controllers
 
                     if (paymentResponse.Succeeded)
                     {
-                        return Ok(paymentResponse.GatewayUrl);
+                        return Redirect(paymentResponse.GatewayUrl);
                     }
                     else
                     {
@@ -1422,7 +1422,7 @@ namespace Dake.Controllers
 
                 if (paymentResponse.Succeeded)
                 {
-                    return Ok(paymentResponse.GatewayUrl);
+                    return Redirect(paymentResponse.GatewayUrl);
                 }
                 else
                 {
@@ -1503,7 +1503,7 @@ namespace Dake.Controllers
 
                     if (paymentResponse.Succeeded)
                     {
-                        return Ok(paymentResponse.GatewayUrl);
+                        return Redirect(paymentResponse.GatewayUrl);
                     }
                     else
                     {
@@ -1679,7 +1679,7 @@ namespace Dake.Controllers
 
                     if (paymentResponse.Succeeded)
                     {
-                        return Ok(paymentResponse.GatewayUrl);
+                        return Redirect(paymentResponse.GatewayUrl);
                     }
                     else
                     {
