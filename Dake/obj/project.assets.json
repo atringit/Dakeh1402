@@ -15998,26 +15998,24 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\sajad\\.nuget\\packages\\": {}
+    "/home/runner/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.3",
     "restore": {
-      "projectUniqueName": "F:\\SourceCodes\\Dakeh1402\\Dake\\Dake.csproj",
+      "projectUniqueName": "/home/runner/work/Dakeh1402/Dakeh1402/Dake/Dake.csproj",
       "projectName": "Dake",
-      "projectPath": "F:\\SourceCodes\\Dakeh1402\\Dake\\Dake.csproj",
-      "packagesPath": "C:\\Users\\sajad\\.nuget\\packages\\",
-      "outputPath": "F:\\SourceCodes\\Dakeh1402\\Dake\\obj\\",
+      "projectPath": "/home/runner/work/Dakeh1402/Dakeh1402/Dake/Dake.csproj",
+      "packagesPath": "/home/runner/.nuget/packages/",
+      "outputPath": "/home/runner/work/Dakeh1402/Dakeh1402/Dake/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\sajad\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        "/home/runner/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "netcoreapp2.1"
       ],
       "sources": {
-        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -16174,7 +16172,7 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.202\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/8.0.401/RuntimeIdentifierGraph.json"
       }
     }
   },
