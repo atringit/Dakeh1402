@@ -75,6 +75,60 @@ namespace Dake.Controllers
             ViewBag.Status = false;
             return View();
         }
+
+        public async Task<IActionResult> NoticeWeb(int id)
+        {
+            bool paymentStatus = false;
+            string code = string.Empty;
+            var status = HttpContext.Request.Query["Status"].ToString();
+            var authority = HttpContext.Request.Query["Authority"].ToString();
+
+            if (!string.IsNullOrEmpty(status) &&
+                status.Equals("ok", StringComparison.OrdinalIgnoreCase)
+                && !string.IsNullOrEmpty(authority))
+            {
+                paymentStatus = true;
+                var factor = _context.Factors.Find(id);
+                int total = (int)factor.totalPrice;
+
+                (var isVerified, var refId) = await _paymentService.VerifyPayment(authority, total);
+
+                if (isVerified)
+                {
+                    code = refId.ToString();
+                    var autoAccept = await _context
+                        .Settings
+                        .Select(s => s.AutoAccept)
+                        .FirstOrDefaultAsync();
+
+                    factor.state = State.IsPay;
+                    var notice = _context.Notices.Find(factor.noticeId);
+                    notice.isPaid = true;
+
+                    ////تایید خودکار آگهی //////////////////////
+                    if (autoAccept)
+                    {
+                        var userCellphone = await _context
+                            .Users
+                            .Where(w => w.id == notice.userId)
+                            .Select(s => s.cellphone)
+                            .FirstOrDefaultAsync();
+
+                        notice.adminConfirmStatus = EnumStatus.Accept;
+
+                        CommonService.SendSMS_Accept(userCellphone, notice.title);
+                    }
+
+                    _context.Notices.Update(notice);
+                    _context.SaveChanges();
+                    _context.Factors.Update(factor);
+                    _context.SaveChanges();
+                }
+            }
+
+            return Ok(new { status = paymentStatus ? "Done" : "Failed", code });
+        }
+
         public async Task<IActionResult> Banner(int id)
         {
             var status = HttpContext.Request.Query["Status"].ToString();
@@ -108,6 +162,41 @@ namespace Dake.Controllers
             }
             ViewBag.Status = false;
             return View();
+        }
+
+        public async Task<IActionResult> BannerWeb(int id)
+        {
+            bool paymentStatus = false;
+            string code = string.Empty;
+            var status = HttpContext.Request.Query["Status"].ToString();
+            var authority = HttpContext.Request.Query["Authority"].ToString();
+
+            if (!string.IsNullOrEmpty(status) &&
+                status.Equals("ok", StringComparison.OrdinalIgnoreCase)
+                && !string.IsNullOrEmpty(authority))
+            {
+                paymentStatus = true;
+                var factor = _context.Factors.Find(id);
+                int total = (int)factor.totalPrice;
+
+                (var isVerified, var refId) = await _paymentService.VerifyPayment(authority, total);
+
+                if (isVerified)
+                {
+                    factor.state = State.IsPay;
+                    var banner = _context.Banner.Find(factor.bannerId);
+                    banner.isPaid = true;
+                    _context.Banner.Update(banner);
+                    _context.SaveChanges();
+                    _context.Factors.Update(factor);
+                    _context.SaveChanges();
+                    code = refId.ToString();
+
+                    await _bannerSevice.ConfirmBanner(banner);
+                }
+            }
+
+            return Ok(new { status = paymentStatus ? "Done" : "Failed", code });
         }
 
         public async Task<IActionResult> Purshe(int id)
@@ -181,6 +270,68 @@ namespace Dake.Controllers
 
             ViewBag.Status = false;
             return View();
+        }
+
+        public async Task<IActionResult> PursheWeb(int id)
+        {
+            bool paymentStatus = false;
+            string code = string.Empty;
+            var status = HttpContext.Request.Query["Status"].ToString();
+            var authority = HttpContext.Request.Query["Authority"].ToString();
+
+            if (!string.IsNullOrEmpty(status) &&
+                status.Equals("ok", StringComparison.OrdinalIgnoreCase)
+                && !string.IsNullOrEmpty(authority))
+            {
+                ViewBag.Status = true;
+                var paymentAttempt = await _context.PaymentRequestAttemps.Where(w => w.FactorId == id).FirstOrDefaultAsync();
+                if (paymentAttempt != null)
+                {
+                    var factor = _context.Factors.Find(id);
+                    int total = (int)factor.totalPrice;
+
+                    (var isVerified, var refId) = await _paymentService.VerifyPayment(authority, total);
+
+                    if (isVerified)
+                    {
+                        code = refId.ToString();
+                        var notice = await _context.Notices.Where(w => w.id == paymentAttempt.NoticeId).FirstOrDefaultAsync();
+
+                        switch (paymentAttempt.pursheType)
+                        {
+                            case pursheType.RegisterNotice:
+                                notice.isPaid = true;
+                                break;
+                            case pursheType.Ladders:
+                                notice.createDate = DateTime.Now;
+                                break;
+                            case pursheType.Extend:
+                                var countExpireDate = await _context.Settings.Select(s => s.countExpireDate).FirstOrDefaultAsync();
+
+                                notice.expireDate = notice.expireDate.AddDays((double)countExpireDate);
+                                var daysofextend = countExpireDate ?? 0;
+                                break;
+                            case pursheType.Special:
+                                var countSpecialExpireDate = await _context.Settings.Select(s => s.countToSpecialNotice).FirstOrDefaultAsync();
+
+                                notice.isSpecial = true;
+                                notice.expireDateIsespacial = notice.expireDate.AddDays((double)countSpecialExpireDate);
+
+                                break;
+                            case pursheType.emergency:
+                                var countEmergencyExpireDate = await _context.Settings.Select(s => s.countExpireDateEmergency).FirstOrDefaultAsync();
+
+                                notice.isEmergency = true;
+                                notice.ExpireDateEmergency = notice.expireDate.AddDays((double)countEmergencyExpireDate);
+                                break;
+                        }
+
+                        await _context.SaveChangesAsync();
+                    }
+                }
+            }
+
+            return Ok(new { status = paymentStatus ? "Done" : "Failed", code });
         }
     }
 }

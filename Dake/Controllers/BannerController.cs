@@ -199,8 +199,102 @@ namespace Dake.Controllers
             
         }
 
+        [HttpPost("v2/api/AddBanner")]
+        [AllowAnonymous]
+        public async Task<IActionResult> AddBannerWeb([FromForm] Banner banner, [FromForm] IList<IFormFile> files)
+        {
 
+            try
+            {
+                string token = HttpContext.Request?.Headers["Token"];
 
+                if (token == null)
+                {
+                    return Unauthorized();
+                }
+
+                var banners = _context.Banner.Where(p => p.expireDate >= DateTime.Now && p.adminConfirmStatus == EnumStatus.Accept).Include(p => p.BannerImage).ToList();
+                if (banners.Count >= 10)
+                {
+                    return BadRequest(new { message = "فعلا ظرفیت تکمیل است" });
+                }
+
+                var user = _context.Users.FirstOrDefault(x => x.token == token);
+
+                if (user == null)
+                {
+                    return Unauthorized();
+                }
+
+                banner.user = user;
+                var bres = await _repository.AddTempBanner(banner, files);
+
+                if (!bres.IsSuccess)
+                {
+                    return BadRequest(new { message = "خطا در ثبت بنر" });
+                }
+
+                var bannerPrice = await _context.StaticPrices.Where(w => w.code == "Add_Banner").FirstOrDefaultAsync();
+
+                int total = (int)bannerPrice.price;
+
+                var bannerId = long.Parse(bres.Data.ToString());
+
+                Factor factor = new Factor();
+                factor.state = State.IsPay;
+                factor.userId = banner.user.id;
+                factor.createDatePersian = PersianCalendarDate.PersianCalendarResult(DateTime.Now);
+                factor.factorKind = FactorKind.Add;
+                factor.bannerId = bannerId;
+
+                //factor.totalPrice = havediscount ? category.registerPrice - discountprice : category.registerPrice;
+                _context.Factors.Add(factor);
+                //Payment
+                await _context.SaveChangesAsync();
+
+                if (factor.totalPrice >= 0)
+                {
+                    var attempt = new PaymentRequestAttemp
+                    {
+                        FactorId = factor.id,
+                        NoticeId = bannerId,
+                        UserId = factor.userId,
+                        pursheType = pursheType.RegisterNotice,
+                    };
+
+                    await _paymentService.AddPaymentAttempt(attempt);
+
+                    var connectGatewayRequest = new PaymentConnectModel
+                    {
+                        FactorId = factor.id,
+                        Amount = total,
+                        ReturnUrl = $"{Request.Scheme}://{Request.Host}/Payments/BannerWeb/{factor.id}",
+                        UserMobile = user?.cellphone ?? banner.user.cellphone,
+                    };
+
+                    var paymentResponse = await _paymentService.ConnectGateway(connectGatewayRequest);
+
+                    if (paymentResponse.Succeeded)
+                    {
+                        return Ok(new { redirectLink = paymentResponse.GatewayUrl });
+                    }
+                    else
+                    {
+                        return BadRequest(new { message = paymentResponse.Error });
+                    }
+                }
+                else
+                {
+                    await _repository.ConfirmBanner(banner);
+                }
+            }
+            catch (Exception ex)
+            {
+                return UnprocessableEntity(new { message = "اکنون سیستم قادر به پاسخ گویی نمی باشد" });
+            }
+            return Ok(new { status = 1, message = "آگهی شما با موفقیت ثبت گردید." });
+
+        }
 
         [HttpDelete]
         public async Task DeleteBanner(long id)

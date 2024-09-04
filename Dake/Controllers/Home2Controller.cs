@@ -31,6 +31,7 @@ using DocumentFormat.OpenXml.Vml;
 using DocumentFormat.OpenXml.Office.CustomUI;
 using Dake.Service;
 using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Dake.Controllers
 {
@@ -811,6 +812,308 @@ namespace Dake.Controllers
             return RedirectToAction("Profile2");
         }
 
+        [HttpPost("v2/api/AddNotice")]
+        [AllowAnonymous]
+        public async Task<IActionResult> AddNoticeWeb(AddNotice addNotice, List<IFormFile> image)
+        {
+            string token = HttpContext.Request?.Headers["Token"];
+
+            if (token == null)
+            {
+                return Unauthorized();
+            }
+
+            var user = _context.Users.FirstOrDefault(x => x.token == token);
+
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            Progress = 0;
+            PaymentRequest _paymentRequest = new PaymentRequest();
+            int discountprice = 0;
+            bool havediscount = false;
+            int _code = 0;
+            try
+            {
+                int number;
+                var setting = _context.Settings.FirstOrDefault();
+                var category = _context.Categorys.Find(addNotice.categoryId);
+
+                //////
+                if (user.IsBlocked)
+                {
+                    return BadRequest(new { message = "شما در لیست سیاه قرار دارید و مجاز به ثبت آگهی نمی باشید. " });
+                }
+
+                var _price1 = addNotice.price.Replace(",", "");
+                var _price2 = addNotice.lastPrice.Replace(",", "");
+                //if (!int.TryParse(_price1, out number) || !int.TryParse(_price2, out number))
+                //{
+                //    TempData["PursheResult"] = "قیمت را به عدد وارد کنید";
+                //    return View("Profile2");
+                //}
+                //discount
+                if (!string.IsNullOrEmpty(addNotice.discountcode) && category.registerPrice > 1000)
+                {
+                    int n;
+                    if (!int.TryParse(addNotice.discountcode, out n))
+                    {
+                        return BadRequest(error: new { Key = "Discount", Error = "کد وارد شده معتبر نیست" });
+                    }
+                    _code = Convert.ToInt32(addNotice.discountcode);
+
+                    if (!_IDiscountCode.CheckCode(_code))
+                    {
+                        return BadRequest(error: new { Key = "Discount", Error = "کد وارد شده معتبر نیست" });
+
+                    }
+                    if (_IDiscountCode.IsAlreadyUsed(user.id, _IDiscountCode.GetIdByCode(_code)))
+                    {
+                        return BadRequest(error: new { Key = "Discount", Error = "این کد قبلا توسط شما استفاده شده است " });
+                    }
+                    else
+                    {
+                        discountprice = (int)_IDiscountCode.GetDiscountPrice(_code);
+                        havediscount = true;
+                    }
+                }
+
+                var notice = new Notice();
+                notice.title = addNotice.title;
+                notice.lastPrice = Convert.ToInt64(addNotice.lastPrice.Replace(",", ""));
+                notice.areaId = addNotice.areaId;
+                notice.cityId = addNotice.cityId;
+                notice.provinceId = addNotice.provinceId;
+                notice.price = Convert.ToInt64(addNotice.price.Replace(",", ""));
+                notice.categoryId = addNotice.categoryId;
+                notice.description = addNotice.description;
+                notice.createDate = DateTime.Now;
+                notice.expireDateIsespacial = DateTime.Now;
+                notice.expireDate = DateTime.Now.AddDays(Convert.ToInt64(setting.countExpireDate));
+                notice.adminConfirmStatus = EnumStatus.Pending;
+                notice.link = addNotice.link;
+                notice.userId = user.id;
+                if (_context.Notices.Count() == 0)
+                    notice.code = "1";
+                else
+                    notice.code = (Convert.ToInt32(_context.Notices.LastOrDefault().code) + 1).ToString();
+                List<string> images = new List<string>();
+
+                if (image != null && image.Count > 0)
+                {
+                    foreach (var file in image)
+                    {
+                        string text = "Dakeh.Net";
+                        string files = System.IO.Path.GetFileNameWithoutExtension(file.FileName) + ".png";
+                        var namefile = Guid.NewGuid().ToString().Replace('-', '0').Substring(0, 7) + System.IO.Path.GetExtension(file.FileName).ToLower();
+                        string filePath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Notice", namefile);
+
+
+
+                        //var filePath = System.IO.Path.Combine(environment.WebRootPath, "Notice/", namefile);
+                        string e = System.IO.Path.GetExtension(namefile);
+
+                        if (e == ".jpg" || e == ".webp" || e == ".jpeg" || e == ".png" || e == ".gif")
+                        {
+                            images.Add("/Notice/" + namefile);
+
+                            if (String.IsNullOrEmpty(notice.image))
+                            {
+                                notice.image = "/Notice/" + namefile;
+                                using (var stream = new FileStream(filePath, FileMode.Create))
+                                {
+
+                                    await file.CopyToAsync(stream);
+                                }
+                                await ProgressMethod(file, namefile);
+                                using (Image originalImage = Image.FromStream(file.OpenReadStream()))
+                                {
+
+                                    using (Bitmap oBitmap = new Bitmap(originalImage))
+                                    {
+                                        using (Graphics g = Graphics.FromImage(oBitmap))
+                                        {
+
+                                            Brush oBrush = new SolidBrush(Color.Green);
+                                            Font oFont = new Font("ARial", 25, FontStyle.Bold, GraphicsUnit.Pixel);
+                                            SizeF osizef = new SizeF();
+                                            osizef = g.MeasureString(text, oFont);
+                                            Point oPoint = new Point(oBitmap.Width - ((int)osizef.Width + 10), oBitmap.Height - ((int)osizef.Height + 10));
+                                            g.DrawString(text, oFont, oBrush, oPoint);
+                                        }
+                                        oBitmap.Save(filePath, System.Drawing.Imaging.ImageFormat.Jpeg);
+                                    }
+
+                                }
+                            }
+                            else
+                            {
+                                using (var stream = new FileStream(filePath, FileMode.Create))
+                                {
+
+                                    await file.CopyToAsync(stream);
+                                }
+                                await ProgressMethod(file, namefile);
+                                using (Image originalImage = Image.FromStream(file.OpenReadStream()))
+                                {
+
+                                    using (Bitmap oBitmap = new Bitmap(originalImage))
+                                    {
+                                        using (Graphics g = Graphics.FromImage(oBitmap))
+                                        {
+
+                                            Brush oBrush = new SolidBrush(Color.Green);
+                                            Font oFont = new Font("ARial", 25, FontStyle.Bold, GraphicsUnit.Pixel);
+                                            SizeF osizef = new SizeF();
+                                            osizef = g.MeasureString(text, oFont);
+                                            Point oPoint = new Point(oBitmap.Width - ((int)osizef.Width + 10), oBitmap.Height - ((int)osizef.Height + 10));
+                                            g.DrawString(text, oFont, oBrush, oPoint);
+                                        }
+                                        oBitmap.Save(filePath, System.Drawing.Imaging.ImageFormat.Jpeg);
+                                    }
+
+                                }
+
+                            }
+                        }
+                        else if (e == ".mp4")
+                        {
+                            if (String.IsNullOrEmpty(notice.movie))
+                            {
+                                notice.movie = "/Notice/" + namefile;
+                                using (var stream = new FileStream(filePath, FileMode.Create))
+                                {
+                                    await file.CopyToAsync(stream);
+                                }
+                                await ProgressMethod(file, namefile);
+
+                                //if (String.IsNullOrEmpty(notice.image))
+                                //{
+                                //    GetBitMap.GetThumbnail(filePath.Replace('/', '\\'), System.IO.Directory.GetCurrentDirectory() +  "\\wwwroot\\Notice\\" + namefile);
+                                //    //notice.image = "/Notice/" + namefile.Replace(".mp4", ".jpg");
+                                //}
+                            }
+                        }
+
+                    }
+
+                }
+
+                if (string.IsNullOrEmpty(notice.image))
+                {
+                    notice.image = "";
+                }
+
+                _context.Notices.Add(notice);
+
+                await _context.SaveChangesAsync();
+
+
+                foreach (var item in images)
+                {
+                    _context.NoticeImages.Add(new NoticeImage
+                    {
+                        noticeId = notice.id,
+                        image = item
+                    });
+                    await _context.SaveChangesAsync();
+                }
+                var parentCategory = GetParent(notice.categoryId);
+                var total = parentCategory.registerPrice > 0 ? (int)parentCategory.registerPrice : 0;
+
+                if (user.Invite_Price != 0)
+                {
+                    if (user.Invite_Price > total)
+                    {
+                        int in_price = user.Invite_Price - total;
+                        total = 0;
+                        user.Invite_Price = in_price;
+                        _context.Users.Update(user);
+                        _context.SaveChanges();
+                    }
+                    else
+                    {
+                        total -= user.Invite_Price;
+                        user.Invite_Price = 0;
+                        _context.Users.Update(user);
+                        _context.SaveChanges();
+                    }
+                }
+
+                total = havediscount ? total - discountprice : total;
+
+                Factor factor = new Factor();
+                factor.state = State.NotPay;
+                factor.userId = user.id;
+                factor.createDatePersian = PersianCalendarDate.PersianCalendarResult(DateTime.Now);
+                factor.noticeId = notice.id;
+                factor.factorKind = FactorKind.Add;
+                factor.totalPrice = total;
+                _context.Factors.Add(factor);
+                //Payment
+                await _context.SaveChangesAsync();
+
+                if (total >= _minAmount)
+                {
+                    var attempt = new PaymentRequestAttemp
+                    {
+                        FactorId = factor.id,
+                        NoticeId = notice.id,
+                        UserId = user.id,
+                        pursheType = pursheType.RegisterNotice,
+                    };
+
+                    await _paymentService.AddPaymentAttempt(attempt);
+
+                    var connectGatewayRequest = new PaymentConnectModel
+                    {
+                        FactorId = factor.id,
+                        Amount = total,
+                        ReturnUrl = $"{Request.Scheme}://{Request.Host}/Payments/NoticeWeb/{factor.id}",
+                        UserMobile = user.cellphone,
+                    };
+
+
+                    var paymentResponse = await _paymentService.ConnectGateway(connectGatewayRequest);
+
+                    if (paymentResponse.Succeeded)
+                    {
+                        return Ok(new { redirectLink = paymentResponse.GatewayUrl });
+                    }
+                    else
+                    {
+                        return BadRequest(new { message = paymentResponse.Error });
+                    }
+                }
+                else
+                {
+                    ////تایید خودکار آگهی //////////////////////
+                    if (setting.AutoAccept)
+                    {
+                        notice.adminConfirmStatus = EnumStatus.Accept;
+
+                        CommonService.SendSMS_Accept(user.cellphone, notice.title);
+                    }
+
+                    _context.Notices.Update(notice);
+                    await _context.SaveChangesAsync();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return UnprocessableEntity(new { message = "اکنون سیستم قادر به پاسخ گویی نمی باشد" });
+            }
+            return Ok(new { status = 1, message = "ثبت آگهی با موفقیت انجام شد" });
+        }
+
         private async Task ProgressMethod(IFormFile file, string namefile)
         {
             long totalBytes = file.Length;
@@ -1284,6 +1587,7 @@ namespace Dake.Controllers
             }
             return Json("Success");
         }
+
         [HttpPost]
         public async Task<IActionResult> LadderNotice(long laddernoticeid)
         {
@@ -1357,11 +1661,100 @@ namespace Dake.Controllers
                     TempData["PursheResult"] = $"کاربرگرامی ، عملیات نردبان کردن آگهی {Notice.title} با موفقیت انجام شد";
                     return RedirectToAction("Profile2");
                 }
-                return View("Profile2");
             }
             catch (Exception)
             {
                 return Content("اکنون سیستم قادر به پاسخ گویی نمی باشد");
+            }
+        }
+
+        [HttpPost("v2/api/LadderNotice")]
+        [AllowAnonymous]
+        public async Task<IActionResult> LadderNoticeWeb(long ladderNoticeId)
+        {
+            string token = HttpContext.Request?.Headers["Token"];
+
+            if (token == null)
+            {
+                return Unauthorized();
+            }
+
+            var user = _context.Users.FirstOrDefault(x => x.token == token);
+
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
+            try
+            {
+                Factor factor = new Factor();
+                var Notice = _context.Notices.Find(ladderNoticeId);
+
+                var category = GetParent(Notice.categoryId);
+
+                if (Notice.expireDate < DateTime.Now)
+                {
+                    return BadRequest(new { message = "متاسفانه آگهی منقضی شده است " });
+                }
+                if (category.laderPrice >= _minAmount)
+                {
+                    factor.state = State.IsPay;
+                    factor.userId = user.id;
+                    factor.createDatePersian = PersianCalendarDate.PersianCalendarResult(DateTime.Now);
+                    factor.noticeId = Notice.id;
+                    factor.factorKind = FactorKind.Ladder;
+                    factor.totalPrice = category.laderPrice;
+                    _context.Factors.Add(factor);
+                    _context.SaveChanges();
+
+                    var attempt = new PaymentRequestAttemp
+                    {
+                        FactorId = factor.id,
+                        NoticeId = Notice.id,
+                        UserId = user.id,
+                        pursheType = pursheType.Ladders,
+                    };
+
+                    await _paymentService.AddPaymentAttempt(attempt);
+
+                    var connectGatewayRequest = new PaymentConnectModel
+                    {
+                        FactorId = factor.id,
+                        Amount = (int)category.laderPrice,
+                        ReturnUrl = $"{Request.Scheme}://{Request.Host}/Payments/PursheWeb/{factor.id}",
+                        UserMobile = user.cellphone,
+                    };
+
+
+                    var paymentResponse = await _paymentService.ConnectGateway(connectGatewayRequest);
+
+                    if (paymentResponse.Succeeded)
+                    {
+                        return Ok(new { redirectLink = paymentResponse.GatewayUrl });
+                    }
+                    else
+                    {
+                        return BadRequest(new { message = paymentResponse.Error });
+                    }
+                }
+                else
+                {
+                    Notice.createDate = DateTime.Now;
+                    factor.state = State.IsPay;
+                    factor.userId = user.id;
+                    factor.createDatePersian = PersianCalendarDate.PersianCalendarResult(DateTime.Now);
+                    factor.noticeId = Notice.id;
+                    factor.factorKind = FactorKind.Ladder;
+                    factor.totalPrice = category.laderPrice;
+                    _context.Factors.Add(factor);
+                    _context.SaveChanges();
+                    return Ok(new { status = 1, message = $"کاربرگرامی ، عملیات نردبان کردن آگهی {Notice.title} با موفقیت انجام شد" });
+                }
+            }
+            catch (Exception)
+            {
+                return UnprocessableEntity(new { message = "اکنون سیستم قادر به پاسخ گویی نمی باشد" });
             }
         }
 
@@ -1450,6 +1843,105 @@ namespace Dake.Controllers
 
         }
 
+        [HttpPost("v2/api/EmergencyNotice")]
+        [AllowAnonymous]
+        public async Task<dynamic> EmergencyNoticeWeb(long emergencyNoticeId)
+        {
+            string token = HttpContext.Request?.Headers["Token"];
+
+            if (token == null)
+            {
+                return Unauthorized();
+            }
+
+            var user = _context.Users.FirstOrDefault(x => x.token == token);
+
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
+            Factor factor = new Factor();
+            var Notice = await _context.Notices.FindAsync(emergencyNoticeId);
+
+            if (Notice.expireDate < DateTime.Now)
+            {
+                return BadRequest(new
+                {
+                    message = "متاسفانه آگهی منقضی شده است "
+                });
+
+            }
+            if (Notice.ExpireDateEmergency >= DateTime.Now && Notice.isEmergency)
+            {
+                return BadRequest(new
+                {
+                    message = " آگهی شما اظطراری می باشد "
+                });
+            }
+
+            var setting = await _context.Settings.FirstOrDefaultAsync();
+            var category = GetParent(Notice.categoryId);
+
+            if (category.emergencyPrice >= _minAmount)
+            {
+                factor.state = State.IsPay;
+                factor.userId = user.id;
+                factor.createDatePersian = PersianCalendarDate.PersianCalendarResult(DateTime.Now);
+                factor.noticeId = Notice.id;
+                factor.factorKind = FactorKind.Emergency;
+                factor.totalPrice = category.emergencyPrice;
+                _context.Factors.Add(factor);
+                await _context.SaveChangesAsync();
+
+                var attempt = new PaymentRequestAttemp
+                {
+                    FactorId = factor.id,
+                    NoticeId = Notice.id,
+                    UserId = user.id,
+                    pursheType = pursheType.emergency,
+                };
+
+                await _paymentService.AddPaymentAttempt(attempt);
+
+                var connectGatewayRequest = new PaymentConnectModel
+                {
+                    FactorId = factor.id,
+                    Amount = (int)category.emergencyPrice,
+                    ReturnUrl = $"{Request.Scheme}://{Request.Host}/Payments/PursheWeb/{factor.id}",
+                    UserMobile = user.cellphone,
+                };
+
+
+                var paymentResponse = await _paymentService.ConnectGateway(connectGatewayRequest);
+
+                if (paymentResponse.Succeeded)
+                {
+                    return Ok(new { redirectLink = paymentResponse.GatewayUrl });
+                }
+                else
+                {
+                    return BadRequest(new { message = paymentResponse.Error });
+                }
+            }
+            else
+            {
+                Notice.isEmergency = true;
+                Notice.ExpireDateEmergency = DateTime.Now.AddDays(Convert.ToInt64(setting.countExpireDateIsespacial));
+                factor.state = State.IsPay;
+                factor.userId = user.id;
+                factor.createDatePersian = PersianCalendarDate.PersianCalendarResult(DateTime.Now);
+                factor.noticeId = Notice.id;
+                factor.factorKind = FactorKind.Emergency;
+                factor.totalPrice = category.emergencyPrice;
+                _context.Factors.Add(factor);
+                await _context.SaveChangesAsync();
+
+                return Ok(new { status = 1, message = $"کاربر گرامی ، اکنون آگهی {Notice.title} جزو آگهی های اضطراری است " });
+            }
+
+        }
+
         [HttpPost]
         public async Task<IActionResult> ExtendedNotice(long Extendnoticeid)
         {
@@ -1533,8 +2025,104 @@ namespace Dake.Controllers
                 return Content("اکنون سیستم قادر به پاسخ گویی نمی باشد");
             }
         }
-        
-        
+
+        [HttpPost("v2/api/ExtendedNotice")]
+        [AllowAnonymous]
+        public async Task<IActionResult> ExtendedNoticeWeb(long extendNoticeId)
+        {
+            string token = HttpContext.Request?.Headers["Token"];
+
+            if (token == null)
+            {
+                return Unauthorized();
+            }
+
+            var user = _context.Users.FirstOrDefault(x => x.token == token);
+
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
+            try
+            {
+                Factor factor = new Factor();
+                var Notice = _context.Notices.Find(extendNoticeId);
+
+
+                if (Notice.expireDate >= DateTime.Now)
+                {
+                    return BadRequest(new
+                    {
+                        message = "آگهی منقضی نشده است و نمیتوان تمدید کرد"
+                    });
+                }
+
+                var setting = _context.Settings.FirstOrDefault();
+                var category = GetParent(Notice.categoryId);
+
+                if (category.expirePrice >= _minAmount)
+                {
+                    factor.state = State.IsPay;
+                    factor.userId = user.id;
+                    factor.createDatePersian = PersianCalendarDate.PersianCalendarResult(DateTime.Now);
+                    factor.noticeId = Notice.id;
+                    factor.factorKind = FactorKind.Extend;
+                    factor.totalPrice = category.expirePrice;
+                    _context.Factors.Add(factor);
+                    _context.SaveChanges();
+
+                    var attempt = new PaymentRequestAttemp
+                    {
+                        FactorId = factor.id,
+                        NoticeId = Notice.id,
+                        UserId = user.id,
+                        pursheType = pursheType.Extend,
+                    };
+
+                    await _paymentService.AddPaymentAttempt(attempt);
+
+                    var connectGatewayRequest = new PaymentConnectModel
+                    {
+                        FactorId = factor.id,
+                        Amount = (int)category.expirePrice,
+                        ReturnUrl = $"{Request.Scheme}://{Request.Host}/Payments/PursheWeb/{factor.id}",
+                        UserMobile = user.cellphone,
+                    };
+
+
+                    var paymentResponse = await _paymentService.ConnectGateway(connectGatewayRequest);
+
+                    if (paymentResponse.Succeeded)
+                    {
+                        return Ok(new { redirectLink = paymentResponse.GatewayUrl });
+                    }
+                    else
+                    {
+                        return BadRequest(new { message = paymentResponse.Error });
+                    }
+                }
+                else
+                {
+                    Notice.expireDate = DateTime.Now.AddDays(Convert.ToInt64(setting.countExpireDate));
+                    factor.state = State.IsPay;
+                    factor.userId = user.id;
+                    factor.createDatePersian = PersianCalendarDate.PersianCalendarResult(DateTime.Now);
+                    factor.noticeId = extendNoticeId;
+                    factor.factorKind = FactorKind.Extend;
+                    factor.totalPrice = category.expirePrice;
+                    _context.Factors.Add(factor);
+                    _context.SaveChanges();
+                    var daysofextend = setting.countExpireDate == null ? 0 : setting.countExpireDate;
+                    return Ok(new { status = 1, message = $"کاربر گرامی ، عملیات تمدید آگهی {Notice.title} به مدت {daysofextend} روز با موفقیت انجام شد" });
+                }
+            }
+            catch (Exception)
+            {
+                return UnprocessableEntity(new { message = "اکنون سیستم قادر به پاسخ گویی نمی باشد" });
+            }
+        }
+
         private Category GetParent(int CatId)
         {
             CategoryViewModelHelper item = new CategoryViewModelHelper();
@@ -1711,7 +2299,117 @@ namespace Dake.Controllers
 
             }
         }
-        
+
+        [HttpPost("v2/api/SpecialNotice")]
+        [AllowAnonymous]
+        public async Task<IActionResult> SpecialNoticeWeb(long specialdNoticeId)
+        {
+            string token = HttpContext.Request?.Headers["Token"];
+
+            if (token == null)
+            {
+                return Unauthorized();
+            }
+
+            var user = _context.Users.FirstOrDefault(x => x.token == token);
+
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
+            try
+            {
+                Factor factor = new Factor();
+                var Notice = _context.Notices.Find(specialdNoticeId);
+
+                if (Notice.expireDate < DateTime.Now)
+                {
+                    return BadRequest(new
+                    {
+                        message = "متاسفانه آگهی منقضی شده است "
+                    });
+
+                }
+
+                if (Notice.expireDateIsespacial >= DateTime.Now && Notice.isSpecial)
+                {
+                    return BadRequest(new
+                    {
+                        message = "آگهی شما ویژه می باشد "
+                    });
+                }
+
+                var setting = _context.Settings.FirstOrDefault();
+                var category = GetParent(Notice.categoryId);
+
+                if (category.espacialPrice >= _minAmount)
+                {
+                    factor.state = State.IsPay;
+                    factor.userId = user.id;
+                    factor.createDatePersian = PersianCalendarDate.PersianCalendarResult(DateTime.Now);
+                    factor.noticeId = Notice.id;
+                    factor.factorKind = FactorKind.Special;
+                    factor.totalPrice = category.espacialPrice;
+                    _context.Factors.Add(factor);
+                    _context.SaveChanges();
+
+                    var attempt = new PaymentRequestAttemp
+                    {
+                        FactorId = factor.id,
+                        NoticeId = Notice.id,
+                        UserId = user.id,
+                        pursheType = pursheType.Special,
+                    };
+
+                    await _paymentService.AddPaymentAttempt(attempt);
+
+                    var connectGatewayRequest = new PaymentConnectModel
+                    {
+                        FactorId = factor.id,
+                        Amount = (int)category.espacialPrice,
+                        ReturnUrl = $"{Request.Scheme}://{Request.Host}/Payments/PursheWeb/{factor.id}",
+                        UserMobile = user.cellphone,
+                    };
+
+
+                    var paymentResponse = await _paymentService.ConnectGateway(connectGatewayRequest);
+
+                    if (paymentResponse.Succeeded)
+                    {
+                        return Ok(new { redirectLink = paymentResponse.GatewayUrl });
+                    }
+                    else
+                    {
+                        return BadRequest(new
+                        {
+                            message = paymentResponse.Error
+                        });
+                    }
+                }
+                else
+                {
+                    Notice.isSpecial = true;
+                    Notice.expireDateIsespacial = DateTime.Now.AddDays(Convert.ToInt64(setting.countExpireDateIsespacial));
+                    factor.state = State.IsPay;
+                    factor.userId = user.id;
+                    factor.createDatePersian = PersianCalendarDate.PersianCalendarResult(DateTime.Now);
+                    factor.noticeId = Notice.id;
+                    factor.factorKind = FactorKind.Special;
+                    factor.totalPrice = category.espacialPrice;
+                    _context.Factors.Add(factor);
+                    _context.SaveChanges();
+                    var daysofextend = setting.countExpireDate ?? 0;
+                    return Ok(new { status = 1, message = $"کاربر گرامی ، اکنون آگهی {Notice.title} جزو آگهی های ویژه است " });
+                }
+            }
+            catch (Exception)
+            {
+                return UnprocessableEntity(new { message = "اکنون سیستم قادر به پاسخ گویی نمی باشد" });
+
+            }
+        }
+
         public IActionResult removeBanner(int Id)
         {
             var user1 = _context.Users.FirstOrDefault(x => x.cellphone == User.Identity.Name && x.deleted == null);
