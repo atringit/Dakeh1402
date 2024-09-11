@@ -11,13 +11,15 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Dake.Controllers
 {
-    [Authorize]
 
     public class HomeController : Controller
     {
         public IActionResult Index()
         {
-            return View();
+            // Serve the React app's index.html from the wwwroot/react folder
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "react", "index.html");
+
+            return PhysicalFile(filePath, "text/html");
         }
         public IActionResult Index2()
         {

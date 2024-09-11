@@ -1,0 +1,37 @@
+{
+  "files": {
+    "main.css": "/static/css/main.1c7afca1.css",
+    "main.js": "/static/js/main.9d2b6fc8.js",
+    "static/media/iranyekanwebthinfanum.eot": "/static/media/iranyekanwebthinfanum.410477b05ff19e5c3fc6.eot",
+    "static/media/iranyekanwebthinfanum.ttf": "/static/media/iranyekanwebthinfanum.aeeaeae6872716ad9495.ttf",
+    "static/media/iranyekanweblightfanum.eot": "/static/media/iranyekanweblightfanum.93ce7a85ea0aff1c0d38.eot",
+    "static/media/iranyekanweblightfanum.ttf": "/static/media/iranyekanweblightfanum.ba850144120396ab9cc5.ttf",
+    "static/media/iranyekanwebextrablackfanum.eot": "/static/media/iranyekanwebextrablackfanum.6b4456b02f5215a77fba.eot",
+    "static/media/iranyekanwebextrablackfanum.ttf": "/static/media/iranyekanwebextrablackfanum.d63020c72c6e720a1ad7.ttf",
+    "static/media/iranyekanwebmediumfanum.eot": "/static/media/iranyekanwebmediumfanum.767f40f0a9e43f99a2fb.eot",
+    "static/media/iranyekanwebregularfanum.eot": "/static/media/iranyekanwebregularfanum.babee3f4dafb202f0e6c.eot",
+    "static/media/iranyekanwebmediumfanum.ttf": "/static/media/iranyekanwebmediumfanum.fe2e65f04a805a97a198.ttf",
+    "static/media/iranyekanwebregularfanum.ttf": "/static/media/iranyekanwebregularfanum.db98fec7e82c04693b7d.ttf",
+    "static/media/iranyekanwebextraboldfanum.eot": "/static/media/iranyekanwebextraboldfanum.7dcd1f6899b4fd611384.eot",
+    "static/media/iranyekanwebextraboldfanum.ttf": "/static/media/iranyekanwebextraboldfanum.19c85fd163c7696dc0a6.ttf",
+    "static/media/iranyekanwebboldfanum.eot": "/static/media/iranyekanwebboldfanum.e21cf481e03660f0e321.eot",
+    "static/media/iranyekanwebboldfanum.ttf": "/static/media/iranyekanwebboldfanum.cce7bbfeb0fc6e515a46.ttf",
+    "static/media/iranyekanwebblackfanum.eot": "/static/media/iranyekanwebblackfanum.da108a8537ef047a534d.eot",
+    "static/media/iranyekanwebblackfanum.ttf": "/static/media/iranyekanwebblackfanum.da6b2b374c5edc8176e9.ttf",
+    "static/media/iranyekanwebmediumfanum.woff": "/static/media/iranyekanwebmediumfanum.9c78b97ef5b1f81922e9.woff",
+    "static/media/iranyekanwebthinfanum.woff": "/static/media/iranyekanwebthinfanum.d1f4f568cc07d6c508a5.woff",
+    "static/media/iranyekanwebextrablackfanum.woff": "/static/media/iranyekanwebextrablackfanum.4454a52c80bae92179f9.woff",
+    "static/media/iranyekanweblightfanum.woff": "/static/media/iranyekanweblightfanum.b29cf05ee1d8c79734a5.woff",
+    "static/media/iranyekanwebregularfanum.woff": "/static/media/iranyekanwebregularfanum.f01e9ae5ea918523d370.woff",
+    "static/media/iranyekanwebboldfanum.woff": "/static/media/iranyekanwebboldfanum.aa6ff8837bb3bd52ea56.woff",
+    "static/media/iranyekanwebblackfanum.woff": "/static/media/iranyekanwebblackfanum.decfae65f5fe00ab93e1.woff",
+    "static/media/iranyekanwebextraboldfanum.woff": "/static/media/iranyekanwebextraboldfanum.f78ea94b363a1b5521c6.woff",
+    "index.html": "/index.html",
+    "main.1c7afca1.css.map": "/static/css/main.1c7afca1.css.map",
+    "main.9d2b6fc8.js.map": "/static/js/main.9d2b6fc8.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.1c7afca1.css",
+    "static/js/main.9d2b6fc8.js"
+  ]
+}

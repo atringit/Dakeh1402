@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Newtonsoft.Json;
 using Pushe.co;
 using System;
@@ -125,7 +126,13 @@ namespace Dake
             });
             app.UseHttpsRedirection();
             app.UseHsts();
-            app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                System.IO.Path.Combine(env.WebRootPath, "react")),
+                RequestPath = ""
+            });
+            //app.UseDefaultFiles();
             app.UseAuthentication();
             //app.UseMvcWithDefaultRoute();
             app.UseSession();
@@ -133,16 +140,20 @@ namespace Dake
           app.UseCors(bulider=> bulider.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 
             app.UseMvc(routes =>
-           {
-               //routes.MapRoute(
-               //    name: "areas",
-               //    template: "{area:exists}/{controller=User}/{action=Login}/{id?}"
+            {
+                //routes.MapRoute(
+                //    name: "areas",
+                //    template: "{area:exists}/{controller=User}/{action=Login}/{id?}"
 
-               //);
-               //routes.MapRoute("Default", "{controller=User}/{action=Login}/{id?}");
-               routes.MapRoute("Default", "{controller=Home2}/{action=Index}/{id?}");
-               routes.MapRoute("ActionApi", "api/{controller}/{name?}");
-           });
+                //);
+                //routes.MapRoute("Default", "{controller=User}/{action=Login}/{id?}");
+                //routes.MapRoute("Default", "{controller=Home2}/{action=Index}/{id?}");
+                routes.MapRoute("ActionApi", "api/{controller}/{name?}");
+
+                routes.MapSpaFallbackRoute(
+                    name: "spa-fallback",
+                    defaults: new { controller = "Home", action = "Index" });
+            });
 
             app.Run(async (context) =>
             {
