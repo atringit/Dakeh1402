@@ -268,7 +268,7 @@ namespace Dake.Controllers
                     {
                         FactorId = factor.id,
                         Amount = total,
-                        ReturnUrl = $"{Request.Scheme}://{Request.Host}/Payments/BannerWeb/{factor.id}",
+                        ReturnUrl = $"{Request.Scheme}://{Request.Host}/v2/api/Payments/Banner/{factor.id}",
                         UserMobile = user?.cellphone ?? banner.user.cellphone,
                     };
 

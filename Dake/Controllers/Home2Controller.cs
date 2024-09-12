@@ -1076,7 +1076,7 @@ namespace Dake.Controllers
                     {
                         FactorId = factor.id,
                         Amount = total,
-                        ReturnUrl = $"{Request.Scheme}://{Request.Host}/Payments/NoticeWeb/{factor.id}",
+                        ReturnUrl = $"{Request.Scheme}://{Request.Host}/v2/api/Payments/Notice/{factor.id}",
                         UserMobile = user.cellphone,
                     };
 
@@ -1722,7 +1722,7 @@ namespace Dake.Controllers
                     {
                         FactorId = factor.id,
                         Amount = (int)category.laderPrice,
-                        ReturnUrl = $"{Request.Scheme}://{Request.Host}/Payments/PursheWeb/{factor.id}",
+                        ReturnUrl = $"{Request.Scheme}://{Request.Host}/v2/api/Payments/Purshe/{factor.id}",
                         UserMobile = user.cellphone,
                     };
 
@@ -1908,7 +1908,7 @@ namespace Dake.Controllers
                 {
                     FactorId = factor.id,
                     Amount = (int)category.emergencyPrice,
-                    ReturnUrl = $"{Request.Scheme}://{Request.Host}/Payments/PursheWeb/{factor.id}",
+                    ReturnUrl = $"{Request.Scheme}://{Request.Host}/v2/api/Payments/Purshe/{factor.id}",
                     UserMobile = user.cellphone,
                 };
 
@@ -2086,7 +2086,7 @@ namespace Dake.Controllers
                     {
                         FactorId = factor.id,
                         Amount = (int)category.expirePrice,
-                        ReturnUrl = $"{Request.Scheme}://{Request.Host}/Payments/PursheWeb/{factor.id}",
+                        ReturnUrl = $"{Request.Scheme}://{Request.Host}/v2/api/Payments/Purshe/{factor.id}",
                         UserMobile = user.cellphone,
                     };
 
@@ -2368,7 +2368,7 @@ namespace Dake.Controllers
                     {
                         FactorId = factor.id,
                         Amount = (int)category.espacialPrice,
-                        ReturnUrl = $"{Request.Scheme}://{Request.Host}/Payments/PursheWeb/{factor.id}",
+                        ReturnUrl = $"{Request.Scheme}://{Request.Host}/v2/api/Payments/Purshe/{factor.id}",
                         UserMobile = user.cellphone,
                     };
 
