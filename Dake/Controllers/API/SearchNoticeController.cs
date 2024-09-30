@@ -122,7 +122,10 @@ namespace Dake.Controllers.API
                 x.price,
                 x.lastPrice
             }).ToList();
-            return new { data = res, resEspacial, totalCount = result.Count() };
+
+            var banners = _context.Banner.Where(p => p.expireDate >= DateTime.Now && p.adminConfirmStatus == EnumStatus.Accept).Include(p => p.BannerImage).ToList();
+
+            return new { data = res, resEspacial, banners, totalCount = result.Count() };
         }
 
         private List<Category> GetSubCategories(int? categoryId)
