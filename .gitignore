@@ -2,11 +2,11 @@
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
+/.vs
 /.vs/Dake/FileContentIndex
 *.suo
 *.user
 *.sln.docstates
-/.vs
 /Dake/bin
 /Dake/obj
 *.pubxml
