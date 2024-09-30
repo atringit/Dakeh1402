@@ -147,12 +147,12 @@ namespace Dake
 
                 //);
                 //routes.MapRoute("Default", "{controller=User}/{action=Login}/{id?}");
-                //routes.MapRoute("Default", "{controller=Home2}/{action=Index}/{id?}");
+                routes.MapRoute("Default", "{controller=Home2}/{action=Index}/{id?}");
                 routes.MapRoute("ActionApi", "api/{controller}/{name?}");
 
-                routes.MapSpaFallbackRoute(
-                    name: "spa-fallback",
-                    defaults: new { controller = "Home", action = "Index" });
+                //routes.MapSpaFallbackRoute(
+                //    name: "spa-fallback",
+                //    defaults: new { controller = "Home", action = "Index" });
             });
 
             app.Run(async (context) =>

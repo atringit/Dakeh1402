@@ -3,3 +3,12 @@
 ################################################################################
 
 /.vs/Dake/FileContentIndex
+*.suo
+*.user
+*.sln.docstates
+/.vs
+/Dake/bin
+/Dake/obj
+*.pubxml
+*.dll
+*.pdb

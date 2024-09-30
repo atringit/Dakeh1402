@@ -43,9 +43,9 @@ body {
 }
 .sss{
     grid-column-start: 1;
-        grid-column-end: 3;
-        grid-row-start: 1;
-        grid-row-end: 3;
+    grid-column-end: 3;
+    grid-row-start: 1;
+    grid-row-end: 3;
 }
 
 @media (max-width: 768px){
@@ -75,8 +75,3 @@ body {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
-@media (min-width: 1536px) {
-    .grid {
-      grid-template-columns: repeat(5, minmax(0, 1fr));
-    }
-  }
