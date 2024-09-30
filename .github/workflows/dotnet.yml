@@ -27,16 +27,5 @@ jobs:
       run: dotnet restore
     - name: Build
       run: dotnet build --no-restore
-    - name: Publish
-      run: dotnet publish -c Release -o ./published-app
-    - name: Commit published files
-      run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-        git add -f published-app
-        git commit -m "Add published app files" -a
-    - name: Push changes
-      run: |
-        git push
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
