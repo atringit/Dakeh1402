@@ -23,12 +23,15 @@ namespace Dake.Controllers.API
         private readonly Context _context;
         private INotice _notice;
         private readonly IHostingEnvironment environment;
+        private readonly ICategoryImageService _categoryImageService;
 
-        public SearchNoticeController(Context context, INotice notice, IHostingEnvironment environment)
+        public SearchNoticeController(Context context, INotice notice, IHostingEnvironment environment, 
+            ICategoryImageService categoryImageService)
         {
             this.environment = environment;
             _context = context;
             _notice = notice;
+            _categoryImageService = categoryImageService;
         }
         [HttpPost]
         public async Task<object> GetNotices(ProductSearch2 searchNotice)
@@ -54,7 +57,7 @@ namespace Dake.Controllers.API
             page = searchNotice.page;
             page = page > 0 ? page : 1;
             pageSize = pageSize > 0 ? pageSize : 10;
-            if (!String.IsNullOrEmpty(searchNotice.title))
+            if (!string.IsNullOrEmpty(searchNotice.title))
                 result = result.Where(x => x.title.Contains(searchNotice.title) || (x.description != null && x.description.Contains(searchNotice.title))).ToList();
 
 
@@ -82,20 +85,20 @@ namespace Dake.Controllers.API
 
             foreach (var item in result)
             {
-                if (string.IsNullOrEmpty(item.image) == false && item.image.Contains("/images/Category/"))
+                if (string.IsNullOrEmpty(item.image))
                 {
-                    item.image = getCategoryImage(item.categoryId);
+                    item.image = await _categoryImageService.GetCategoryImageAsync(item.categoryId);
                 }
             }
             foreach (var item in specialNotices)
             {
-                if (string.IsNullOrEmpty(item.image) == false && item.image.Contains("/images/Category/"))
+                if (string.IsNullOrEmpty(item.image))
                 {
-                    GetNoticeCategoryImage getNoticeCategoryImage = new GetNoticeCategoryImage(_context);
-                    item.image = getNoticeCategoryImage.getCategoryImage(item.categoryId);
+                    item.image = await _categoryImageService.GetCategoryImageAsync(item.categoryId);
                 }
             }
-            int pagesize = 10;
+
+            const int pagesize = 10;
             // int skip = (page - 1) * pagesize;
             var res = result.Skip((page - 1) * pagesize).Take(pagesize).Select(x => new
             {
@@ -107,7 +110,8 @@ namespace Dake.Controllers.API
                 x.categoryId,
                 x.isEmergency,
                 x.price,
-                x.lastPrice
+                x.lastPrice,
+                x.movie,
             }).ToList();
 
             var resEspacial = specialNotices.Skip((page - 1) * pagesize).Take(pagesize).Select(x => new
@@ -120,7 +124,7 @@ namespace Dake.Controllers.API
                 x.movie,
                 x.isSpecial,
                 x.price,
-                x.lastPrice
+                x.lastPrice,
             }).ToList();
 
             var banners = _context.Banner.Where(p => p.expireDate >= DateTime.Now && p.adminConfirmStatus == EnumStatus.Accept).Include(p => p.BannerImage).ToList();

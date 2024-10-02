@@ -88,6 +88,7 @@ namespace Dake
 
             services.AddScoped<IBannerSevice, BannerSevice>();
             services.AddScoped<IPaymentService, PaymentService>();
+            services.AddScoped<ICategoryImageService, CategoryImageService>();
             #endregion
 
             services.AddCors(opt => opt.AddPolicy(name: "AllowOrigin",
