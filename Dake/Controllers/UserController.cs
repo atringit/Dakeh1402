@@ -32,9 +32,9 @@ namespace Dake.Controllers
     {
         private readonly Context _context;
         private IUser _user;
-        private ICity _city;
+        private ICityService _city;
 
-        public UserController(Context context, IUser user, ICity city)
+        public UserController(Context context, IUser user, ICityService city)
         {
             _context = context;
             _user = user;

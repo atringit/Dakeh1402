@@ -13,10 +13,10 @@ namespace Dake.Controllers
 {
     public class CityController : Controller
     {
-         private ICity _City;
+         private ICityService _City;
         private readonly Context _context;
 
-        public CityController(ICity City, Context context)
+        public CityController(ICityService City, Context context)
         {
             _context = context;
             _City = City;

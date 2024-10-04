@@ -7,10 +7,12 @@ using System.Threading.Tasks;
 
 namespace Dake.Service.Interface
 {
-    public interface ICity
+    public interface ICityService
     {
-        object GetCities();
+        Task<object> GetCitiesAsync();
+
         PagedList<City> GetCities(int pageId = 1, string filterName = "");
+
         object GetProvinces(int cityId);
         object GetAreas(int provinceId);
     }

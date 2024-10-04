@@ -79,7 +79,7 @@ namespace Dake
             services.AddTransient<IFactor, factorService>();
             services.AddTransient<IInformation, informationService>();
             services.AddTransient<Icategory, categoryService>();
-            services.AddTransient<ICity, cityService>();
+            services.AddTransient<ICityService, CityService>();
             services.AddTransient<IReportNotice, reportNoticeService>();
             services.AddTransient<IStaticPrice, staticPriceService>();
             services.AddTransient<IDiscountCode, discountCodeService>();

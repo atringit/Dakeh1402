@@ -15,9 +15,9 @@ namespace Dake.Controllers.API
     {
         private readonly Context _context;
 
-        private ICity _City;
+        private ICityService _City;
 
-        public ProvincesController(Context context, ICity City)
+        public ProvincesController(Context context, ICityService City)
         {
             _context = context;
             _City = City;

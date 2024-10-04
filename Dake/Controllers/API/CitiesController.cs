@@ -15,20 +15,20 @@ namespace Dake.Controllers.API
     {
         private readonly Context _context;
 
-        private ICity _City;
+        private ICityService _cityService;
 
-        public CitiesController(Context context,ICity City)
+        public CitiesController(Context context, ICityService cityService)
         {
             _context = context;
-            _City = City;
+            _cityService = cityService;
 
         }
 
         // GET: api/AllPrices
         [HttpGet("GetCities")]
-        public IActionResult GetCities()
+        public async Task<IActionResult> GetCities()
         {
-            var data = _City.GetCities();
+            var data = await _cityService.GetCitiesAsync();
             return Ok(data);
         }
 		[HttpGet("GetProvinceForAndroaid/{id}")]
