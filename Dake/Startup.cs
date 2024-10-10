@@ -1,4 +1,6 @@
-﻿using Dake.Service;
+﻿using Dake.Filters;
+using Dake.Middlewares;
+using Dake.Service;
 using Dake.Service.Interface;
 using Jumbula.WebSite.Utilities.Captcha;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -13,9 +15,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Pushe.co;
 using System;
+using System.IO;
 
 namespace Dake
 {
@@ -60,8 +64,11 @@ namespace Dake
 
 
             #endregion
-            services.AddMvc().AddJsonOptions(opt =>
-                                opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
+
+            services
+                .AddMvc(opt => opt.Filters.Add(new DeviceTypeActionFilter()))
+                .AddJsonOptions(opt => opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
+
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
             //.SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             #region DataBaseContext
@@ -130,9 +137,12 @@ namespace Dake
             app.UseStaticFiles(new StaticFileOptions
             {
                 FileProvider = new PhysicalFileProvider(
-                System.IO.Path.Combine(env.WebRootPath, "react")),
+                    Path.Combine(env.WebRootPath, "react")),
                 RequestPath = ""
             });
+
+            app.UseMiddleware<DeviceBasedRoutingMiddleware>();
+
             //app.UseDefaultFiles();
             app.UseAuthentication();
             //app.UseMvcWithDefaultRoute();
@@ -151,9 +161,9 @@ namespace Dake
                 routes.MapRoute("Default", "{controller=Home2}/{action=Index}/{id?}");
                 routes.MapRoute("ActionApi", "api/{controller}/{name?}");
 
-                //routes.MapSpaFallbackRoute(
-                //    name: "spa-fallback",
-                //    defaults: new { controller = "Home", action = "Index" });
+                routes.MapSpaFallbackRoute(
+                    name: "spa-fallback",
+                    defaults: new { controller = "Home", action = "Index" });
             });
 
             app.Run(async (context) =>
