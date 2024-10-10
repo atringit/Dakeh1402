@@ -66,7 +66,7 @@ namespace Dake
             #endregion
 
             services
-                .AddMvc(opt => opt.Filters.Add(new DeviceTypeActionFilter()))
+                .AddMvc(/*opt => opt.Filters.Add(new DeviceTypeActionFilter())*/)
                 .AddJsonOptions(opt => opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
 
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
@@ -141,8 +141,6 @@ namespace Dake
                 RequestPath = ""
             });
 
-            app.UseMiddleware<DeviceBasedRoutingMiddleware>();
-
             //app.UseDefaultFiles();
             app.UseAuthentication();
             //app.UseMvcWithDefaultRoute();
@@ -152,18 +150,14 @@ namespace Dake
 
             app.UseMvc(routes =>
             {
-                //routes.MapRoute(
-                //    name: "areas",
-                //    template: "{area:exists}/{controller=User}/{action=Login}/{id?}"
+                routes.MapRoute(
+                name: "iosRoute",
+                template: "{controller=Home}/{action=Index}",
+                defaults: new { },
+                constraints: new { device = new DeviceTypeRouteConstraint("ios") });
 
-                //);
-                //routes.MapRoute("Default", "{controller=User}/{action=Login}/{id?}");
                 routes.MapRoute("Default", "{controller=Home2}/{action=Index}/{id?}");
                 routes.MapRoute("ActionApi", "api/{controller}/{name?}");
-
-                routes.MapSpaFallbackRoute(
-                    name: "spa-fallback",
-                    defaults: new { controller = "Home", action = "Index" });
             });
 
             app.Run(async (context) =>

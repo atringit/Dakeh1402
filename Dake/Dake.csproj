@@ -7700,8 +7700,6 @@
     <None Include="wwwroot\assets\scss\_fonts.scss" />
     <None Include="wwwroot\assets\scss\_media.scss" />
     <None Include="wwwroot\assets\scss\_mixins.scss" />
-    <None Include="wwwroot\react\favicon\safari-pinned-tab.svg" />
-    <None Include="wwwroot\react\favicon\site.webmanifest" />
     <None Include="wwwroot\react\static\css\main.1c7afca1.css.map" />
     <None Include="wwwroot\react\static\js\main.9d2b6fc8.js" />
     <None Include="wwwroot\react\static\js\main.9d2b6fc8.js.map" />
