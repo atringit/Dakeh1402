@@ -3,21 +3,35 @@
   "name": "Dakeh",
   "icons": [
     {
-      "src": "/favicon/android-chrome-192x192.png",
+      "src": "favicon/manifest-icon-192.maskable.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
     },
     {
-      "src": "/favicon/android-chrome-512x512.png",
+      "src": "favicon/manifest-icon-192.maskable.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "favicon/manifest-icon-512.maskable.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "favicon/manifest-icon-512.maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ],
-
   "start_url": ".",
   "display": "standalone",
   "theme_color": "#ffffff",
   "background_color": "#ffffff",
-  "orientation":"any"
+  "orientation": "any",
+  "id": "com.dekehnet.app.pwa",
+  "description": "راحت ترین سامانه‌ی خرید و فروش کالا"
 }
