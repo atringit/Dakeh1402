@@ -63,7 +63,7 @@ namespace Dake.Controllers.API
                 return Ok(userprice);
             }
         }
-        [HttpPost]
+        [HttpPost("GenrateInvite")]
         public IActionResult GenrateInvite()
         {
             Random random = new Random();
