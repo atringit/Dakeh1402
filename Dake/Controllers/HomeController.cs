@@ -16,6 +16,10 @@ namespace Dake.Controllers
     {
         public IActionResult Index()
         {
+            return View();
+        }
+        public IActionResult Index3()
+        {
             // Serve the React app's index.html from the wwwroot/react folder
             var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "react", "index.html");
 
