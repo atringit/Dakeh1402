@@ -152,7 +152,7 @@ namespace Dake
             {
                 routes.MapRoute(
                 name: "iosRoute",
-                template: "{controller=Home}/{action=Index}",
+                template: "{controller=Home}/{action=Index3}",
                 defaults: new { },
                 constraints: new { device = new DeviceTypeRouteConstraint("ios") });
 
