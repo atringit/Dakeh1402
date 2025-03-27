@@ -25,47 +25,87 @@ namespace Dake.Controllers.API
         }
         // GET: api/Categorys
          [HttpGet]
-        public object GetCategorys()
+        public async Task<Result<List<CategoryViewModel>>> GetCategorys()
         {
-            List<CategoryViewModel> categoryViewModels = new List<CategoryViewModel>();
-            IQueryable<Category> result = _context.Categorys.OrderByDescending(x=>x.id);
-            var res = result.Select(x=>new {x.id,x.name,parentCategoryId=GetAd(x.parentCategoryId),x.expirePrice,x.espacialPrice,x.staticespacialPriceId , x.staticexpirePriceId , x.staticladerPriceId,x.staticregisterPriceId,x.registerPrice,x.image, x.emergencyPrice }).ToList();
-            foreach (var item in res)
-            {
-                categoryViewModels.Add(new CategoryViewModel()
+            var staticPrices = await _context
+                .StaticPrices
+                .ToListAsync();
+
+            var query = _context
+                .Categorys
+                .Where(w => w.parentCategoryId != null)
+                .Select(s => new CategoryViewModel
                 {
-                    id = item.id,
-                    name = item.name,
-                    parentCategoryId =
-                    GetAd(item.parentCategoryId),
-                    espacialPriceCode = item.staticespacialPriceId,
-                    espacialPrice = item.staticespacialPriceId == "0" ? 0
-                    : _context.StaticPrices.Where(s => s.code == item.staticespacialPriceId)
-                    .FirstOrDefault().price,
-                    expirePrice = item.staticexpirePriceId == "0" ? 0 :
-                    _context.StaticPrices.Where(s => s.code == item.staticexpirePriceId).
-                    FirstOrDefault().price,
-                    expirePriceCode = item.staticexpirePriceId,
-                    ladderPrice = item.staticladerPriceId == "0" ? 0 :
-                    _context.StaticPrices.Where(s => s.code == item.staticladerPriceId).
-                    FirstOrDefault().price,
-                    ladderPriceCode = item.staticladerPriceId,
-                    registerPrice = item.staticregisterPriceId == "0" ? 0 :
-                    _context.StaticPrices.Where(s => s.code == item.staticregisterPriceId).
-                    FirstOrDefault().price,
-                    registerPriceCode = item.staticregisterPriceId,
-                    image = item.image
+                    id = s.id,
+                    name = s.name,
+                    parentCategoryId = s.parentCategoryId,
+                    espacialPriceCode = s.staticespacialPriceId,
+                    espacialPrice = s.staticespacialPriceId == "0"
+                    ? 0
+                    : staticPrices.Find(x => x.code == s.staticespacialPriceId).price,
+                    expirePrice = s.staticexpirePriceId == "0"
+                    ? 0
+                    : staticPrices.Find(x => x.code == s.staticexpirePriceId).price,
+                    expirePriceCode = s.staticexpirePriceId,
+                    ladderPrice = s.staticladerPriceId == "0"
+                    ? 0
+                    : staticPrices.Find(x => x.code == s.staticladerPriceId).price,
+                    ladderPriceCode = s.staticladerPriceId,
+                    registerPrice = s.staticregisterPriceId == "0"
+                    ? 0
+                    : staticPrices.Find(x => x.code == s.staticregisterPriceId).price,
+                    registerPriceCode = s.staticregisterPriceId,
+                    image = s.image
                 });
-            }
-            return new { data = categoryViewModels };
+
+            var data = await query.ToListAsync();
+
+            return new Result<List<CategoryViewModel>>(
+                isSuccess: true,
+                data: data);
         }
-        private int? GetAd(int? categoryId)
+
+        [HttpGet("GetParentCategories")]
+        public async Task<Result<List<CategoryViewModel>>> GetParentCategories()
         {
-            if (categoryId == null)
-                return 0;
-            else return categoryId;
-           
+            var staticPrices = await _context
+                .StaticPrices
+                .ToListAsync();
+
+            var query = _context
+                .Categorys
+                .Where(w => w.parentCategoryId == null)
+                .Select(s => new CategoryViewModel
+                {
+                    id = s.id,
+                    name = s.name,
+                    parentCategoryId = 0,
+                    espacialPriceCode = s.staticespacialPriceId,
+                    espacialPrice = s.staticespacialPriceId == "0"
+                    ? 0
+                    : staticPrices.Find(x => x.code == s.staticespacialPriceId).price,
+                    expirePrice = s.staticexpirePriceId == "0"
+                    ? 0
+                    : staticPrices.Find(x => x.code == s.staticexpirePriceId).price,
+                    expirePriceCode = s.staticexpirePriceId,
+                    ladderPrice = s.staticladerPriceId == "0"
+                    ? 0
+                    : staticPrices.Find(x => x.code == s.staticladerPriceId).price,
+                    ladderPriceCode = s.staticladerPriceId,
+                    registerPrice = s.staticregisterPriceId == "0"
+                    ? 0
+                    : staticPrices.Find(x => x.code == s.staticregisterPriceId).price,
+                    registerPriceCode = s.staticregisterPriceId,
+                    image = s.image
+                });
+
+            var data = await query.ToListAsync();
+
+            return new Result<List<CategoryViewModel>>(
+                isSuccess: true,
+                data: data);
         }
+
          [HttpGet("{id}")]
 
          public object GetCategory(int id)
